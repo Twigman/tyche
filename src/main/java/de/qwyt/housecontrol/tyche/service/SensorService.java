@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,6 +17,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
+import de.qwyt.housecontrol.tyche.repository.sensor.SensorRepository;
+import de.qwyt.housecontrol.tyche.repository.sensor.SensorStateRepository;
 
 @Service
 public class SensorService {
@@ -29,10 +30,16 @@ public class SensorService {
 	
 	private final ModelMapper modelMapper;
 	
+	private final SensorRepository sensorRepository;
+	
+	private final SensorStateRepository sensorStateRepository;
+	
 	@Autowired
-	public SensorService(ObjectMapper objectMapper, ModelMapper modelMapper) {
+	public SensorService(ObjectMapper objectMapper, ModelMapper modelMapper, SensorRepository sensorRepository, SensorStateRepository sensorStateRepository) {
 		this.modelMapper = modelMapper;
 		this.objectMapper = objectMapper;
+		this.sensorRepository = sensorRepository;
+		this.sensorStateRepository = sensorStateRepository;
 		this.sensorMap = new HashMap<>();
 	}
 	
@@ -58,6 +65,10 @@ public class SensorService {
 		        if (sensor.getUniqueId() != null) {
 		            sensorMap.put(sensor.getUniqueId(), sensor);
 		            LOG.debug("New " + sensor.getClass().getSimpleName() + " registered (" + sensor.getUniqueId() + ")");
+		            
+		            // save sensor
+		            //this.sensorStateRepository.save(sensor.getState());
+		            //this.sensorRepository.save(sensor);
 		        } else {
 		            LOG.error("No unique ID found for sensor " + sensor.getName() + " (" + sensor.getManufacturer() + ")");
 		        }

@@ -7,18 +7,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.TemperatureSensor;
-import de.qwyt.housecontrol.tyche.repository.TemperatureRepository;
+import de.qwyt.housecontrol.tyche.repository.sensor.SensorRepository;
 
 @RestController
 @RequestMapping("/temperature")
 public class TemperatureRestController {
 
 	@Autowired
-	private TemperatureRepository repository;
+	private SensorRepository repository;
 	
 	@GetMapping(path = "/all")
-	public List<TemperatureSensor> getTemperature() {
+	public List<Sensor> getTemperature() {
 		return repository.findAll();
 	}
 	

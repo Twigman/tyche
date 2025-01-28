@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
 
@@ -34,9 +36,11 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = DaylightSensor.class, name = "Daylight"),
 	@JsonSubTypes.Type(value = CLIPDaylightOffsetSensor.class, name = "CLIPDaylightOffset")
 })
+@Document(collection = "Sensors")
 public abstract class Sensor {
 
 	@Id
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private String id;
 	
 	@JsonProperty("ep")
@@ -68,6 +72,7 @@ public abstract class Sensor {
 	private GeneralSensorConfig config;
 	
 	@JsonProperty("state")
+	@DBRef
 	private SensorState state;
 	
 	

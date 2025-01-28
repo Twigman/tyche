@@ -15,5 +15,5 @@ import lombok.ToString;
 public class HumiditySensorState extends SensorState {
 	
 	@JsonProperty("humidity")
-	private boolean humidity;
+	private Integer humidity;
 }

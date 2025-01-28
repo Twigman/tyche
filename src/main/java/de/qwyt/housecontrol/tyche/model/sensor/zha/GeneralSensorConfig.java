@@ -14,6 +14,7 @@ import lombok.Data;
 public class GeneralSensorConfig {
 	
 	@Id
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private String id;
 	
 	@JsonProperty("battery")

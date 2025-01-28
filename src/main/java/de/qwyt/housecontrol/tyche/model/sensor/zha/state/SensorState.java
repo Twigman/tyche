@@ -3,6 +3,7 @@ package de.qwyt.housecontrol.tyche.model.sensor.zha.state;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -14,6 +15,7 @@ import de.qwyt.housecontrol.tyche.model.sensor.zha.HumiditySensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.LightLevelSensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.PresenceSensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.PressureSensor;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.TemperatureSensor;
 import lombok.Data;
 
@@ -36,9 +38,8 @@ import lombok.Data;
 public abstract class SensorState {
 
 	@Id
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private String id;
-	
-	private String sensorId;
 	
 	@JsonProperty("lastupdated")
 	private Date lastupdated;
