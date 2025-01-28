@@ -33,17 +33,17 @@ public class RaspbeeWebSocketController {
 	public void handleWebSocketMessage(RaspbeeWebSocketEvent webSocketEvent) {
 		
 		try {
-			JsonNode root = this.objectMapper.readTree(webSocketEvent.getMessage());
+			JsonNode rootMessage = this.objectMapper.readTree(webSocketEvent.getMessage());
 			// contains the source (sensors/lights)
-			String resourceType = root.get("r").asText();
+			String resourceType = rootMessage.get("r").asText();
 			// event
-			String eventType = root.get("e").asText();
+			String eventType = rootMessage.get("e").asText();
 			// identify the device
-			String uniqueId = root.get("uniqueid").asText();
+			String uniqueId = rootMessage.get("uniqueid").asText();
 			
 			if (eventType.equals("changed")) {
 				if (resourceType.equals("sensors")) {
-					this.sensorService.updateSensorByJson(uniqueId, root);
+					this.sensorService.updateSensorByJson(uniqueId, rootMessage);
 				} else if (resourceType.equals("lights")) {
 					
 				} else {

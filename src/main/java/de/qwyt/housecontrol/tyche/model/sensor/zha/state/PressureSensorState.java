@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
+@ToString(callSuper = true)
 @Document(collection = "PressureSensorState")
 public class PressureSensorState extends SensorState {
 
 	@JsonProperty("pressure")
-	private int pressure;
+	private Integer pressure;
 }

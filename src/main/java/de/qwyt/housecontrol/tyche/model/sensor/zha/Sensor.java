@@ -12,8 +12,12 @@ import org.springframework.data.annotation.Id;
 
 import lombok.Data;
 
+/**
+ * Note: Integer is used instead of int to allow null values.
+ * Null is assigned if the field is missing in json.
+ * In that case, the ModelMapper doesn't update the field, which is important.
+ */
 @Data
-@Component
 @JsonTypeInfo(
 		use = JsonTypeInfo.Id.NAME,
 		include = JsonTypeInfo.As.PROPERTY,
@@ -36,7 +40,7 @@ public abstract class Sensor {
 	private String id;
 	
 	@JsonProperty("ep")
-	private int ep;
+	private Integer ep;
 	
 	@JsonProperty("etag")
 	private String etag;

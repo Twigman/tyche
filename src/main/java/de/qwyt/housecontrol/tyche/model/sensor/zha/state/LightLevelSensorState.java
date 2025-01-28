@@ -19,8 +19,8 @@ public class LightLevelSensorState extends SensorState {
 	private boolean daylight;
 	
 	@JsonProperty("lightlevel")
-	private int lightlevel;
+	private Integer lightlevel;
 	
 	@JsonProperty("lux")
-	private int lux;
+	private Integer lux;
 }

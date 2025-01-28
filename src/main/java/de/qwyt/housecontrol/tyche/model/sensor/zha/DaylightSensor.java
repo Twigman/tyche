@@ -3,9 +3,11 @@ package de.qwyt.housecontrol.tyche.model.sensor.zha;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.DaylightSensorState;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
+@ToString(callSuper = true)
 public class DaylightSensor extends Sensor {
 
 	@Override

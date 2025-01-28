@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -45,17 +46,10 @@ public class SensorService {
 		    for (Iterator<Map.Entry<String, JsonNode>> it = rootNode.fields(); it.hasNext(); ) {
 		        Map.Entry<String, JsonNode> entry = it.next();
 		        JsonNode sensorNode = entry.getValue();
-		        
+
 		        // Extract the sensor type from the root node
 		        String sensorType = sensorNode.get("type").asText();
-		        
-		        // Check if the "state" object exists and is a JSON object
-		        JsonNode stateNode = sensorNode.get("state");
-		        if (stateNode != null && stateNode.isObject()) {
-		            // Insert the "type" attribute into the "state" object
-		            ((ObjectNode) stateNode).put("type", sensorType);
-		        }
-		        
+		        sensorNode = this.extendSensorStateByType(sensorNode, sensorType);
 
 		        // Convert JsonNode into a Sensor object
 		        Sensor sensor = objectMapper.treeToValue(sensorNode, Sensor.class);
@@ -71,7 +65,6 @@ public class SensorService {
 		
 			LOG.info(this.sensorMap.size() + " sensors registered");
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			LOG.error("Error during Sensor registration");
 			e.printStackTrace();
 		}
@@ -81,49 +74,70 @@ public class SensorService {
 	}
 
 
-	public void updateSensorByJson(String uniqueId, JsonNode root) {
+	public void updateSensorByJson(String uniqueId, JsonNode rootMessage) {
 		Sensor sensor = this.sensorMap.get(uniqueId);
 		
-		if (root.has("state")) {
+		if (rootMessage.has("state")) {
 			// state event
-			
-			// Map state-entry to concrete SensorState and change values of the registered sensor
-			JsonNode stateNode = root.get("state");
-			String sensorType = sensor.getType();
-
-			// Add type in stateNode if it is an ObjectNode
-			if (stateNode != null && stateNode.isObject()) {
-			    ((ObjectNode) stateNode).put("type", sensorType);
-			}
-
-			LOG.debug(sensor.getState().toString());
-
-			try {
-			    // Deserialize stateNode to a concrete SensorState instance
-			    SensorState changedSensorState = this.objectMapper.treeToValue(stateNode, sensor.getState().getClass());
-			    
-			    // Update sensor state only for non-null attributes
-			    this.updateSensorStateForNotNullAttributes(changedSensorState, sensor.getState());
-			    LOG.debug("Sensor " + uniqueId + " updated");
-			} catch (JsonProcessingException | IllegalArgumentException e) {
-			    LOG.error("Can't create SensorState from JSON: " + stateNode.toString());
-			    e.printStackTrace();
-			}
-			
-		} else if (root.has("attr")) {
+			this.updateSensorStateByJson(sensor, rootMessage);
+		} else if (rootMessage.has("attr")) {
 			// attr event
+			this.updateSensorAttrByJson(sensor, rootMessage);
 		} else {
-			LOG.warn("Event doesn't contains a state- or attr-Attribute: {}", root.toString());
+			LOG.warn("Event doesn't contains a state- or attr-Attribute: {}", rootMessage.toString());
 		}
 	}
 	
-	public void updateSensorStateForNotNullAttributes(SensorState sourceSensorState, SensorState targetSensorState) {
-		modelMapper.map(sourceSensorState, targetSensorState);
+	private JsonNode extendSensorStateByType(JsonNode root, String sensorType) {
+		JsonNode stateNode = root.get("state");
+		
+		// Add type in stateNode if it is an ObjectNode
+		if (stateNode != null && stateNode.isObject()) {
+			((ObjectNode) stateNode).put("type", sensorType);
+		    ((ObjectNode) root).set("state", stateNode);
+		} else {
+			LOG.warn("Sensor has no 'state' attribute.");
+		}
+		return root;
 	}
 	
-	public void updateSensor(Sensor sourceSensor, Sensor targetSensor) {
-		modelMapper.map(sourceSensor, targetSensor);
+	
+	private void updateSensorAttrByJson(Sensor sensor, JsonNode root) {
+		// Convert JsonNode into a Sensor object
+		JsonNode attrNode = root.get("attr");
+		
+        try {
+        	LOG.debug(sensor.toString());
+			Sensor changedSensor = objectMapper.treeToValue(attrNode, Sensor.class);
+			this.modelMapper.map(changedSensor, sensor);
+			
+			LOG.debug("Sensor {} updated", sensor.getUniqueId());
+		} catch (JsonProcessingException | IllegalArgumentException e) {
+			LOG.error("Can't create Sensor from JSON: {}", root.toString());
+			e.printStackTrace();
+		}
 	}
+	
+
+	public void updateSensorStateByJson(Sensor sensor, JsonNode root) {
+		
+		root = this.extendSensorStateByType(root, sensor.getType());
+		// Map state-entry to concrete SensorState and change values of the registered sensor
+		JsonNode stateNode = root.get("state");
+
+		try {
+		    // Deserialize stateNode to a concrete SensorState instance
+		    SensorState changedSensorState = this.objectMapper.treeToValue(stateNode, sensor.getState().getClass());
+		    
+		    // Update sensor state only for non-null attributes
+		    this.modelMapper.map(changedSensorState, sensor.getState());
+		    LOG.debug("Sensor {} updated", sensor.getUniqueId());
+		} catch (JsonProcessingException | IllegalArgumentException e) {
+		    LOG.error("Can't create SensorState from JSON: {}", stateNode.toString());
+		    e.printStackTrace();
+		}
+	}
+	
 	
 	public void addSensor(Sensor sensor) {
 		this.sensorMap.put(sensor.getId(), sensor);
