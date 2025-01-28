@@ -1,2 +1,2 @@
-# tyche
-Home automation
+# tyche-showcase
+Showcase for Spring Boot project - Home automation
