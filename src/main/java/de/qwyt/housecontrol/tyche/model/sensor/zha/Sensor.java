@@ -1,7 +1,5 @@
 package de.qwyt.housecontrol.tyche.model.sensor.zha;
 
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -16,6 +14,8 @@ import lombok.Data;
  * Note: Integer is used instead of int to allow null values.
  * Null is assigned if the field is missing in json.
  * In that case, the ModelMapper doesn't update the field, which is important.
+ * 
+ * TODO: Missing fields are: specific config, lastannounced and lastseen
  */
 @Data
 @JsonTypeInfo(

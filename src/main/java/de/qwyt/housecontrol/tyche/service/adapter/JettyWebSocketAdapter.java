@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
-import de.qwyt.housecontrol.tyche.model.event.RaspbeeWebSocketEvent;
+import de.qwyt.housecontrol.tyche.event.RaspbeeWebSocketEvent;
 
 @WebSocket(autoDemand = true)
 public class JettyWebSocketAdapter {

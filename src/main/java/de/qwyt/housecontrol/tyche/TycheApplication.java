@@ -9,7 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import de.qwyt.housecontrol.tyche.controller.rest.DeconzRestController;
+import de.qwyt.housecontrol.tyche.controller.DeconzRestController;
 import de.qwyt.housecontrol.tyche.service.SensorService;
 import de.qwyt.housecontrol.tyche.service.WeatherService;
 import de.qwyt.housecontrol.tyche.service.WebSocketService;

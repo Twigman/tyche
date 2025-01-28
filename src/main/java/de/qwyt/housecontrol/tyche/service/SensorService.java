@@ -107,7 +107,6 @@ public class SensorService {
 		JsonNode attrNode = root.get("attr");
 		
         try {
-        	LOG.debug(sensor.toString());
 			Sensor changedSensor = objectMapper.treeToValue(attrNode, Sensor.class);
 			this.modelMapper.map(changedSensor, sensor);
 			

@@ -9,7 +9,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import de.qwyt.housecontrol.tyche.model.event.RaspbeeWebSocketEvent;
+import de.qwyt.housecontrol.tyche.event.RaspbeeWebSocketEvent;
 
 public class SpringBasicWebSocketAdapter extends TextWebSocketHandler {
 	

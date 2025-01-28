@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.model.event;
+package de.qwyt.housecontrol.tyche.event;
 
 
 import org.springframework.context.ApplicationEvent;

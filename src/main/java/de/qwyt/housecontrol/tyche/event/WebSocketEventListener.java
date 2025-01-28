@@ -1,21 +1,20 @@
-package de.qwyt.housecontrol.tyche.controller;
+package de.qwyt.housecontrol.tyche.event;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.qwyt.housecontrol.tyche.model.event.RaspbeeWebSocketEvent;
 import de.qwyt.housecontrol.tyche.service.LightService;
 import de.qwyt.housecontrol.tyche.service.SensorService;
 
-@Controller
-public class RaspbeeWebSocketController {
+@Component
+public class WebSocketEventListener {
 	
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
@@ -76,5 +75,4 @@ public class RaspbeeWebSocketController {
 		}
 		*/
 	}
-	
 }

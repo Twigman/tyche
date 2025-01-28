@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.controller.rest;
+package de.qwyt.housecontrol.tyche.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
