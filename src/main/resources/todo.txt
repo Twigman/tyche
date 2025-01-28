@@ -1,0 +1,3 @@
+Beim Start Sensoren registrieren 
+Sensor Werte in Mongodb schreiben (Docker)
+Sensor Werte über REST API auslesen

@@ -1,0 +1,24 @@
+Wie mit Sensoren umgehen?
+
+Ein physischer Sensor liefert drei Werte, welche über drei getrennte JSON-Objekte geliefert werden.
+
+Sensor rekonstuieren
+
++ Ein Sensor kann einfacher einem Raum/Ort zugewiesen werden.
+- komplexere Objekte
+
+
+
+Werte als getrennte Sensoren behandeln 
+
++ Es ist bei Abfragen leichter die Temperatur abzufragen
++ einfachere Objekte
+- Zuordnung der Werte zu einem Sensor erfordert zusätzliche Logik
+
+
+Was möchte ich machen?
+
+- Temperatur in Bad, Küche, Flur, Wohnzimmer anzeigen
+- Luftfeuchtigkeit in Badezimmer und Wohnzimmer
+- Bewegung in Flur und Küche
+  -> Der Zusammenhang der Sensoren ist egal

@@ -1,0 +1,11 @@
+services:
+  mongodb:
+    image: mongo:8.0.4
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - tyche-mongo-data:/data/db
+
+volumes:
+  tyche-mongo-data:
