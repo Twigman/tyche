@@ -1,4 +1,0 @@
-Beim Start Sensoren registrieren
-Beim Start Lichter registrieren 
-Sensor Werte in Mongodb schreiben (Docker)
-Lichter über Sensoren steuern
