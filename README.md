@@ -10,4 +10,4 @@ Implemented ideas:<br />
 [ ] Web-Frontend<br />
 [ ] Docker Setup<br />
 <br />
-The project is still in progress
+The project is still in progress and will be updated
