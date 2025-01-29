@@ -67,8 +67,8 @@ public class SensorService {
 		            LOG.debug("New " + sensor.getClass().getSimpleName() + " registered (" + sensor.getUniqueId() + ")");
 		            
 		            // save sensor
-		            //this.sensorStateRepository.save(sensor.getState());
-		            //this.sensorRepository.save(sensor);
+		            this.sensorStateRepository.save(sensor.getState());
+		            this.sensorRepository.save(sensor);
 		        } else {
 		            LOG.error("No unique ID found for sensor " + sensor.getName() + " (" + sensor.getManufacturer() + ")");
 		        }

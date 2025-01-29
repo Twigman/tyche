@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -35,6 +36,7 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = DaylightSensorState.class, name = "Daylight"),
 	@JsonSubTypes.Type(value = CLIPDaylightOffsetSensorState.class, name = "CLIPDaylightOffset")
 })
+@Document(collection = "SensorStates")
 public abstract class SensorState {
 
 	@Id
