@@ -39,9 +39,13 @@ import lombok.Data;
 @Document(collection = "Sensors")
 public abstract class Sensor {
 
+	//@Id
+	//@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	//private String id;
+	
 	@Id
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private String id;
+	@JsonProperty("uniqueid")
+	private String uniqueId;
 	
 	@JsonProperty("ep")
 	private Integer ep;
@@ -64,9 +68,6 @@ public abstract class Sensor {
 	// Will not be filled, because it is used to decide which Subclass to load
 	@JsonProperty("type")
 	private String type;
-	
-	@JsonProperty("uniqueid")
-	private String uniqueId;
 	
 	@JsonProperty("config")
 	private GeneralSensorConfig config;

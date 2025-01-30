@@ -52,9 +52,15 @@ public class SensorService {
 	}
 	
 	/**
-	 * Loads all sensors from the database.
-	 * 
-	 * @return Map with sensors
+	 * Loads all sensors from the database and adds them to the registered sensors map.
+	 * <p>
+	 * This method retrieves all sensor records from the database and adds them to a map where
+	 * the key is the uniqueId of each sensor, allowing for efficient lookups of sensors by their
+	 * unique identifier.
+	 * </p>
+	 *
+	 * @return A map containing sensors where the key is the uniqueId of each sensor.
+	 * @see SensorRepository
 	 */
 	public Map<String, Sensor> loadSensorsFromDb() {
 		
@@ -68,6 +74,17 @@ public class SensorService {
 		return this.sensorMap;
 	}
 	
+
+	/**
+	 * Registers all sensors from a JSON response, including all available attributes such as config and state.
+	 * <p>
+	 * This method processes the provided JSON string, extracts sensor data, and registers them into the system.
+	 * For each sensor, the method checks if it has a uniqueId and updates the sensor map accordingly.
+	 * </p>
+	 *
+	 * @param jsonResponse The JSON string containing the sensor data from deconz.
+	 * @return {@code true} if all sensors were successfully registered without errors; {@code false} otherwise.
+	 */
 	public boolean registerSensors(String jsonResponse) {
 		// parse Sensors
 		try {
@@ -87,28 +104,35 @@ public class SensorService {
 		        Sensor sensor = objectMapper.treeToValue(sensorNode, Sensor.class);
 
 		        // Insert sensor with uniqueId as key into the map
-		        if (sensor.getUniqueId() != null) {
-		        	this.updateSensorMap(sensor);
-		            
-		            // save sensor
+	        	if (this.updateSensorMap(sensor)) {
+	        		// save sensor
 		            this.sensorStateRepository.save(this.sensorMap.get(sensor.getUniqueId()).getState());
 		            this.sensorRepository.save(this.sensorMap.get(sensor.getUniqueId()));
 		        } else {
-		            LOG.error("No unique ID found for sensor " + sensor.getName() + " (" + sensor.getManufacturer() + ")");
+		            // TODO
 		        }
 		    }
 			LOG.info(this.sensorMap.size() + " sensors registered");
 			
+			return true;
+			
 		} catch (JsonProcessingException e) {
 			LOG.error("Error during Sensor registration");
 			e.printStackTrace();
+			return false;
 		}
-		
-		return false;
-		
 	}
 
 
+	/**
+	 * Updates a sensor by processing a JSON message and applying the changes to the sensor's state or attributes.
+	 * <p>
+	 * The method determines if the event contains a state or attribute update and processes it accordingly.
+	 * </p>
+	 *
+	 * @param uniqueId The unique identifier of the sensor to be updated.
+	 * @param rootMessage The JSON message containing the sensor update data.
+	 */
 	public void updateSensorByJson(String uniqueId, JsonNode rootMessage) {
 		Sensor sensor = this.sensorMap.get(uniqueId);
 		
@@ -124,6 +148,16 @@ public class SensorService {
 	}
 	
 	
+	/**
+	 * Updates a sensor's attributes based on the provided JSON data.
+	 * <p>
+	 * This method processes the provided JSON node containing sensor attributes and maps the values to
+	 * the existing sensor object. It then updates the sensor in the system.
+	 * </p>
+	 *
+	 * @param sensor The sensor to be updated.
+	 * @param root The JSON node containing the attribute data for the sensor.
+	 */
 	private void updateSensorAttrByJson(Sensor sensor, JsonNode root) {
 		// Convert JsonNode into a Sensor object
 		JsonNode attrNode = root.get("attr");
@@ -140,6 +174,16 @@ public class SensorService {
 	}
 	
 
+	/**
+	 * Updates a sensor's state based on the provided JSON data.
+	 * <p>
+	 * This method processes the provided JSON node containing the state data for the sensor, updates
+	 * the sensor's state, and applies the changes to the registered sensor.
+	 * </p>
+	 *
+	 * @param sensor The sensor whose state is to be updated.
+	 * @param root The JSON node containing the state data for the sensor.
+	 */
 	public void updateSensorStateByJson(Sensor sensor, JsonNode root) {
 		
 		root = this.insertTypeInState(root, sensor.getType());
@@ -159,7 +203,19 @@ public class SensorService {
 		}
 	}
 	
-	
+	/**
+	 * Inserts a {@code type} field into the {@code state} node of the given JSON object.
+	 * <p>
+	 * If the {@code state} field exists and is an object, the method adds a new field called
+	 * {@code type} with the provided {@code sensorType} as its value. If the {@code state} field
+	 * is missing or not an object, a warning is logged.
+	 * </p>
+	 *
+	 * @param root the root {@link JsonNode} containing the {@code state} field
+	 * @param sensorType the type of the sensor to be inserted into the {@code state} node
+	 * @return the modified {@link JsonNode} with the {@code type} field added to the {@code state} node
+	 * @throws NullPointerException if {@code root} is {@code null}
+	 */
 	private JsonNode insertTypeInState(JsonNode root, String sensorType) {
 		JsonNode stateNode = root.get("state");
 		
@@ -173,23 +229,38 @@ public class SensorService {
 		return root;
 	}
 	
-	
-	public void updateSensorMap(Sensor sensor) {
-		if (this.sensorMap.containsKey(sensor.getUniqueId())) {
-			// key already exists
-			// update Sensor
-			this.modelMapper.map(sensor, this.sensorMap.get(sensor.getUniqueId()));
-			LOG.debug("{} updated",	this.sensorMap.get(sensor.getUniqueId()).getTypeAndIdInfo());
+	/**
+	 * Updates the sensor map by adding a new sensor or updating an existing one.
+	 * <p>
+	 * This method checks if the sensor has a valid uniqueId. If the sensor is already present in the map,
+	 * it updates the existing sensor's data. If the sensor is not present in the map, it is added as a new sensor.
+	 * If the sensor's uniqueId is null or the sensor object itself is null, an error is logged.
+	 * </p>
+	 *
+	 * @param sensor The sensor to be added or updated in the map.
+	 * @return {@code true} if the sensor was successfully added or updated; {@code false} if the sensor is null
+	 *         or has a null uniqueId.
+	 */
+	public boolean updateSensorMap(Sensor sensor) {
+		if (sensor != null) {
+			if (sensor.getUniqueId() != null) {
+				if (this.sensorMap.containsKey(sensor.getUniqueId())) {
+					// key already exists
+					// update Sensor
+					this.modelMapper.map(sensor, this.sensorMap.get(sensor.getUniqueId()));
+					LOG.debug("{} updated",	this.sensorMap.get(sensor.getUniqueId()).getTypeAndIdInfo());
+				} else {
+					// new sensor
+					this.sensorMap.put(sensor.getUniqueId(), sensor);
+					LOG.debug("New {} registered ({})", sensor.getClass().getSimpleName(), sensor.getUniqueId());
+				}
+				return true;
+			} else {
+				LOG.error("No unique ID found for sensor " + sensor.getName() + " (" + sensor.getManufacturer() + ")");
+			}
 		} else {
-			// new sensor
-			this.sensorMap.put(sensor.getUniqueId(), sensor);
-			LOG.debug("New {} registered ({})", sensor.getClass().getSimpleName(), sensor.getUniqueId());
+			LOG.error("Sensor is null");
 		}
+		return false;
 	}
-	
-	
-	public void addSensor(Sensor sensor) {
-		this.sensorMap.put(sensor.getId(), sensor);
-	}
-
 }
