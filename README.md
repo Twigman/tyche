@@ -1,7 +1,7 @@
 # tyche-showcase
 Showcase for a Spring Boot project - Home automation (working sample)<br />
 <br />
-Implemented ideas:<br />
+Ideas:<br />
 * [x] Pluggable WebSocket implementation
   - concrete implementation for Spring and Jetty
 * [x] JSON Handling
