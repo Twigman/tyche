@@ -16,25 +16,23 @@ public class HueLightState {
 	@Id
 	private String id;
 	
-	private String sensorId;
-	
 	@JsonProperty("alert")
 	private String alert;
 	
 	@JsonProperty("bri")
-	private int bri;
+	private Integer bri;
 	
 	@JsonProperty("colormode")
 	private String colormode;
 	
 	@JsonProperty("ct")
-	private int ct;
+	private Integer ct;
 	
 	@JsonProperty("effect")
 	private String effect;
 	
 	@JsonProperty("hue")
-	private int hue;
+	private Integer hue;
 	
 	@JsonProperty("on")
 	private boolean on;
@@ -43,7 +41,7 @@ public class HueLightState {
 	private boolean reachable;
 	
 	@JsonProperty("sat")
-	private int sat;
+	private Integer sat;
 	
 	@JsonProperty("xy")
 	private List<Double> xy;

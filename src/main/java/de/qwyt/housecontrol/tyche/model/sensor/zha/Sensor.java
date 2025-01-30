@@ -81,10 +81,10 @@ public abstract class Sensor {
 		return this.state;
 	}
 	
-	public String getTypeAndIdInfo() {
+	public String getNameAndIdInfo() {
 		// String Templates not supported in JDK 21
 		//return STR."${this.getClass().getSimpleName()} (this.getUniqueId())";
-		return String.format("%s (%s)", this.getClass().getSimpleName(), this.getUniqueId());
+		return String.format("%s (%s)", this.name, this.getUniqueId());
 	}
 	
 }

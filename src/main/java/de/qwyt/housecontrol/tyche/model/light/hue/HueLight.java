@@ -3,6 +3,7 @@ package de.qwyt.housecontrol.tyche.model.light.hue;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,17 +13,19 @@ import lombok.Data;
 @Data
 @Document(collection = "HueLights")
 public class HueLight {
+	
 	@Id
-	private String id;
+	@JsonProperty("uniqueid")
+	private String uniqueId;
 	
 	@JsonProperty("colorcapabilities")
-	private int colorcapabilities;
+	private Integer colorcapabilities;
 	
 	@JsonProperty("ctmax")
-	private int ctmax;
+	private Integer ctmax;
 	
 	@JsonProperty("ctmin")
-	private int ctmin;
+	private Integer ctmin;
 	
 	@JsonProperty("hascolor")
 	private boolean hascolor;
@@ -51,15 +54,21 @@ public class HueLight {
 	@JsonProperty("type")
 	private String type;
 	
-	@JsonProperty("uniqueid")
-	private String uniqueId;
-	
+	@DBRef
 	@JsonProperty("config")
 	private HueLightConfigAttr config;
 	
+	@DBRef
 	@JsonProperty("capabilities")
 	private HueLightCapabilities capabilities;
 	
+	@DBRef
 	@JsonProperty("state")
 	private HueLightState state;
+	
+	
+	public String getNameAndIdInfo() {
+		return String.format("%s (%s)", this.name, this.uniqueId);
+	}
+	
 }

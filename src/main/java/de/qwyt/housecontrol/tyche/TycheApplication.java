@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import de.qwyt.housecontrol.tyche.controller.DeconzRestController;
+import de.qwyt.housecontrol.tyche.service.LightService;
 import de.qwyt.housecontrol.tyche.service.SensorService;
 import de.qwyt.housecontrol.tyche.service.WeatherService;
 import de.qwyt.housecontrol.tyche.service.WebSocketService;
@@ -37,6 +38,9 @@ public class TycheApplication implements CommandLineRunner {
 	@Autowired
 	private SensorService sensorService;
 	
+	@Autowired
+	private LightService lightService;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(TycheApplication.class, args);
 	}
@@ -47,6 +51,10 @@ public class TycheApplication implements CommandLineRunner {
 		LOG.info("Initialising sensors");
 		sensorService.loadSensorsFromDb();
 		sensorService.registerSensors(deconzController.getSensors());
+		LOG.info("Initialising lights");
+		lightService.loadLightsFromDb();
+		lightService.registerLights(deconzController.getLights());
+		
 		
 		
 		webSocketService.connect(deconzWebSocketUrl);

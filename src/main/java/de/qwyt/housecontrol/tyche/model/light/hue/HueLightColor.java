@@ -3,6 +3,7 @@ package de.qwyt.housecontrol.tyche.model.light.hue;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,8 +15,7 @@ public class HueLightColor {
 	@Id
 	private String id;
 	
-	private String sensorId;
-	
+	@DBRef
 	@JsonProperty("ct")
 	private HueLightColorCt ct;
 	

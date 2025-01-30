@@ -14,8 +14,6 @@ public class HueLightConfigAttr {
 	@Id
 	private String id;
 	
-	private String sensorId;
-
 	@JsonProperty("groups")
 	private List<String> groups;
 	

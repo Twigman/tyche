@@ -81,6 +81,9 @@ public class SensorService {
 	 * This method processes the provided JSON string, extracts sensor data, and registers them into the system.
 	 * For each sensor, the method checks if it has a uniqueId and updates the sensor map accordingly.
 	 * </p>
+	 * <p>
+	 * Note: Very similar to registerLights
+	 * </p>
 	 *
 	 * @param jsonResponse The JSON string containing the sensor data from deconz.
 	 * @return {@code true} if all sensors were successfully registered without errors; {@code false} otherwise.
@@ -152,7 +155,7 @@ public class SensorService {
 	 * Updates a sensor's attributes based on the provided JSON data.
 	 * <p>
 	 * This method processes the provided JSON node containing sensor attributes and maps the values to
-	 * the existing sensor object. It then updates the sensor in the system.
+	 * the existing sensor objecgetClass().getSimpleName()t. It then updates the sensor in the system.
 	 * </p>
 	 *
 	 * @param sensor The sensor to be updated.
@@ -184,7 +187,7 @@ public class SensorService {
 	 * @param sensor The sensor whose state is to be updated.
 	 * @param root The JSON node containing the state data for the sensor.
 	 */
-	public void updateSensorStateByJson(Sensor sensor, JsonNode root) {
+	private void updateSensorStateByJson(Sensor sensor, JsonNode root) {
 		
 		root = this.insertTypeInState(root, sensor.getType());
 		// Map state-entry to concrete SensorState and change values of the registered sensor
@@ -248,7 +251,7 @@ public class SensorService {
 					// key already exists
 					// update Sensor
 					this.modelMapper.map(sensor, this.sensorMap.get(sensor.getUniqueId()));
-					LOG.debug("{} updated",	this.sensorMap.get(sensor.getUniqueId()).getTypeAndIdInfo());
+					LOG.debug("{} updated",	this.sensorMap.get(sensor.getUniqueId()).getNameAndIdInfo());
 				} else {
 					// new sensor
 					this.sensorMap.put(sensor.getUniqueId(), sensor);

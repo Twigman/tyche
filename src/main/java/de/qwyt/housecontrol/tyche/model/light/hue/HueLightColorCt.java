@@ -12,12 +12,10 @@ public class HueLightColorCt {
 	@Id
 	private String id;
 	
-	private String sensorId;
-	
 	@JsonProperty("max")
-	private int max;
+	private Integer max;
 	
 	@JsonProperty("min")
-	private int min;
+	private Integer min;
 
 }
