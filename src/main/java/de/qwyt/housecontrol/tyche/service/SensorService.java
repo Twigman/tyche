@@ -2,7 +2,9 @@ package de.qwyt.housecontrol.tyche.service;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -24,6 +26,7 @@ import de.qwyt.housecontrol.tyche.repository.sensor.SensorStateRepository;
 public class SensorService {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
+	// uniqueId is the Key
 	private Map<String, Sensor> sensorMap;
 	
 	private final ObjectMapper objectMapper;
@@ -35,12 +38,34 @@ public class SensorService {
 	private final SensorStateRepository sensorStateRepository;
 	
 	@Autowired
-	public SensorService(ObjectMapper objectMapper, ModelMapper modelMapper, SensorRepository sensorRepository, SensorStateRepository sensorStateRepository) {
+	public SensorService(
+			ObjectMapper objectMapper,
+			ModelMapper modelMapper,
+			SensorRepository sensorRepository,
+			SensorStateRepository sensorStateRepository
+			) {
 		this.modelMapper = modelMapper;
 		this.objectMapper = objectMapper;
 		this.sensorRepository = sensorRepository;
 		this.sensorStateRepository = sensorStateRepository;
 		this.sensorMap = new HashMap<>();
+	}
+	
+	/**
+	 * Loads all sensors from the database.
+	 * 
+	 * @return Map with sensors
+	 */
+	public Map<String, Sensor> loadSensorsFromDb() {
+		
+		List<Sensor> sensors =  this.sensorRepository.findAll();
+		
+		this.sensorMap = sensors.stream()
+				.collect(Collectors.toMap(Sensor::getUniqueId, sensor -> sensor));
+		
+		LOG.info("{} sensors loaded from database", this.sensorMap.size());
+		
+		return this.sensorMap;
 	}
 	
 	public boolean registerSensors(String jsonResponse) {
@@ -56,25 +81,24 @@ public class SensorService {
 
 		        // Extract the sensor type from the root node
 		        String sensorType = sensorNode.get("type").asText();
-		        sensorNode = this.extendSensorStateByType(sensorNode, sensorType);
+		        sensorNode = this.insertTypeInState(sensorNode, sensorType);
 
 		        // Convert JsonNode into a Sensor object
 		        Sensor sensor = objectMapper.treeToValue(sensorNode, Sensor.class);
 
 		        // Insert sensor with uniqueId as key into the map
 		        if (sensor.getUniqueId() != null) {
-		            sensorMap.put(sensor.getUniqueId(), sensor);
-		            LOG.debug("New " + sensor.getClass().getSimpleName() + " registered (" + sensor.getUniqueId() + ")");
+		        	this.updateSensorMap(sensor);
 		            
 		            // save sensor
-		            this.sensorStateRepository.save(sensor.getState());
-		            this.sensorRepository.save(sensor);
+		            this.sensorStateRepository.save(this.sensorMap.get(sensor.getUniqueId()).getState());
+		            this.sensorRepository.save(this.sensorMap.get(sensor.getUniqueId()));
 		        } else {
 		            LOG.error("No unique ID found for sensor " + sensor.getName() + " (" + sensor.getManufacturer() + ")");
 		        }
 		    }
-		
 			LOG.info(this.sensorMap.size() + " sensors registered");
+			
 		} catch (JsonProcessingException e) {
 			LOG.error("Error during Sensor registration");
 			e.printStackTrace();
@@ -99,19 +123,6 @@ public class SensorService {
 		}
 	}
 	
-	private JsonNode extendSensorStateByType(JsonNode root, String sensorType) {
-		JsonNode stateNode = root.get("state");
-		
-		// Add type in stateNode if it is an ObjectNode
-		if (stateNode != null && stateNode.isObject()) {
-			((ObjectNode) stateNode).put("type", sensorType);
-		    ((ObjectNode) root).set("state", stateNode);
-		} else {
-			LOG.warn("Sensor has no 'state' attribute.");
-		}
-		return root;
-	}
-	
 	
 	private void updateSensorAttrByJson(Sensor sensor, JsonNode root) {
 		// Convert JsonNode into a Sensor object
@@ -131,7 +142,7 @@ public class SensorService {
 
 	public void updateSensorStateByJson(Sensor sensor, JsonNode root) {
 		
-		root = this.extendSensorStateByType(root, sensor.getType());
+		root = this.insertTypeInState(root, sensor.getType());
 		// Map state-entry to concrete SensorState and change values of the registered sensor
 		JsonNode stateNode = root.get("state");
 
@@ -145,6 +156,34 @@ public class SensorService {
 		} catch (JsonProcessingException | IllegalArgumentException e) {
 		    LOG.error("Can't create SensorState from JSON: {}", stateNode.toString());
 		    e.printStackTrace();
+		}
+	}
+	
+	
+	private JsonNode insertTypeInState(JsonNode root, String sensorType) {
+		JsonNode stateNode = root.get("state");
+		
+		// Add type in stateNode if it is an ObjectNode
+		if (stateNode != null && stateNode.isObject()) {
+			((ObjectNode) stateNode).put("type", sensorType);
+		    ((ObjectNode) root).set("state", stateNode);
+		} else {
+			LOG.warn("Sensor has no 'state' attribute.");
+		}
+		return root;
+	}
+	
+	
+	public void updateSensorMap(Sensor sensor) {
+		if (this.sensorMap.containsKey(sensor.getUniqueId())) {
+			// key already exists
+			// update Sensor
+			this.modelMapper.map(sensor, this.sensorMap.get(sensor.getUniqueId()));
+			LOG.debug("{} updated",	this.sensorMap.get(sensor.getUniqueId()).getTypeAndIdInfo());
+		} else {
+			// new sensor
+			this.sensorMap.put(sensor.getUniqueId(), sensor);
+			LOG.debug("New {} registered ({})", sensor.getClass().getSimpleName(), sensor.getUniqueId());
 		}
 	}
 	

@@ -1,6 +1,5 @@
 package de.qwyt.housecontrol.tyche.model.sensor.zha.state;
 
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +10,6 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
-@Document(collection = "PresenceSensorState")
 public class PresenceSensorState extends SensorState {
 
 	@JsonProperty("presence")

@@ -45,6 +45,7 @@ public class TycheApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		LOG.debug("Start run");
 		LOG.info("Initialising sensors");
+		sensorService.loadSensorsFromDb();
 		sensorService.registerSensors(deconzController.getSensors());
 		
 		

@@ -2,8 +2,6 @@ package de.qwyt.housecontrol.tyche.model.sensor.zha.state;
 
 import java.util.Date;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -13,7 +11,6 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
-@Document(collection = "DaylightSensorState")
 public class DaylightSensorState extends SensorState {
 	
 	@JsonProperty("dark")
