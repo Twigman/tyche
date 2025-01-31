@@ -1,5 +1,7 @@
 # tyche-showcase
-Showcase for a Spring Boot project - Home automation (working sample)<br />
+Showcase for a Spring Boot project - Home automation<br />
+This is a part of my home automation project. It runs on a Raspberry Pi with a ZigBee module. Several light sources and various sensors are connected to it.<br />
+The application uses REST requests to retrieve the initial configuration. Changes are communicated via WebSocket.<br />
 <br />
 Ideas:<br />
 * [x] Pluggable WebSocket implementation
