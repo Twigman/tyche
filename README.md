@@ -6,7 +6,7 @@ The application uses REST requests to retrieve the initial configuration. Change
 <br />
 Ideas:<br />
 * [x] Pluggable WebSocket implementation
-  - concrete implementation for Spring and Jetty
+  - concrete implementation for Spring and Jetty (for the showcase)
 * [x] JSON Handling
   - json messages are parsed into classes via ObjectMapper (Jackson)
 * [ ] REST APIs
