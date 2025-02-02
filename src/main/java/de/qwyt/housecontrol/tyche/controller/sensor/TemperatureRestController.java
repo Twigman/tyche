@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.controller;
+package de.qwyt.housecontrol.tyche.controller.sensor;
 
 import java.util.List;
 
@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
-import de.qwyt.housecontrol.tyche.model.sensor.zha.TemperatureSensor;
 import de.qwyt.housecontrol.tyche.repository.sensor.SensorRepository;
 
 @RestController
@@ -23,4 +22,9 @@ public class TemperatureRestController {
 		return repository.findAll();
 	}
 	
+	
+	@GetMapping(path = "/current")
+	public List<Sensor> getCurrentTemperature() {
+		return repository.findAll();
+	}
 }

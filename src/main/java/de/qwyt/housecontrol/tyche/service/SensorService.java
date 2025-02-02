@@ -276,4 +276,14 @@ public class SensorService {
 		}
 		return false;
 	}
+	
+	
+	public Map<String, Sensor> getSensorMap() {
+		return this.sensorMap;
+	}
+	
+	
+	public Sensor getSensor(String uniqueId) {
+		return this.sensorMap.get(uniqueId);
+	}
 }
