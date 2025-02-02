@@ -10,14 +10,19 @@ Ideas:<br />
 * [x] JSON Handling
   - json messages are parsed into classes via ObjectMapper (Jackson)
 * [ ] REST APIs
-* [ ] Persistant storage with MongoDB
-  - sensors and their states are stored
-  - sensors are loaded from the database when the application is started
+* [x] Persistant storage with MongoDB
+  - [x] sensors and their states are stored
+  - [x] sensors are loaded from the database when the application is started
+  - [x] lights and their states are stored
+  - [x] lights are loaded from the database when the application is started
 * [ ] Mocking WebService endpoint
 * [ ] Web-Frontend
 * [ ] Docker setup
   - MongoDB
 * [ ] JUnit Tests
+  - [x] HueLights
+  - [x] ChangeCheker
+  - [ ] LightService?
 
 <br />
 The project is still in progress and will be updated
