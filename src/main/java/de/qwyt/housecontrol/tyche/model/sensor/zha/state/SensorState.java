@@ -46,4 +46,5 @@ public abstract class SensorState {
 	@JsonProperty("lastupdated")
 	private Date lastupdated;
 	
+	private String sensorId;
 }
