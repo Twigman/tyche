@@ -17,6 +17,7 @@ Ideas:<br />
 * [ ] Web-Frontend
 * [ ] Docker setup
   - MongoDB
+* [ ] JUnit Tests
 
 <br />
 The project is still in progress and will be updated
