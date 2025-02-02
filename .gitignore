@@ -4,6 +4,7 @@ target/
 #!**/src/main/**/target/
 #!**/src/test/**/target/
 .mvn/
+**/logs/
 
 ### STS ###
 .apt_generated
@@ -38,6 +39,7 @@ build/
 *.log
 *.txt
 Dockerfile
+logback-spring.xml
 
 # Package Files #
 *.jar
