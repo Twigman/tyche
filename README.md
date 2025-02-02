@@ -21,7 +21,7 @@ Ideas:<br />
   - MongoDB
 * [ ] JUnit Tests
   - [x] HueLights
-  - [x] ChangeCheker
+  - [x] ChangeChecker
   - [ ] LightService?
 
 <br />
