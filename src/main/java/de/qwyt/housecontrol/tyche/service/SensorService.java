@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
+import de.qwyt.housecontrol.tyche.repository.sensor.SensorConfigRepository;
 import de.qwyt.housecontrol.tyche.repository.sensor.SensorRepository;
 import de.qwyt.housecontrol.tyche.repository.sensor.SensorStateRepository;
 
@@ -37,17 +38,21 @@ public class SensorService {
 	
 	private final SensorStateRepository sensorStateRepository;
 	
+	private final SensorConfigRepository sensorConfigRepository;
+	
 	@Autowired
 	public SensorService(
 			ObjectMapper objectMapper,
 			ModelMapper modelMapper,
 			SensorRepository sensorRepository,
-			SensorStateRepository sensorStateRepository
+			SensorStateRepository sensorStateRepository,
+			SensorConfigRepository sensorConfigRepository
 			) {
 		this.modelMapper = modelMapper;
 		this.objectMapper = objectMapper;
 		this.sensorRepository = sensorRepository;
 		this.sensorStateRepository = sensorStateRepository;
+		this.sensorConfigRepository = sensorConfigRepository;
 		this.sensorMap = new HashMap<>();
 	}
 	
@@ -109,9 +114,11 @@ public class SensorService {
 		        // Insert sensor with uniqueId as key into the map
 	        	if (this.updateSensorMap(sensor)) {
 	        		// save sensor
-	        		// assign unique sensor id to sensorState
+	        		// assign unique sensor id to sensorState and sensorConfig
 	        		this.sensorMap.get(sensor.getUniqueId()).getState().setSensorId(sensor.getUniqueId());
+	        		this.sensorMap.get(sensor.getUniqueId()).getConfig().setSensorId(sensor.getUniqueId());
 	        		
+	        		this.sensorConfigRepository.save(this.sensorMap.get(sensor.getUniqueId()).getConfig());
 		            this.sensorStateRepository.saveSensorState(this.sensorMap.get(sensor.getUniqueId()).getState());
 		            this.sensorRepository.save(this.sensorMap.get(sensor.getUniqueId()));
 		        } else {
@@ -152,9 +159,12 @@ public class SensorService {
 			this.sensorRepository.save(sensor);
 		} else if (rootMessage.has("attr")) {
 			// attr event
-			this.updateSensorAttrByJson(sensor, rootMessage);
-			// update the sensor
-			this.sensorRepository.save(sensor);
+			if (this.updateSensorAttrByJson(sensor, rootMessage)) {
+				// update the sensor entry
+				this.sensorRepository.save(sensor);
+			} else {
+				// unimportant field has changed (e.g. "lastseen")
+			}
 		} else {
 			LOG.warn("Event doesn't contains a state- or attr-Attribute: {}", rootMessage.toString());
 		}
@@ -171,19 +181,30 @@ public class SensorService {
 	 * @param sensor The sensor to be updated.
 	 * @param root The JSON node containing the attribute data for the sensor.
 	 */
-	private void updateSensorAttrByJson(Sensor sensor, JsonNode root) {
+	private boolean updateSensorAttrByJson(Sensor sensor, JsonNode root) {
 		// Convert JsonNode into a Sensor object
 		JsonNode attrNode = root.get("attr");
 		
         try {
 			Sensor changedSensor = objectMapper.treeToValue(attrNode, Sensor.class);
-			this.modelMapper.map(changedSensor, sensor);
 			
-			LOG.debug("Sensor {} updated", sensor.getUniqueId());
+			// only update if relevant fields have changed
+			if (sensor.hasChangedValuesRelevantForDatabase(changedSensor)) {
+				// update
+				this.modelMapper.map(changedSensor, sensor);
+				this.sensorRepository.save(sensor);
+				LOG.debug("{} updated", sensor.getNameAndIdInfo());
+				return true;
+			} else {
+				// no changes
+				LOG.debug("No relevant changes for {}", sensor.getNameAndIdInfo());
+				return false;
+			}
 		} catch (JsonProcessingException | IllegalArgumentException e) {
 			LOG.error("Can't create Sensor from JSON: {}", root.toString());
 			e.printStackTrace();
 		}
+        return false;
 	}
 	
 
@@ -209,7 +230,7 @@ public class SensorService {
 		    
 		    // Update sensor state only for non-null attributes
 		    this.modelMapper.map(changedSensorState, sensor.getState());
-		    LOG.debug("Sensor {} updated", sensor.getUniqueId());
+		    LOG.debug("State changed for {}", sensor.getNameAndIdInfo());
 		} catch (JsonProcessingException | IllegalArgumentException e) {
 		    LOG.error("Can't create SensorState from JSON: {}", stateNode.toString());
 		    e.printStackTrace();

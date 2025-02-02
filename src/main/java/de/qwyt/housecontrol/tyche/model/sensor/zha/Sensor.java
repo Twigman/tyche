@@ -65,11 +65,11 @@ public abstract class Sensor {
 	@JsonProperty("swversion")
 	private String swversion;
 	
-	// Will not be filled, because it is used to decide which Subclass to load
 	@JsonProperty("type")
 	private String type;
 	
 	@JsonProperty("config")
+	@Transient
 	private GeneralSensorConfig config;
 	
 	@JsonProperty("state")
@@ -85,6 +85,61 @@ public abstract class Sensor {
 		// String Templates not supported in JDK 21
 		//return STR."${this.getClass().getSimpleName()} (this.getUniqueId())";
 		return String.format("%s (%s)", this.name, this.getUniqueId());
+	}
+	
+	/**
+	 * Compares the relevant fields of the current {@link Sensor} object with the provided sensor 
+	 * to detect whether any of the fields that are relevant for database updates have changed.
+	 * <p>
+	 * The method checks if there is any change in the following fields:
+	 * <ul>
+	 *     <li>ep</li>
+	 *     <li>uniqueId</li>
+	 *     <li>etag</li>
+	 *     <li>modelId</li>
+	 *     <li>manufacturer</li>
+	 *     <li>name</li>
+	 *     <li>swversion</li>
+	 *     <li>type</li>
+	 * </ul>
+	 * If any of these fields differ between the current {@link Sensor} object and the provided one,
+	 * the method will return true, indicating that a relevant change for database persistence has been detected.
+	 * If none of the fields have changed, it will return false.
+	 *
+	 * @param s the {@link Sensor} object to compare against
+	 * @return true if any relevant field has changed; false otherwise
+	 */
+	public boolean hasChangedValuesRelevantForDatabase(Sensor s) {
+	    // compare only relevant fields
+	    if (hasChanged(this.ep, s.ep)) return true;
+	    if (hasChanged(this.uniqueId, s.uniqueId)) return true;
+	    if (hasChanged(this.etag, s.etag)) return true;
+	    if (hasChanged(this.modelId, s.modelId)) return true;
+	    if (hasChanged(this.manufacturer, s.manufacturer)) return true;
+	    if (hasChanged(this.name, s.name)) return true;
+	    if (hasChanged(this.swversion, s.swversion)) return true;
+	    if (hasChanged(this.type, s.type)) return true;
+	    
+	    return false;
+	}
+	
+	/**
+	 * Compares two values to determine if they have changed. A change is considered if the values 
+	 * are not equal or if one of the values is {@code null}.
+	 * <p>
+	 * If both values are equal (considering null values as equal if both are null), the method returns false,
+	 * indicating no change. If the values are different, it returns true.
+	 * 
+	 * @param oldValue the original value to compare
+	 * @param newValue the new value to compare
+	 * @param <T> the type of the values being compared
+	 * @return true if the values are different or if one of the values is null; false if they are the same
+	 */
+	private <T> boolean hasChanged(T oldValue, T newValue) {
+		// detect no change
+		if (newValue == null) return false;
+		
+		return !oldValue.equals(newValue);
 	}
 	
 }
