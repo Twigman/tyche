@@ -17,11 +17,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLight;
-import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
-import de.qwyt.housecontrol.tyche.repository.light.HueLightCapabilitiesRepository;
-import de.qwyt.housecontrol.tyche.repository.light.HueLightColorCtRepository;
-import de.qwyt.housecontrol.tyche.repository.light.HueLightColorRepository;
-import de.qwyt.housecontrol.tyche.repository.light.HueLightConfigRepository;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightRepository;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightStateRepository;
 
@@ -41,33 +36,17 @@ public class LightService {
 	
 	private final HueLightStateRepository hueLightStateRepository;
 	
-	private final HueLightColorCtRepository hueLightColorCtRepository;
-	
-	private final HueLightColorRepository hueLightColorRepository;
-	
-	private final HueLightCapabilitiesRepository hueLightCapabilitiesRepository;
-	
-	private final HueLightConfigRepository hueLightConfigRepository;
-	
 	@Autowired
 	public LightService(
 			ObjectMapper objectMapper,
 			ModelMapper modelMapper,
 			HueLightRepository hueLightRepository,
-			HueLightStateRepository hueLightStateRepository,
-			HueLightColorCtRepository hueLightColorCtRepository,
-			HueLightColorRepository hueLightColorRepository,
-			HueLightCapabilitiesRepository hueLightCapabilitiesRepository,
-			HueLightConfigRepository hueLightConfigRepository
+			HueLightStateRepository hueLightStateRepository
 			) {
 		this.objectMapper = objectMapper;
 		this.modelMapper = modelMapper;
 		this.hueLightRepository = hueLightRepository;
 		this.hueLightStateRepository = hueLightStateRepository;
-		this.hueLightColorCtRepository = hueLightColorCtRepository;
-		this.hueLightColorRepository = hueLightColorRepository;
-		this.hueLightCapabilitiesRepository = hueLightCapabilitiesRepository;
-		this.hueLightConfigRepository = hueLightConfigRepository;
 		this.lightMap = new HashMap<>();
 	}
 	
@@ -110,13 +89,12 @@ public class LightService {
 
 		        // Insert light with uniqueId as key into the map
 	        	if (this.updateLightMap(light)) {
+	        		HueLight l = this.lightMap.get(light.getUniqueId());
+	        		// set id
+	        		l.getState().setLightId(l.getUniqueId());
 	        		// save light
-	        		this.hueLightStateRepository.save(this.lightMap.get(light.getUniqueId()).getState());
-	        		this.hueLightColorCtRepository.save(this.lightMap.get(light.getUniqueId()).getCapabilities().getColor().getCt());
-	        		this.hueLightColorRepository.save(this.lightMap.get(light.getUniqueId()).getCapabilities().getColor());
-	        		this.hueLightCapabilitiesRepository.save(this.lightMap.get(light.getUniqueId()).getCapabilities());
-	        		this.hueLightConfigRepository.save(this.lightMap.get(light.getUniqueId()).getConfig());
-	        		this.hueLightRepository.save(this.lightMap.get(light.getUniqueId()));
+	        		this.hueLightStateRepository.save(l.getState());
+	        		this.hueLightRepository.save(l);
 		        } else {
 		            // TODO
 		        }
@@ -131,7 +109,7 @@ public class LightService {
 			return false;
 		}
 	}
-
+	
 
 	private boolean updateLightMap(HueLight light) {
 		if (light != null) {
@@ -156,4 +134,51 @@ public class LightService {
 		return false;
 	}
 
+
+	public void updateLightByJson(String uniqueId, JsonNode rootMessage) {
+		HueLight light = this.lightMap.get(uniqueId);
+		
+		LOG.debug(rootMessage.toPrettyString());
+		
+		if (rootMessage.has("state")) {
+			// state event
+			
+		} else if (rootMessage.has("attr")) {
+			// attr event
+			this.updateLightAttrByJson(light, rootMessage);
+		} else {
+			
+		}
+		
+		
+	}
+
+
+	// TODO 1:1 like the method in SensorService
+	private boolean updateLightAttrByJson(HueLight light, JsonNode root) {
+		// Convert JsonNode into a Sensor object
+		JsonNode attrNode = root.get("attr");
+		
+        try {
+			HueLight changedLight = objectMapper.treeToValue(attrNode, HueLight.class);
+			
+			// only update if relevant fields have changed
+			if (light.hasChangedValuesRelevantForDatabase(changedLight)) {
+				// update
+				this.modelMapper.map(changedLight, light);
+				this.hueLightRepository.save(light);
+				LOG.debug("{} updated", light.getNameAndIdInfo());
+				return true;
+			} else {
+				// no changes
+				LOG.debug("No relevant changes for {}", light.getNameAndIdInfo());
+				return false;
+			}
+        } catch (JsonProcessingException | IllegalArgumentException e) {
+			LOG.error("Can't create Light from JSON: {}", root.toString());
+			e.printStackTrace();
+		}
+        return false;
+		
+	}
 }

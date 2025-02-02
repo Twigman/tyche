@@ -44,7 +44,7 @@ public class WebSocketEventListener {
 				if (resourceType.equals("sensors")) {
 					this.sensorService.updateSensorByJson(uniqueId, rootMessage);
 				} else if (resourceType.equals("lights")) {
-					
+					this.lightService.updateLightByJson(uniqueId, rootMessage);
 				} else {
 					LOG.warn("No handling for resource '" + resourceType + "' implemented");
 				}

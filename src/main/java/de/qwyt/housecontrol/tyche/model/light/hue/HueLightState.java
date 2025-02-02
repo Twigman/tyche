@@ -3,6 +3,7 @@ package de.qwyt.housecontrol.tyche.model.light.hue;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -45,5 +46,7 @@ public class HueLightState {
 	
 	@JsonProperty("xy")
 	private List<Double> xy;
-
+	
+	@Indexed
+	private String lightId;
 }

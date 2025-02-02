@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
+import de.qwyt.housecontrol.tyche.util.ChangeChecker;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -111,35 +112,16 @@ public abstract class Sensor {
 	 */
 	public boolean hasChangedValuesRelevantForDatabase(Sensor s) {
 	    // compare only relevant fields
-	    if (hasChanged(this.ep, s.ep)) return true;
-	    if (hasChanged(this.uniqueId, s.uniqueId)) return true;
-	    if (hasChanged(this.etag, s.etag)) return true;
-	    if (hasChanged(this.modelId, s.modelId)) return true;
-	    if (hasChanged(this.manufacturer, s.manufacturer)) return true;
-	    if (hasChanged(this.name, s.name)) return true;
-	    if (hasChanged(this.swversion, s.swversion)) return true;
-	    if (hasChanged(this.type, s.type)) return true;
+	    if (ChangeChecker.hasChanged(this.ep, s.ep)) return true;
+	    if (ChangeChecker.hasChanged(this.uniqueId, s.uniqueId)) return true;
+	    if (ChangeChecker.hasChanged(this.etag, s.etag)) return true;
+	    if (ChangeChecker.hasChanged(this.modelId, s.modelId)) return true;
+	    if (ChangeChecker.hasChanged(this.manufacturer, s.manufacturer)) return true;
+	    if (ChangeChecker.hasChanged(this.name, s.name)) return true;
+	    if (ChangeChecker.hasChanged(this.swversion, s.swversion)) return true;
+	    if (ChangeChecker.hasChanged(this.type, s.type)) return true;
 	    
 	    return false;
-	}
-	
-	/**
-	 * Compares two values to determine if they have changed. A change is considered if the values 
-	 * are not equal or if one of the values is {@code null}.
-	 * <p>
-	 * If both values are equal (considering null values as equal if both are null), the method returns false,
-	 * indicating no change. If the values are different, it returns true.
-	 * 
-	 * @param oldValue the original value to compare
-	 * @param newValue the new value to compare
-	 * @param <T> the type of the values being compared
-	 * @return true if the values are different or if one of the values is null; false if they are the same
-	 */
-	private <T> boolean hasChanged(T oldValue, T newValue) {
-		// detect no change
-		if (newValue == null) return false;
-		
-		return !oldValue.equals(newValue);
 	}
 	
 }
