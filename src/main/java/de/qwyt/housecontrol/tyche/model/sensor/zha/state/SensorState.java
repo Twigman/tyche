@@ -3,6 +3,7 @@ package de.qwyt.housecontrol.tyche.model.sensor.zha.state;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -36,7 +37,7 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = DaylightSensorState.class, name = "Daylight"),
 	@JsonSubTypes.Type(value = CLIPDaylightOffsetSensorState.class, name = "CLIPDaylightOffset")
 })
-@Document(collection = "SensorStates")
+//@Document(collection = "SensorStates")
 public abstract class SensorState {
 
 	@Id
@@ -46,5 +47,6 @@ public abstract class SensorState {
 	@JsonProperty("lastupdated")
 	private Date lastupdated;
 	
+	@Indexed
 	private String sensorId;
 }

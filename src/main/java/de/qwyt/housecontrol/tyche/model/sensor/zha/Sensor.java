@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
@@ -73,7 +73,7 @@ public abstract class Sensor {
 	private GeneralSensorConfig config;
 	
 	@JsonProperty("state")
-	@DBRef
+	@Transient
 	private SensorState state;
 	
 	

@@ -112,7 +112,7 @@ public class SensorService {
 	        		// assign unique sensor id to sensorState
 	        		this.sensorMap.get(sensor.getUniqueId()).getState().setSensorId(sensor.getUniqueId());
 	        		
-		            this.sensorStateRepository.save(this.sensorMap.get(sensor.getUniqueId()).getState());
+		            this.sensorStateRepository.saveSensorState(this.sensorMap.get(sensor.getUniqueId()).getState());
 		            this.sensorRepository.save(this.sensorMap.get(sensor.getUniqueId()));
 		        } else {
 		            // TODO
@@ -147,7 +147,7 @@ public class SensorService {
 			this.updateSensorStateByJson(sensor, rootMessage);
 			// reset sensorState ID to add a new entry to the database
 			sensor.getState().setId(null);
-			this.sensorStateRepository.save(sensor.getState());
+			this.sensorStateRepository.saveSensorState(sensor.getState());
 			// update sensorState reference
 			this.sensorRepository.save(sensor);
 		} else if (rootMessage.has("attr")) {
