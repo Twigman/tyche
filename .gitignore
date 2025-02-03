@@ -35,11 +35,16 @@ build/
 .vscode/
 
 **/application.properties
+**/application.yml
+**/application-docker.yml
 *.json
 *.log
 *.txt
-Dockerfile
+docker-compose.yml
+Dockerfile_mint
+Dockerfile_raspberry
 logback-spring.xml
+deliver_docker_setup_to_raspberry.sh
 
 # Package Files #
 *.jar

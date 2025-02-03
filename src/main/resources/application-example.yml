@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: tyche
+  data:
+    mongodb:
+      database: tychedb
+      host: localhost
+      port: 27017
+
+server:
+   port: 8080
+
+raspberry:
+  ip: 1.1.1.1
+
+home:
+  lat: -6.501408
+  lon: 106.318075
+
+deconz:
+  apikey: key
+  http:
+    port: 80
+  restapi:
+    lights:
+      url: http://${raspberry.ip}:${deconz.http.port}/api/${deconz.apikey}/lights
+    sensors:
+      url: http://${raspberry.ip}:${deconz.http.port}/api/${deconz.apikey}/sensors
+    groups:
+      url: http://${raspberry.ip}:${deconz.http.port}/api/${deconz.apikey}/groups
+  websocket:
+    port: 443
+    url: ws://${raspberry.ip}:${deconz.websocket.port}
+  endpoints:
+    - ${deconz.restapi.light.url}
+    - ${deconz.restapi.sensor.url}
+
+meteomatics:
+  username: user
+  pw: pw
+  url: https://api.meteomatics.com
+	
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  data:
+    mondodb:
+      uri: mongodb://mongodb:27017/tychedb

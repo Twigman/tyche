@@ -1,0 +1,16 @@
+# 1. JDK for Raspberry Pi (ARM-Architectur)
+FROM arm64v8/eclipse-temurin:21-jdk-alpine
+
+# spring profile
+ENV SPRING_PROFILES_ACTIVE=docker
+
+WORKDIR /app
+
+# dependencies
+COPY target/tyche-housecontrol.jar /app/tyche-housecontrol.jar
+
+# example port for Spring-Boot-App
+EXPOSE 8080
+
+# run app
+ENTRYPOINT ["java", "-jar", "tyche-housecontrol.jar"]

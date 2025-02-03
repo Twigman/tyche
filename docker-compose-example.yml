@@ -1,0 +1,27 @@
+services:
+  # MongoDB Service
+  mongodb:
+    image: mongo:8.0.4
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - tyche-mongo-data:/data/db
+
+  # Spring Boot Anwendung
+  tyche:
+    build:
+      context: .
+      dockerfile: Dockerfile_raspberry_example
+    container_name: tyche
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+      - /var/log/tyche:/log
+    depends_on:
+      - mongodb  # start mongodb first
+
+volumes:
+  tyche-mongo-data:

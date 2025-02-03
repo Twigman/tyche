@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLight;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLightState;
-import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightRepository;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightStateRepository;
 
@@ -139,8 +138,6 @@ public class LightService {
 
 	public void updateLightByJson(String uniqueId, JsonNode rootMessage) {
 		HueLight light = this.lightMap.get(uniqueId);
-		
-		LOG.debug(rootMessage.toPrettyString());
 		
 		if (rootMessage.has("state")) {
 			// state event
