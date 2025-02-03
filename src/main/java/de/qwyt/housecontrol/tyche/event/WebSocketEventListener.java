@@ -37,14 +37,20 @@ public class WebSocketEventListener {
 			String resourceType = rootMessage.get("r").asText();
 			// event
 			String eventType = rootMessage.get("e").asText();
-			// identify the device
-			String uniqueId = rootMessage.get("uniqueid").asText();
+			
 			
 			if (eventType.equals("changed")) {
 				if (resourceType.equals("sensors")) {
+					// identify the device
+					String uniqueId = rootMessage.get("uniqueid").asText();
 					this.sensorService.updateSensorByJson(uniqueId, rootMessage);
 				} else if (resourceType.equals("lights")) {
+					// identify the device
+					String uniqueId = rootMessage.get("uniqueid").asText();
 					this.lightService.updateLightByJson(uniqueId, rootMessage);
+				} else if (resourceType.equals("groups")) {
+					// no uniqueId
+					LOG.warn("No handling for resource '" + resourceType + "' implemented");
 				} else {
 					LOG.warn("No handling for resource '" + resourceType + "' implemented");
 				}

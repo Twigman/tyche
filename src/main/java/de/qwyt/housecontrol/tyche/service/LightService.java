@@ -17,6 +17,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLight;
+import de.qwyt.housecontrol.tyche.model.light.hue.HueLightState;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightRepository;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightStateRepository;
 
@@ -142,15 +144,34 @@ public class LightService {
 		
 		if (rootMessage.has("state")) {
 			// state event
-			
+			this.updateLightStateByJson(light, rootMessage);
 		} else if (rootMessage.has("attr")) {
 			// attr event
 			this.updateLightAttrByJson(light, rootMessage);
 		} else {
 			
 		}
-		
-		
+	}
+
+
+	private void updateLightStateByJson(HueLight light, JsonNode root) {
+		// Map state-entry to concrete SensorState and change values of the registered sensor
+		JsonNode stateNode = root.get("state");
+
+		try {
+		    // Deserialize stateNode to a concrete SensorState instance
+			HueLightState changedLightState = this.objectMapper.treeToValue(stateNode, HueLightState.class);
+		    
+		    // Update sensor state only for non-null attributes
+		    this.modelMapper.map(changedLightState, light.getState());
+		    // reset sensorState ID to add a new entry to the database
+		 	light.getState().setId(null);
+		 	this.hueLightStateRepository.save(light.getState());
+		    LOG.debug("State changed for {}", light.getNameAndIdInfo());
+		} catch (JsonProcessingException | IllegalArgumentException e) {
+		    LOG.error("Can't create SensorState from JSON: {}", stateNode.toString());
+		    e.printStackTrace();
+		}
 	}
 
 

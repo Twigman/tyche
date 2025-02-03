@@ -1,11 +1,13 @@
 package de.qwyt.housecontrol.tyche.model.sensor.zha.state;
 
-import java.util.Date;
+import java.time.Instant;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import de.qwyt.housecontrol.tyche.model.deserializer.FlexibleInstantDeserializier;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -26,8 +28,10 @@ public class DaylightSensorState extends SensorState {
 	private boolean status;
 	
 	@JsonProperty("sunrise")
-	private Date sunrise;
+	@JsonDeserialize(using = FlexibleInstantDeserializier.class)
+	private Instant sunrise;
 	
 	@JsonProperty("sunset")
-	private Date sunset;
+	@JsonDeserialize(using = FlexibleInstantDeserializier.class)
+	private Instant sunset;
 }

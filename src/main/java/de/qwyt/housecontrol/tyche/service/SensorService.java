@@ -152,19 +152,9 @@ public class SensorService {
 		if (rootMessage.has("state")) {
 			// state event
 			this.updateSensorStateByJson(sensor, rootMessage);
-			// reset sensorState ID to add a new entry to the database
-			sensor.getState().setId(null);
-			this.sensorStateRepository.saveSensorState(sensor.getState());
-			// update sensorState reference
-			this.sensorRepository.save(sensor);
 		} else if (rootMessage.has("attr")) {
 			// attr event
-			if (this.updateSensorAttrByJson(sensor, rootMessage)) {
-				// update the sensor entry
-				this.sensorRepository.save(sensor);
-			} else {
-				// unimportant field has changed (e.g. "lastseen")
-			}
+			this.updateSensorAttrByJson(sensor, rootMessage);
 		} else {
 			LOG.warn("Event doesn't contains a state- or attr-Attribute: {}", rootMessage.toString());
 		}
@@ -230,6 +220,9 @@ public class SensorService {
 		    
 		    // Update sensor state only for non-null attributes
 		    this.modelMapper.map(changedSensorState, sensor.getState());
+		    // reset sensorState ID to add a new entry to the database
+		 	sensor.getState().setId(null);
+		 	this.sensorStateRepository.saveSensorState(sensor.getState());
 		    LOG.debug("State changed for {}", sensor.getNameAndIdInfo());
 		} catch (JsonProcessingException | IllegalArgumentException e) {
 		    LOG.error("Can't create SensorState from JSON: {}", stateNode.toString());

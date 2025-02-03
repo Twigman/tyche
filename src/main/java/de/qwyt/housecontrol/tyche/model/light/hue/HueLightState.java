@@ -1,8 +1,10 @@
 package de.qwyt.housecontrol.tyche.model.light.hue;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -49,4 +51,7 @@ public class HueLightState {
 	
 	@Indexed
 	private String lightId;
+	
+	@LastModifiedDate
+	private Instant timestamp;
 }
