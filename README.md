@@ -9,20 +9,21 @@ Ideas:<br />
   - concrete implementation for Spring and Jetty (for the showcase)
 * [x] JSON Handling
   - json messages are parsed into classes via ObjectMapper (Jackson)
+  - using filters for serialization
 * [ ] REST APIs
 * [x] Persistant storage with MongoDB
-  - [x] sensors and their states are stored
-  - [x] sensors are loaded from the database when the application is started
-  - [x] lights and their states are stored
-  - [x] lights are loaded from the database when the application is started
+  - sensors and their states are stored
+  - sensors are loaded from the database when the application is started
+  - lights and their states are stored
+  - lights are loaded from the database when the application is started
 * [ ] Mocking WebService endpoint
 * [ ] Web-Frontend
-* [ ] Docker setup
+* [x] Docker setup
   - MongoDB
-* [ ] JUnit Tests
-  - [x] HueLights
-  - [x] ChangeChecker
-  - [ ] LightService?
+  - Tyche
+* [x] JUnit Tests
+  - HueLights
+  - ChangeChecker
 
 <br />
 The project is still in progress and will be updated<br />
