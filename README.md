@@ -25,8 +25,8 @@ Ideas:<br />
   - [ ] LightService?
 
 <br />
-The project is still in progress and will be updated
-
+The project is still in progress and will be updated<br />
+<br />
 Start only MongoDB container for development with IDE:<br />
 `docker compose --profile dev up -d`<br />
 <br />
