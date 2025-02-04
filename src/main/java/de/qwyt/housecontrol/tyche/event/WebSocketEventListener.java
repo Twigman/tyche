@@ -10,8 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.qwyt.housecontrol.tyche.service.LightService;
-import de.qwyt.housecontrol.tyche.service.SensorService;
+import de.qwyt.housecontrol.tyche.service.LightServiceImpl;
+import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
 
 @Component
 public class WebSocketEventListener {
@@ -19,10 +19,10 @@ public class WebSocketEventListener {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private SensorService sensorService;
+	private SensorServiceImpl sensorService;
 	
 	@Autowired
-	private LightService lightService;
+	private LightServiceImpl lightService;
 	
 	@Autowired
 	private ObjectMapper objectMapper;

@@ -22,7 +22,7 @@ import de.qwyt.housecontrol.tyche.repository.light.HueLightRepository;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightStateRepository;
 
 @Service
-public class LightService {
+public class LightServiceImpl {
 	
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
@@ -40,7 +40,7 @@ public class LightService {
 	private final DeconzApiClient deconzApiClient;
 	
 	@Autowired
-	public LightService(
+	public LightServiceImpl(
 			ObjectMapper objectMapper,
 			ModelMapper modelMapper,
 			HueLightRepository hueLightRepository,

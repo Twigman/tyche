@@ -10,9 +10,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import de.qwyt.housecontrol.tyche.service.DeconzApiClient;
-import de.qwyt.housecontrol.tyche.service.LightService;
-import de.qwyt.housecontrol.tyche.service.SensorService;
-import de.qwyt.housecontrol.tyche.service.WeatherService;
+import de.qwyt.housecontrol.tyche.service.LightServiceImpl;
+import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
+import de.qwyt.housecontrol.tyche.service.WeatherServiceImpl;
 import de.qwyt.housecontrol.tyche.service.WebSocketService;
 import jakarta.annotation.PreDestroy;
 
@@ -30,16 +30,16 @@ public class TycheApplication implements CommandLineRunner {
 	private WebSocketService webSocketService;
 	
 	@Autowired
-	private WeatherService weatherService;
+	private WeatherServiceImpl weatherService;
 	
 	@Autowired
 	private DeconzApiClient deconzClient;
 	
 	@Autowired
-	private SensorService sensorService;
+	private SensorServiceImpl sensorService;
 	
 	@Autowired
-	private LightService lightService;
+	private LightServiceImpl lightService;
 	
 	
 	

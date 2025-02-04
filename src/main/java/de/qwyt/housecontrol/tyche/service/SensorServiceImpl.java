@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,7 +25,7 @@ import de.qwyt.housecontrol.tyche.repository.sensor.SensorRepository;
 import de.qwyt.housecontrol.tyche.repository.sensor.SensorStateRepository;
 
 @Service
-public class SensorService {
+public class SensorServiceImpl {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
 	// uniqueId is the Key
@@ -40,19 +41,23 @@ public class SensorService {
 	
 	private final SensorConfigRepository sensorConfigRepository;
 	
+	private final SensorEventServiceImpl sensorEventService;
+	
 	@Autowired
-	public SensorService(
+	public SensorServiceImpl(
 			ObjectMapper objectMapper,
 			ModelMapper modelMapper,
 			SensorRepository sensorRepository,
 			SensorStateRepository sensorStateRepository,
-			SensorConfigRepository sensorConfigRepository
+			SensorConfigRepository sensorConfigRepository,
+			SensorEventServiceImpl sensorEventService
 			) {
 		this.modelMapper = modelMapper;
 		this.objectMapper = objectMapper;
 		this.sensorRepository = sensorRepository;
 		this.sensorStateRepository = sensorStateRepository;
 		this.sensorConfigRepository = sensorConfigRepository;
+		this.sensorEventService = sensorEventService;
 		this.sensorMap = new HashMap<>();
 	}
 	
@@ -224,12 +229,16 @@ public class SensorService {
 		 	sensor.getState().setId(null);
 		 	this.sensorStateRepository.saveSensorState(sensor.getState());
 		    LOG.debug("State changed for {}", sensor.getNameAndIdInfo());
+		    
+		    // Event Service
+		    sensorEventService.processSensorChange(sensor);
 		} catch (JsonProcessingException | IllegalArgumentException e) {
 		    LOG.error("Can't create SensorState from JSON: {}", stateNode.toString());
 		    e.printStackTrace();
 		}
 	}
 	
+
 	/**
 	 * Inserts a {@code type} field into the {@code state} node of the given JSON object.
 	 * <p>

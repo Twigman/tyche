@@ -20,7 +20,7 @@ import lombok.Data;
 		property = "type"
 )
 @JsonSubTypes({
-	//@JsonSubTypes.Type(value = DimmerSensor.class, name = "ZHASwitch"),
+	@JsonSubTypes.Type(value = DimmerSwitchState.class, name = "ZHASwitch"),
 	@JsonSubTypes.Type(value = PresenceSensorState.class, name = "ZHAPresence"),
 	@JsonSubTypes.Type(value = LightLevelSensorState.class, name = "ZHALightLevel"),
 	@JsonSubTypes.Type(value = TemperatureSensorState.class, name = "ZHATemperature"),

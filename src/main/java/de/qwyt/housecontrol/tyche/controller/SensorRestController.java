@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
-import de.qwyt.housecontrol.tyche.service.SensorService;
+import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
 
 @RestController
 @RequestMapping("/api/sensors")
 public class SensorRestController {
 	
 	@Autowired
-	private SensorService sensorService;
+	private SensorServiceImpl sensorService;
 	
 	@GetMapping(path = "/all")
 	public Map<String, Sensor> getSensors() {

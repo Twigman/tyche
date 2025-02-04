@@ -23,6 +23,11 @@ public class FlexibleInstantDeserializier extends JsonDeserializer<Instant> {
 	public Instant deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
 		String dateString = p.getText().trim();
 		
+		if (dateString.equals("none")) {
+			// DimmerSwitch
+			return null;
+		}
+		
 		try {
             return Instant.parse(dateString); // Standard ISO 8601 mit 'Z' funktioniert direkt
         } catch (DateTimeParseException e) {

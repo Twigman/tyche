@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class WeatherService {
+public class WeatherServiceImpl {
 	
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	

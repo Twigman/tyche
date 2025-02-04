@@ -45,6 +45,8 @@ Dockerfile_mint
 Dockerfile_raspberry
 logback-spring.xml
 deliver_docker_setup_to_raspberry.sh
+docker-compose.dev.yml
+docker-compose.prod.yml
 
 # Package Files #
 *.jar

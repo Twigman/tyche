@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLightState;
-import de.qwyt.housecontrol.tyche.service.LightService;
+import de.qwyt.housecontrol.tyche.service.LightServiceImpl;
 
 @RestController
 @RequestMapping("/api/lights")
 public class LightRestController {
 
 	@Autowired
-	private LightService lightService;
+	private LightServiceImpl lightService;
 	
 	@Autowired
 	private RestTemplate restTemplate;
