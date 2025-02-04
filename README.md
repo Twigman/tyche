@@ -26,3 +26,12 @@ Ideas:<br />
 
 <br />
 The project is still in progress and will be updated
+
+Start only MongoDB container for development with IDE:<br />
+`docker compose --profile dev up -d`<br />
+<br />
+Start everything:<br /> 
+`docker compose up -d`<br />
+<br />
+Stop everything:<br />
+`docker compose down`

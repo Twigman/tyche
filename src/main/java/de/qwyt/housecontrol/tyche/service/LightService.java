@@ -37,17 +37,21 @@ public class LightService {
 	
 	private final HueLightStateRepository hueLightStateRepository;
 	
+	private final DeconzApiClient deconzApiClient;
+	
 	@Autowired
 	public LightService(
 			ObjectMapper objectMapper,
 			ModelMapper modelMapper,
 			HueLightRepository hueLightRepository,
-			HueLightStateRepository hueLightStateRepository
+			HueLightStateRepository hueLightStateRepository,
+			DeconzApiClient deconzApiClient
 			) {
 		this.objectMapper = objectMapper;
 		this.modelMapper = modelMapper;
 		this.hueLightRepository = hueLightRepository;
 		this.hueLightStateRepository = hueLightStateRepository;
+		this.deconzApiClient = deconzApiClient;
 		this.lightMap = new HashMap<>();
 	}
 	
@@ -161,9 +165,7 @@ public class LightService {
 		    
 		    // Update sensor state only for non-null attributes
 		    this.modelMapper.map(changedLightState, light.getState());
-		    // reset sensorState ID to add a new entry to the database
-		 	light.getState().setId(null);
-		 	this.hueLightStateRepository.save(light.getState());
+		    this.hueLightStateRepository.saveNew(light.getState());
 		    LOG.debug("State changed for {}", light.getNameAndIdInfo());
 		} catch (JsonProcessingException | IllegalArgumentException e) {
 		    LOG.error("Can't create SensorState from JSON: {}", stateNode.toString());
@@ -197,6 +199,32 @@ public class LightService {
 			e.printStackTrace();
 		}
         return false;
+	}
+	
+	
+	public boolean turnOnLight(String uniqueId) {
+		HueLight light = this.lightMap.get(uniqueId);
+		light.getState().setOn(true);
 		
+		if (deconzApiClient.updateLightState(uniqueId, light.getState())) {
+			this.hueLightStateRepository.saveNew(light.getState());
+			return true;
+		} else {
+			LOG.error("Could not turn on {}", light.getNameAndIdInfo());
+			return false;
+		}
+	}
+	
+	public boolean turnOffLight(String uniqueId) {
+		HueLight light = this.lightMap.get(uniqueId);
+		light.getState().setOn(false);
+		
+		if (deconzApiClient.updateLightState(uniqueId, light.getState())) {
+		 	this.hueLightStateRepository.saveNew(light.getState());
+			return true;
+		} else {
+			LOG.error("Could not turn off {}", light.getNameAndIdInfo());
+			return false;
+		}
 	}
 }

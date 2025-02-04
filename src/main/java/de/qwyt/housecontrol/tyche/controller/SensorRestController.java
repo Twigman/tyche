@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.controller.sensor;
+package de.qwyt.housecontrol.tyche.controller;
 
 import java.util.Map;
 

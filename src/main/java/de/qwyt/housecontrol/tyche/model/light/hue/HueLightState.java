@@ -8,12 +8,16 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
 @Data
 @Document(collection = "HueLightStates")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonFilter("dynamicFilter")
 public class HueLightState {
 	
 	@Id
