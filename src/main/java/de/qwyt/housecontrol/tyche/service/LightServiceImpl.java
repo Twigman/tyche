@@ -16,10 +16,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.qwyt.housecontrol.tyche.model.group.Room;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLight;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLightState;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightRepository;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightStateRepository;
+import de.qwyt.housecontrol.tyche.util.Symbole;
 
 @Service
 public class LightServiceImpl {
@@ -201,6 +203,18 @@ public class LightServiceImpl {
         return false;
 	}
 	
+	public boolean turnOnLightsIn(Room room) {
+		int counter = 0;
+		
+		for (String lightId : room.getLightIdList()) {
+			if (this.turnOnLight(lightId)) {
+				counter++;
+			}
+		}
+		LOG.debug("[Light] {{}}\t{} ON", room.getName(), Symbole.ARROW_RIGHT);
+		
+		return (counter == room.getLightIdList().size()) ? true : false;
+	}
 	
 	public boolean turnOnLight(String uniqueId) {
 		HueLight light = this.lightMap.get(uniqueId);
@@ -208,6 +222,7 @@ public class LightServiceImpl {
 		
 		if (deconzApiClient.updateLightState(uniqueId, light.getState())) {
 			this.hueLightStateRepository.saveNew(light.getState());
+			LOG.debug("[Light] {} {} ON", light.getName(), Symbole.ARROW_RIGHT);
 			return true;
 		} else {
 			LOG.error("Could not turn on {}", light.getNameAndIdInfo());
@@ -221,10 +236,29 @@ public class LightServiceImpl {
 		
 		if (deconzApiClient.updateLightState(uniqueId, light.getState())) {
 		 	this.hueLightStateRepository.saveNew(light.getState());
+		 	LOG.debug("[Light] {} {} OFF", light.getName(), Symbole.ARROW_RIGHT);
 			return true;
 		} else {
 			LOG.error("Could not turn off {}", light.getNameAndIdInfo());
 			return false;
 		}
 	}
+	
+	public boolean turnOffLightsIn(Room room) {
+		int counter = 0;
+		
+		for (String lightId : room.getLightIdList()) {
+			if (this.turnOffLight(lightId)) {
+				counter++;
+			}
+		}
+		LOG.debug("[Light] {{}}\t{} OFF", room.getName(), Symbole.ARROW_RIGHT);
+		
+		return (counter == room.getLightIdList().size()) ? true : false;
+	}
+	
+	/*
+	private String formatLightName(String name) {
+		return String.format("%-21s", name);
+	}*/
 }

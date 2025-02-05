@@ -47,6 +47,7 @@ logback-spring.xml
 deliver_docker_setup_to_raspberry.sh
 docker-compose.dev.yml
 docker-compose.prod.yml
+**/RoomConfig.java
 
 # Package Files #
 *.jar

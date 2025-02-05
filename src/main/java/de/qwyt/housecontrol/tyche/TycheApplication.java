@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import de.qwyt.housecontrol.tyche.service.DeconzApiClient;
 import de.qwyt.housecontrol.tyche.service.LightServiceImpl;
+import de.qwyt.housecontrol.tyche.service.RoomServiceImpl;
 import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
 import de.qwyt.housecontrol.tyche.service.WeatherServiceImpl;
 import de.qwyt.housecontrol.tyche.service.WebSocketService;
@@ -41,6 +42,9 @@ public class TycheApplication implements CommandLineRunner {
 	@Autowired
 	private LightServiceImpl lightService;
 	
+	@Autowired
+	private RoomServiceImpl roomService;
+	
 	
 	
 	public static void main(String[] args) {
@@ -56,6 +60,8 @@ public class TycheApplication implements CommandLineRunner {
 		LOG.info("Initialising lights");
 		lightService.loadLightsFromDb();
 		lightService.registerLights(deconzClient.getLights());
+		LOG.info("Initialising rooms");
+		roomService.loadRoomsFromDb();
 		
 		
 		

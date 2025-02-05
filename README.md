@@ -16,6 +16,7 @@ Ideas:<br />
   - sensors are loaded from the database when the application is started
   - lights and their states are stored
   - lights are loaded from the database when the application is started
+* [x] Events
 * [ ] Mocking WebService endpoint
 * [ ] Web-Frontend
 * [x] Docker setup
@@ -29,7 +30,7 @@ Ideas:<br />
 The project is still in progress and will be updated<br />
 <br />
 Start only MongoDB container for development with IDE:<br />
-`docker compose --profile dev up -d`<br />
+`docker compose -f docker-compose.dev.yml up -d`<br />
 <br />
 Start everything:<br /> 
 `docker compose up -d`<br />

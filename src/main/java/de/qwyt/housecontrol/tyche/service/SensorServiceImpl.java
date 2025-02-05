@@ -160,6 +160,9 @@ public class SensorServiceImpl {
 		} else if (rootMessage.has("attr")) {
 			// attr event
 			this.updateSensorAttrByJson(sensor, rootMessage);
+		} else if (rootMessage.has("config")) {
+			// config event
+			LOG.warn("Not implemented config Event: {}", rootMessage.toString());
 		} else {
 			LOG.warn("Event doesn't contains a state- or attr-Attribute: {}", rootMessage.toString());
 		}
