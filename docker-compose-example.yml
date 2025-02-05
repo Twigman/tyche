@@ -22,8 +22,6 @@ services:
       - /var/log/tyche:/log
     depends_on:
       - mongodb  # start mongodb first
-    profiles:
-      - "no-dev" # dont start with "dev" profile
 
 volumes:
   tyche-mongo-data:
