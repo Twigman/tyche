@@ -2,10 +2,10 @@ package de.qwyt.housecontrol.tyche.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import de.qwyt.housecontrol.tyche.service.adapter.SpringBasicWebSocketAdapter;
-
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+
+import de.qwyt.housecontrol.tyche.service.websocket.adapter.SpringBasicWebSocketAdapter;
+
 import org.springframework.web.socket.client.WebSocketClient;
 
 @Configuration

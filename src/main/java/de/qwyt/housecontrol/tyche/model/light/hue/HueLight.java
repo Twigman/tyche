@@ -9,8 +9,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.qwyt.housecontrol.tyche.util.ChangeChecker;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Document(collection = "HueLights")
 public class HueLight {
 	
@@ -28,7 +30,7 @@ public class HueLight {
 	private Integer ctmin;
 	
 	@JsonProperty("hascolor")
-	private boolean hascolor;
+	private Boolean hascolor;
 	
 	@JsonProperty("etag")
 	private String etag;
@@ -36,11 +38,17 @@ public class HueLight {
 	@JsonProperty("modelid")
 	private String modelId;
 	
+	@JsonProperty("productid")
+	private String productId;
+	
 	@JsonProperty("manufacturername")
 	private String manufacturer;
 	
 	@JsonProperty("name")
 	private String name;
+	
+	@JsonProperty("swconfigid")
+	private String swconfigId;
 	
 	@JsonProperty("swversion")
 	private String swversion;

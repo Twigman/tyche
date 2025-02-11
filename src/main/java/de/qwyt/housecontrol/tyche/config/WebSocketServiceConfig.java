@@ -4,10 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.client.WebSocketClient;
 
-import de.qwyt.housecontrol.tyche.service.JettyWebSocketServiceImpl;
-import de.qwyt.housecontrol.tyche.service.SpringBasicWebSocketServiceImpl;
-import de.qwyt.housecontrol.tyche.service.WebSocketService;
-import de.qwyt.housecontrol.tyche.service.adapter.SpringBasicWebSocketAdapter;
+import de.qwyt.housecontrol.tyche.service.websocket.JettyWebSocketServiceImpl;
+import de.qwyt.housecontrol.tyche.service.websocket.SpringBasicWebSocketServiceImpl;
+import de.qwyt.housecontrol.tyche.service.websocket.WebSocketService;
+import de.qwyt.housecontrol.tyche.service.websocket.adapter.SpringBasicWebSocketAdapter;
 
 @Configuration
 public class WebSocketServiceConfig {

@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.service.adapter;
+package de.qwyt.housecontrol.tyche.service.websocket.adapter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

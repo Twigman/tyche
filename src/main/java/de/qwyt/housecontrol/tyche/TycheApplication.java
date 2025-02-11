@@ -8,15 +8,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileProperties;
+import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileProperties;
 import de.qwyt.housecontrol.tyche.service.DeconzApiClient;
 import de.qwyt.housecontrol.tyche.service.LightServiceImpl;
 import de.qwyt.housecontrol.tyche.service.RoomServiceImpl;
 import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
 import de.qwyt.housecontrol.tyche.service.WeatherServiceImpl;
-import de.qwyt.housecontrol.tyche.service.WebSocketService;
+import de.qwyt.housecontrol.tyche.service.websocket.WebSocketService;
 import jakarta.annotation.PreDestroy;
 
+@EnableConfigurationProperties({AutomationProfileProperties.class, HueColorProfileProperties.class})
 @SpringBootApplication
 public class TycheApplication implements CommandLineRunner {
 

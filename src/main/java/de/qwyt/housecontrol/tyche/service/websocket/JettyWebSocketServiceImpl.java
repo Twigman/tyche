@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.service;
+package de.qwyt.housecontrol.tyche.service.websocket;
 
 import java.net.URI;
 import java.util.concurrent.CompletableFuture;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import de.qwyt.housecontrol.tyche.service.adapter.JettyWebSocketAdapter;
+import de.qwyt.housecontrol.tyche.service.websocket.adapter.JettyWebSocketAdapter;
 
 @Service
 public class JettyWebSocketServiceImpl implements WebSocketService {

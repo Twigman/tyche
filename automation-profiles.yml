@@ -1,0 +1,51 @@
+automation:
+  activeProfile: HOME
+  profiles:
+    # defaults
+    # sensors:
+    # targetRelativeHumidity: 50.0
+    # targetTemperatureLivingroom: 18
+    HOME:
+      activateMotionDetection: true
+      activateLightAutomation: true
+      sensors:
+        targetTemperatureLivingroom: 20.5
+      presets:
+        ALL:
+          lights:
+            enabled: false
+        LIVINGROOM:
+          lights:
+            enabled: true
+    AWAY:
+      activateMotionDetection: true
+      activateLightAutomation: false
+      presets:
+        ALL:
+          lights:
+            enabled: false
+    VACATION:
+      activateMotionDetection: true
+      activateLightAutomation: false
+      presets:
+        ALL:
+          lights:
+            enabled: false
+    SLEEPING:
+      activateMotionDetection: true
+      activateLightAutomation: false
+      presets:
+        ALL:
+          lights:
+            enabled: false
+    BEDTIME:
+      activateMotionDetection: true
+      activateLightAutomation: false
+      presets:
+        ALL:
+          lights:
+            enabled: false
+        BEDROOM:
+          lights:
+            enabled: true
+

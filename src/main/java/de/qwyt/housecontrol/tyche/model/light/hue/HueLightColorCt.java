@@ -5,8 +5,10 @@ import org.springframework.data.annotation.Id;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class HueLightColorCt {
 	
 	@Id

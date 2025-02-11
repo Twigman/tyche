@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.service;
+package de.qwyt.housecontrol.tyche.service.websocket;
 
 public interface WebSocketService {
 	void connect(String url);

@@ -5,7 +5,7 @@ import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import de.qwyt.housecontrol.tyche.service.adapter.JettyWebSocketAdapter;
+import de.qwyt.housecontrol.tyche.service.websocket.adapter.JettyWebSocketAdapter;
 
 @Configuration
 public class JettyWebSocketConfig {

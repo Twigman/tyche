@@ -1,15 +1,20 @@
 package de.qwyt.housecontrol.tyche.service;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.event.sensor.DimmerSwitchEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorPresenceEvent;
+import de.qwyt.housecontrol.tyche.model.group.Room;
 import de.qwyt.housecontrol.tyche.model.group.RoomType;
+import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileType;
+import de.qwyt.housecontrol.tyche.model.profile.automation.LightPresets;
+import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileType;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.DimmerSwitch;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.PresenceSensor;
 import de.qwyt.housecontrol.tyche.util.Symbole;
@@ -22,34 +27,33 @@ public class AutomationServiceImpl {
 	
 	private final RoomServiceImpl roomService;
 	
-	private HomeMode homeMode;
-	
-	private ActivityMode activityMode;
+	private final AutomationProfileManager automationProfileManager;
 	
 	@Autowired
-	public AutomationServiceImpl(LightServiceImpl lightService, RoomServiceImpl roomService) {
+	public AutomationServiceImpl(
+			LightServiceImpl lightService,
+			RoomServiceImpl roomService,
+			AutomationProfileManager automationProfileManager
+			) {
 		this.lightService = lightService;
 		this.roomService = roomService;
-		this.homeMode = HomeMode.HOME;
-		this.activityMode = ActivityMode.ACTIVE;
+		this.automationProfileManager = automationProfileManager;
 	}
 	
 	@EventListener
 	public void handlePresenceEvent(SensorPresenceEvent presenceEvent) {
 		PresenceSensor sensor = presenceEvent.getSensor();
-		// TODO
-		// test
 		if (roomService.getRoom(RoomType.HALLWAY).getSensorIdList().contains(sensor.getUniqueId())) {
-			// Flur
+			// Hallway
 			if (sensor.getState().isPresence()) {
-				LOG.debug("Light Flur: ON");
-				lightService.turnOnLightsIn(roomService.getRoom(RoomType.HALLWAY));
+				LOG.debug("Motion Detector HALLWAY: Presence");
+				lightService.turnOnLightsIn(roomService.getRoom(RoomType.HALLWAY), HueColorProfileType.DEFAULT_CT);
 			}	
 		} else if (roomService.getRoom(RoomType.KITCHEN).getSensorIdList().contains(sensor.getUniqueId())) {
-			// Küche
+			// Kitchen
 			if (sensor.getState().isPresence()) {
-				LOG.debug("Light Küche: ON");
-				lightService.turnOnLightsIn(roomService.getRoom(RoomType.KITCHEN));
+				LOG.debug("Motion Detector KITCHEN: Presence");
+				lightService.turnOnLightsIn(roomService.getRoom(RoomType.KITCHEN), HueColorProfileType.DEFAULT_CT);
 			}
 		}
 	}
@@ -60,28 +64,17 @@ public class AutomationServiceImpl {
 		
 		switch(dimmerSwitch.getState().getButton()) {
 		case BUTTON_ON_PRESSED:
-			this.setActivityMode(ActivityMode.ACTIVE, dimmerEvent.getModule());
+			this.automationProfileManager.setActiveProfile(AutomationProfileType.HOME);
+			this.executePreset(this.automationProfileManager.getActiveProfile().getPresets());
 			break;
 		case BUTTON_OFF_PRESSED:
-			this.setActivityMode(ActivityMode.BEDTIME, dimmerEvent.getModule());
-			// on
-			lightService.turnOnLightsIn(roomService.getRoom(RoomType.BEDROOM));
-			// off
-			lightService.turnOffLightsIn(roomService.getRoom(RoomType.BATHROOM));
-			lightService.turnOffLightsIn(roomService.getRoom(RoomType.HALLWAY));
-			lightService.turnOffLightsIn(roomService.getRoom(RoomType.KITCHEN));
-			lightService.turnOffLightsIn(roomService.getRoom(RoomType.LIVINGROOM));
+			this.automationProfileManager.setActiveProfile(AutomationProfileType.BEDTIME);
+			this.executePreset(this.automationProfileManager.getActiveProfile().getPresets());
 			break;
 		case BUTTON_OFF_HOLD:
 			if (dimmerSwitch.getState().getEventduration() >= 16) {
-				this.setActivityMode(ActivityMode.SLEEPING, dimmerEvent.getModule());
-				LOG.info("{} { all_lights } {} OFF", dimmerEvent.getModule().formatForLog(), Symbole.ARROW_RIGHT);
-				// turn off all lights
-				lightService.turnOffLightsIn(roomService.getRoom(RoomType.BATHROOM));
-				lightService.turnOffLightsIn(roomService.getRoom(RoomType.BEDROOM));
-				lightService.turnOffLightsIn(roomService.getRoom(RoomType.HALLWAY));
-				lightService.turnOffLightsIn(roomService.getRoom(RoomType.KITCHEN));
-				lightService.turnOffLightsIn(roomService.getRoom(RoomType.LIVINGROOM));
+				this.automationProfileManager.setActiveProfile(AutomationProfileType.SLEEPING);
+				this.executePreset(this.automationProfileManager.getActiveProfile().getPresets());
 				LOG.info("Good night");
 			}
 			break;
@@ -97,25 +90,11 @@ public class AutomationServiceImpl {
 		}
 	}
 	
-	private HomeMode setHomeMode(HomeMode mode, HousecontrolModule module) {
-		if (this.homeMode == mode) {
-			return this.homeMode;
-		} else {
-			// update mode
-			this.homeMode = mode;
-			LOG.info("{} HOME MODE {} {}", module.formatForLog(), Symbole.ARROW_RIGHT, this.homeMode);
-			return this.homeMode;
-		}
-	}
-
-	private ActivityMode setActivityMode(ActivityMode mode, HousecontrolModule module) {
-		if (this.activityMode == mode) {
-			return this.activityMode;
-		} else {
-			// update mode
-			this.activityMode = mode;
-			LOG.info("{} ACTIVITY MODE {} {}", module.formatForLog(), Symbole.ARROW_RIGHT, this.activityMode);
-			return this.activityMode;
-		}
+	
+	private void executePreset(Map<RoomType, LightPresets> map) {
+		map.forEach((roomType, preset) -> {
+			Room room =  this.roomService.getRoom(roomType);
+			lightService.updateLightsIn(room, preset.getLights(), HueColorProfileType.DEFAULT_CT);
+		});
 	}
 }

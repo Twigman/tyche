@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.qwyt.housecontrol.tyche.model.group.Room;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLight;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLightState;
+import de.qwyt.housecontrol.tyche.model.profile.automation.LightPresets;
+import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileType;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightRepository;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightStateRepository;
 import de.qwyt.housecontrol.tyche.util.Symbole;
@@ -41,13 +44,16 @@ public class LightServiceImpl {
 	
 	private final DeconzApiClient deconzApiClient;
 	
+	private final HueColorProfileManager colorProfileManager;
+	
 	@Autowired
 	public LightServiceImpl(
 			ObjectMapper objectMapper,
-			ModelMapper modelMapper,
+			@Qualifier("notNullModelMapper") ModelMapper modelMapper,
 			HueLightRepository hueLightRepository,
 			HueLightStateRepository hueLightStateRepository,
-			DeconzApiClient deconzApiClient
+			DeconzApiClient deconzApiClient, 
+			HueColorProfileManager colorProfileManager
 			) {
 		this.objectMapper = objectMapper;
 		this.modelMapper = modelMapper;
@@ -55,6 +61,7 @@ public class LightServiceImpl {
 		this.hueLightStateRepository = hueLightStateRepository;
 		this.deconzApiClient = deconzApiClient;
 		this.lightMap = new HashMap<>();
+		this.colorProfileManager = colorProfileManager;
 	}
 	
 	
@@ -203,21 +210,23 @@ public class LightServiceImpl {
         return false;
 	}
 	
-	public boolean turnOnLightsIn(Room room) {
+	public boolean turnOnLightsIn(Room room, HueColorProfileType colorProfile) {
 		int counter = 0;
 		
 		for (String lightId : room.getLightIdList()) {
-			if (this.turnOnLight(lightId)) {
+			if (this.turnOnLight(lightId, colorProfile)) {
 				counter++;
 			}
 		}
-		LOG.debug("[Light] {{}}\t{} ON", room.getName(), Symbole.ARROW_RIGHT);
+		LOG.debug("[Light] {}\t{} ON", room.getName(), Symbole.ARROW_RIGHT);
 		
 		return (counter == room.getLightIdList().size()) ? true : false;
 	}
 	
-	public boolean turnOnLight(String uniqueId) {
+	public boolean turnOnLight(String uniqueId, HueColorProfileType colorProfile) {
 		HueLight light = this.lightMap.get(uniqueId);
+		colorProfileManager.applyProfile(light.getState(), colorProfile);
+		
 		light.getState().setOn(true);
 		
 		if (deconzApiClient.updateLightState(uniqueId, light.getState())) {
@@ -228,6 +237,34 @@ public class LightServiceImpl {
 			LOG.error("Could not turn on {}", light.getNameAndIdInfo());
 			return false;
 		}
+	}
+	
+	public boolean updateLight(String uniqueId, HueLightState newState, HueColorProfileType colorProfile) {
+		HueLight light = this.lightMap.get(uniqueId);
+		this.modelMapper.map(newState, light.getState());
+		colorProfileManager.applyProfile(light.getState(), colorProfile);
+		
+		if (deconzApiClient.updateLightState(uniqueId, light.getState())) {
+			this.hueLightStateRepository.saveNew(light.getState());
+			LOG.debug("[Light] {} updated", light.getNameAndIdInfo());
+			return true;
+		} else {
+			LOG.error("Could not turn on {}", light.getNameAndIdInfo());
+			return false;
+		}
+	}
+	
+	public boolean updateLightsIn(Room room, HueLightState newState, HueColorProfileType colorProfile) {
+		int counter = 0;
+		
+		for (String lightId : room.getLightIdList()) {
+			if (this.updateLight(lightId, newState, colorProfile)) {
+				counter++;
+			}
+		}
+		LOG.debug("[Light] {} updated", room.getName());
+		
+		return (counter == room.getLightIdList().size()) ? true : false;
 	}
 	
 	public boolean turnOffLight(String uniqueId) {
@@ -252,7 +289,7 @@ public class LightServiceImpl {
 				counter++;
 			}
 		}
-		LOG.debug("[Light] {{}}\t{} OFF", room.getName(), Symbole.ARROW_RIGHT);
+		LOG.debug("[Light] {}\t{} OFF", room.getName(), Symbole.ARROW_RIGHT);
 		
 		return (counter == room.getLightIdList().size()) ? true : false;
 	}
@@ -261,4 +298,8 @@ public class LightServiceImpl {
 	private String formatLightName(String name) {
 		return String.format("%-21s", name);
 	}*/
+	
+	public Map<String, HueLight> getLightMap() {
+		return this.lightMap;
+	}
 }

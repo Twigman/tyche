@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.service;
+package de.qwyt.housecontrol.tyche.service.websocket;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketClient;
 
-import de.qwyt.housecontrol.tyche.service.adapter.SpringBasicWebSocketAdapter;
+import de.qwyt.housecontrol.tyche.service.websocket.adapter.SpringBasicWebSocketAdapter;
 
 @Service
 public class SpringBasicWebSocketServiceImpl implements WebSocketService {
