@@ -17,7 +17,6 @@ import de.qwyt.housecontrol.tyche.model.profile.automation.LightPresets;
 import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileType;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.DimmerSwitch;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.PresenceSensor;
-import de.qwyt.housecontrol.tyche.util.Symbole;
 
 @Service
 public class AutomationServiceImpl {
@@ -29,32 +28,53 @@ public class AutomationServiceImpl {
 	
 	private final AutomationProfileManager automationProfileManager;
 	
+	private final TimerService timerService;
+	
 	@Autowired
 	public AutomationServiceImpl(
 			LightServiceImpl lightService,
 			RoomServiceImpl roomService,
-			AutomationProfileManager automationProfileManager
+			AutomationProfileManager automationProfileManager, 
+			TimerService timerService
 			) {
 		this.lightService = lightService;
 		this.roomService = roomService;
 		this.automationProfileManager = automationProfileManager;
+		this.timerService = timerService;
 	}
 	
 	@EventListener
 	public void handlePresenceEvent(SensorPresenceEvent presenceEvent) {
 		PresenceSensor sensor = presenceEvent.getSensor();
-		if (roomService.getRoom(RoomType.HALLWAY).getSensorIdList().contains(sensor.getUniqueId())) {
-			// Hallway
-			if (sensor.getState().isPresence()) {
-				LOG.debug("Motion Detector HALLWAY: Presence");
-				lightService.turnOnLightsIn(roomService.getRoom(RoomType.HALLWAY), HueColorProfileType.DEFAULT_CT);
-			}	
-		} else if (roomService.getRoom(RoomType.KITCHEN).getSensorIdList().contains(sensor.getUniqueId())) {
-			// Kitchen
-			if (sensor.getState().isPresence()) {
-				LOG.debug("Motion Detector KITCHEN: Presence");
-				lightService.turnOnLightsIn(roomService.getRoom(RoomType.KITCHEN), HueColorProfileType.DEFAULT_CT);
+		// TODO sollte ggf. vor schon vor dem Schreiben in die Datenbank geprüft werden
+		// Is motion detection active?
+		if (automationProfileManager.getActiveProfile().getActivateMotionDetection()) {
+			// motion detection -> active
+			if (roomService.getRoom(RoomType.HALLWAY).getSensorIdList().contains(sensor.getUniqueId()) && sensor.getState().isPresence()) {
+				// Hallway
+				//if (sensor.getState().isPresence()) {
+					LOG.debug("Motion Detector HALLWAY: Presence");
+					
+					if (automationProfileManager.getActiveProfile().getActivateLightAutomation()) {
+						// light automation -> active
+						lightService.turnOnLightsIn(roomService.getRoom(RoomType.HALLWAY), HueColorProfileType.DEFAULT_CT);
+						// 15 s
+						timerService.startTimer(sensor.getUniqueId(), 15000, () -> lightService.turnOffLightsIn(roomService.getRoom(RoomType.HALLWAY)));
+					}
+				//}	
+			} else if (roomService.getRoom(RoomType.KITCHEN).getSensorIdList().contains(sensor.getUniqueId()) && sensor.getState().isPresence()) {
+				// Kitchen
+				if (automationProfileManager.getActiveProfile().getActivateLightAutomation()) {
+					// light automation -> active
+					//if (sensor.getState().isPresence()) {
+					LOG.debug("Motion Detector KITCHEN: Presence");
+					lightService.turnOnLightsIn(roomService.getRoom(RoomType.KITCHEN), HueColorProfileType.DEFAULT_CT);
+					// 15 s
+					timerService.startTimer(sensor.getUniqueId(), 15000, () -> lightService.turnOffLightsIn(roomService.getRoom(RoomType.KITCHEN)));
+				}
 			}
+		} else {
+			// motion detection -> deactivated
 		}
 	}
 	
@@ -92,6 +112,9 @@ public class AutomationServiceImpl {
 	
 	
 	private void executePreset(Map<RoomType, LightPresets> map) {
+		// stop all timers
+		timerService.cancelAllTimers();
+		
 		map.forEach((roomType, preset) -> {
 			Room room =  this.roomService.getRoom(roomType);
 			lightService.updateLightsIn(room, preset.getLights(), HueColorProfileType.DEFAULT_CT);
