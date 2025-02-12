@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import de.qwyt.housecontrol.tyche.model.light.hue.capabilities.HueLightCapColor;
+
 public class HueLightTest {
 	
 	@Test
@@ -183,7 +185,7 @@ public class HueLightTest {
         groups1.add("6");
         config1.setGroups(groups1);
         
-        HueLightColor color1 = new HueLightColor();
+        HueLightCapColor color1 = new HueLightCapColor();
         ArrayList<String> effects1 = new ArrayList<>();
         effects1.add("cool");
         effects1.add("special");
@@ -221,7 +223,7 @@ public class HueLightTest {
         groups2.add("6"); // Same
         config2.setGroups(groups2);
         
-        HueLightColor color2 = new HueLightColor();
+        HueLightCapColor color2 = new HueLightCapColor();
         ArrayList<String> effects2 = new ArrayList<>();
         effects2.add("cool"); // Same
         effects2.add("special"); // Same

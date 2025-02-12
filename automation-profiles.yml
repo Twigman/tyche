@@ -40,12 +40,14 @@ automation:
             enabled: false
     BEDTIME:
       activateMotionDetection: true
-      activateLightAutomation: false
+      activateLightAutomation: true
       presets:
         ALL:
           lights:
             enabled: false
+            bri: 60
         BEDROOM:
           lights:
             enabled: true
+            bri: 200
 

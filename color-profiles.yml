@@ -1,8 +1,12 @@
 color:
   profiles:
-    DEFAULT_CT:
+    DEFAULT_CT_BRI:
       # ct OR hue + sat OR xy
       alert: none
       effect: none
       bri: 252
+      ct: 341
+    DEFAULT_CT:
+      alert: none
+      effect: none
       ct: 341

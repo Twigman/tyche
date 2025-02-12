@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.qwyt.housecontrol.tyche.model.light.hue.capabilities.HueLightCapBri;
+import de.qwyt.housecontrol.tyche.model.light.hue.capabilities.HueLightCapColor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,5 +17,7 @@ public class HueLightCapabilities {
 	private List<String> alerts;
 	
 	@JsonProperty("color")
-	private HueLightColor color;
+	private HueLightCapColor color;
+	
+	private HueLightCapBri bri;
 }

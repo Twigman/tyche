@@ -19,10 +19,10 @@ public class WeatherServiceImpl {
 	@Value("${meteomatics.url}")
 	private String url;
 	
-	@Value("${home.lat}")
+	@Value("${tyche.home.lat}")
 	private String homeLat;
 	
-	@Value("${home.lon}")
+	@Value("${tyche.home.lon}")
 	private String homeLon;
 	
 	@Autowired

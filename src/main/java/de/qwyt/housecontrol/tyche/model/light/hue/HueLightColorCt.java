@@ -14,6 +14,9 @@ public class HueLightColorCt {
 	@Id
 	private String id;
 	
+	@JsonProperty("computes_xy")
+    private Boolean computesXy;
+	
 	@JsonProperty("max")
 	private Integer max;
 	

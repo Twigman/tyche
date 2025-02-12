@@ -5,6 +5,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,9 @@ public class AutomationServiceImpl {
 	
 	private final TimerService timerService;
 	
+	@Value("${tyche.light.timer}")
+	private int lightTimer;
+	
 	@Autowired
 	public AutomationServiceImpl(
 			LightServiceImpl lightService,
@@ -50,27 +54,23 @@ public class AutomationServiceImpl {
 		// Is motion detection active?
 		if (automationProfileManager.getActiveProfile().getActivateMotionDetection()) {
 			// motion detection -> active
+			// TODO can be null due to bug with first room initialization if db is empty
 			if (roomService.getRoom(RoomType.HALLWAY).getSensorIdList().contains(sensor.getUniqueId()) && sensor.getState().isPresence()) {
 				// Hallway
-				//if (sensor.getState().isPresence()) {
-					LOG.debug("Motion Detector HALLWAY: Presence");
-					
-					if (automationProfileManager.getActiveProfile().getActivateLightAutomation()) {
-						// light automation -> active
-						lightService.turnOnLightsIn(roomService.getRoom(RoomType.HALLWAY), HueColorProfileType.DEFAULT_CT);
-						// 15 s
-						timerService.startTimer(sensor.getUniqueId(), 15000, () -> lightService.turnOffLightsIn(roomService.getRoom(RoomType.HALLWAY)));
-					}
-				//}	
+				LOG.debug("Motion Detector HALLWAY: Presence");
+				
+				if (automationProfileManager.getActiveProfile().getActivateLightAutomation()) {
+					// light automation -> active
+					lightService.turnOnLightsIn(roomService.getRoom(RoomType.HALLWAY), HueColorProfileType.DEFAULT_CT_BRI);
+					timerService.startTimer(sensor.getUniqueId(), lightTimer, () -> lightService.turnOffLightsIn(roomService.getRoom(RoomType.HALLWAY)));
+				}
 			} else if (roomService.getRoom(RoomType.KITCHEN).getSensorIdList().contains(sensor.getUniqueId()) && sensor.getState().isPresence()) {
+				LOG.debug("Motion Detector KITCHEN: Presence");
 				// Kitchen
 				if (automationProfileManager.getActiveProfile().getActivateLightAutomation()) {
 					// light automation -> active
-					//if (sensor.getState().isPresence()) {
-					LOG.debug("Motion Detector KITCHEN: Presence");
-					lightService.turnOnLightsIn(roomService.getRoom(RoomType.KITCHEN), HueColorProfileType.DEFAULT_CT);
-					// 15 s
-					timerService.startTimer(sensor.getUniqueId(), 15000, () -> lightService.turnOffLightsIn(roomService.getRoom(RoomType.KITCHEN)));
+					lightService.turnOnLightsIn(roomService.getRoom(RoomType.KITCHEN), HueColorProfileType.DEFAULT_CT_BRI);
+					timerService.startTimer(sensor.getUniqueId(), lightTimer, () -> lightService.turnOffLightsIn(roomService.getRoom(RoomType.KITCHEN)));
 				}
 			}
 		} else {
@@ -117,7 +117,7 @@ public class AutomationServiceImpl {
 		
 		map.forEach((roomType, preset) -> {
 			Room room =  this.roomService.getRoom(roomType);
-			lightService.updateLightsIn(room, preset.getLights(), HueColorProfileType.DEFAULT_CT);
+			lightService.updateLightsIn(room, preset.getLights(), HueColorProfileType.DEFAULT_CT_BRI);
 		});
 	}
 }
