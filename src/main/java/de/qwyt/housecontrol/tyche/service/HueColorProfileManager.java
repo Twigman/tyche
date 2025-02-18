@@ -32,6 +32,7 @@ public class HueColorProfileManager {
 	
 	public HueLightState applyProfile(HueLightState state, HueColorProfileType profileType) {
 		HueColorProfile profile = this.colorProfileProperties.getProfiles().get(profileType);
+		state.setColorProfile(profileType);
 		modelMapper.map(profile, state);
 		
 		return state;

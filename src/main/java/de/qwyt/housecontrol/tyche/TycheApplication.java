@@ -65,7 +65,7 @@ public class TycheApplication implements CommandLineRunner {
 		lightService.loadLightsFromDb();
 		lightService.registerLights(deconzClient.getLights());
 		LOG.info("Initialising rooms");
-		roomService.loadRoomsFromDb();
+		roomService.saveRoomsinDb();
 		
 		
 		

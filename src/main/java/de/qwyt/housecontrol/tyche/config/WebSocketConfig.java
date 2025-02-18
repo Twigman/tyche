@@ -12,7 +12,7 @@ import org.springframework.web.socket.client.WebSocketClient;
 public class WebSocketConfig {
 	
 	@Bean
-	public SpringBasicWebSocketAdapter SpringBasicWebSocketAdapter() {
+	public SpringBasicWebSocketAdapter springBasicWebSocketAdapter() {
 		return new SpringBasicWebSocketAdapter();
 	}
 	

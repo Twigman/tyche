@@ -224,6 +224,7 @@ public class LightServiceImpl {
 	}
 	
 	public boolean turnOnLight(String uniqueId, HueColorProfileType colorProfile) {
+		LOG.debug("{} id", uniqueId);
 		HueLight light = this.lightMap.get(uniqueId);
 		colorProfileManager.applyProfile(light.getState(), colorProfile);
 		
@@ -239,10 +240,10 @@ public class LightServiceImpl {
 		}
 	}
 	
-	public boolean updateLight(String uniqueId, HueLightState newState, HueColorProfileType colorProfile) {
+	public boolean updateLight(String uniqueId, HueLightState newState) {
 		HueLight light = this.lightMap.get(uniqueId);
 		this.modelMapper.map(newState, light.getState());
-		colorProfileManager.applyProfile(light.getState(), colorProfile);
+		colorProfileManager.applyProfile(light.getState(), light.getState().getColorProfile());
 		
 		if (deconzApiClient.updateLightState(uniqueId, light.getState())) {
 			this.hueLightStateRepository.saveNew(light.getState());
@@ -254,11 +255,11 @@ public class LightServiceImpl {
 		}
 	}
 	
-	public boolean updateLightsIn(Room room, HueLightState newState, HueColorProfileType colorProfile) {
+	public boolean updateLightsIn(Room room, HueLightState newState) {
 		int counter = 0;
 		
 		for (String lightId : room.getLightIdList()) {
-			if (this.updateLight(lightId, newState, colorProfile)) {
+			if (this.updateLight(lightId, newState)) {
 				counter++;
 			}
 		}

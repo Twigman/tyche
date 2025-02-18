@@ -61,7 +61,10 @@ public class AutomationServiceImpl {
 				
 				if (automationProfileManager.getActiveProfile().getActivateLightAutomation()) {
 					// light automation -> active
-					lightService.turnOnLightsIn(roomService.getRoom(RoomType.HALLWAY), HueColorProfileType.DEFAULT_CT_BRI);
+					lightService.turnOnLightsIn(
+							roomService.getRoom(RoomType.HALLWAY),
+							automationProfileManager.getActiveProfile().getPresets().get(RoomType.HALLWAY).getLights().getColorProfile()
+							);
 					timerService.startTimer(sensor.getUniqueId(), lightTimer, () -> lightService.turnOffLightsIn(roomService.getRoom(RoomType.HALLWAY)));
 				}
 			} else if (roomService.getRoom(RoomType.KITCHEN).getSensorIdList().contains(sensor.getUniqueId()) && sensor.getState().isPresence()) {
@@ -69,7 +72,10 @@ public class AutomationServiceImpl {
 				// Kitchen
 				if (automationProfileManager.getActiveProfile().getActivateLightAutomation()) {
 					// light automation -> active
-					lightService.turnOnLightsIn(roomService.getRoom(RoomType.KITCHEN), HueColorProfileType.DEFAULT_CT_BRI);
+					lightService.turnOnLightsIn(
+							roomService.getRoom(RoomType.KITCHEN),
+							automationProfileManager.getActiveProfile().getPresets().get(RoomType.KITCHEN).getLights().getColorProfile()
+							);
 					timerService.startTimer(sensor.getUniqueId(), lightTimer, () -> lightService.turnOffLightsIn(roomService.getRoom(RoomType.KITCHEN)));
 				}
 			}
@@ -117,7 +123,7 @@ public class AutomationServiceImpl {
 		
 		map.forEach((roomType, preset) -> {
 			Room room =  this.roomService.getRoom(roomType);
-			lightService.updateLightsIn(room, preset.getLights(), HueColorProfileType.DEFAULT_CT_BRI);
+			lightService.updateLightsIn(room, preset.getLights());
 		});
 	}
 }

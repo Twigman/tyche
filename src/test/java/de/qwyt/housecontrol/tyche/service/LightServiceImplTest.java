@@ -84,7 +84,7 @@ public class LightServiceImplTest {
     	
     	when(deconzApiClient.updateLightState(anyString(), any(HueLightState.class))).thenReturn(true);
     	
-    	boolean result = lightService.updateLight("123", newState, HueColorProfileType.DEFAULT_CT_BRI);
+    	boolean result = lightService.updateLight("123", newState);
     	
     	assertTrue(result);
     	HueLightState updatedState = lightService.getLightMap().get("123").getState();

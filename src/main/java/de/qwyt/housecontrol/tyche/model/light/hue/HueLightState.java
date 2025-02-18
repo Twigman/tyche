@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,11 +12,9 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileType;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.AccessLevel;
 
 @Data
 @NoArgsConstructor
@@ -66,6 +63,9 @@ public class HueLightState {
 	@LastModifiedDate
 	private Instant timestamp;
 	
+	// extra field for tyche
+	@JsonProperty("hueColorProfileType")
+	private HueColorProfileType colorProfile;
 	/**
 	 * Only use "on2" for yaml configuration.
 	 * The name "on" combined with the wrapper class Boolean causes problems.
