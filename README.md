@@ -11,6 +11,7 @@ Ideas:<br />
   - json messages are parsed into classes via ObjectMapper (Jackson)
   - using filters for serialization
 * [ ] REST APIs
+* [ ] SOAP Client
 * [x] Persistant storage with MongoDB
   - sensors and their states are stored
   - sensors are loaded from the database when the application is started
