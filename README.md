@@ -12,7 +12,7 @@ Ideas:<br />
   - using filters for serialization
 * [ ] REST APIs
 * [ ] SOAP Client
-  - WSDL files generated from fritzbox docu with ChatGPT
+  - WSDL files generated from fritzbox doc with ChatGPT
   - generated JAXB Classes with maven wsimport plugin
   - SSL Certificates
 * [x] Persistant storage with MongoDB
