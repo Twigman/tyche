@@ -30,6 +30,7 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
+		<!-- WEB -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -37,8 +38,23 @@
 		
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-web-services</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
+		
+		<!-- SOAP START -->
+		<!-- Apache CXF for SOAP-Support -->
+	    <dependency>
+		    <groupId>org.apache.cxf</groupId>
+		    <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+		    <version>4.1.0</version>
+		</dependency>
+		
+		<!-- SOAP END -->
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -62,6 +78,7 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- TEST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -84,17 +101,86 @@
 
 	<build>
 		<plugins>
+			<!-- 
+			Generating WSDL Stubs for Fritzbox TR-064 
+			WSDL Files are generated with ChatGPT <3
+			-->
+			<plugin>
+	            <groupId>com.sun.xml.ws</groupId>
+	            <artifactId>jaxws-maven-plugin</artifactId>
+	            <version>4.0.3</version>
+	            <executions>
+	                <execution>
+	                    <goals>
+	                        <goal>wsimport</goal>
+	                    </goals>
+	                </execution>
+	            </executions>
+	            <configuration>
+			        <wsdlDirectory>${project.basedir}/src/main/resources/wsdl/fritzbox</wsdlDirectory>
+			        <packageName>fritzbox.ws.tr064</packageName>
+			        <sourceDestDir>
+			            ${project.build.directory}/generated-sources/wsdl
+			        </sourceDestDir>
+			    </configuration>
+        	</plugin>
+        	
+        	<!-- Plugin to include generated-sources -->
+	        <plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>build-helper-maven-plugin</artifactId>
+	            <executions>
+	                <execution>
+	                    <id>add-source</id>
+	                    <phase>generate-sources</phase>
+	                    <goals>
+	                        <goal>add-source</goal>
+	                    </goals>
+	                    <configuration>
+	                        <sources>
+	                            <source>${project.build.directory}/generated-sources/wsdl</source>
+	                        </sources>
+	                    </configuration>
+	                </execution>
+	            </executions>
+        	</plugin>
+        	
+        	<!-- Maven-Compiler-Plugin, include generated sources
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-compiler-plugin</artifactId>
+	            <configuration>
+	                <source>21</source>
+	                <target>21</target>
+	                <generatedSourcesDirectory>${project.build.directory}/generated-sources</generatedSourcesDirectory>
+	            </configuration>
+	        </plugin>-->
+			
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-		 <plugin>
-		     <groupId>org.apache.maven.plugins</groupId>
-		     <artifactId>maven-surefire-plugin</artifactId>
-		     <configuration>
-		         <argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
-		     </configuration>
-		 </plugin>
+			
+			<!--
+			<plugin>
+			     <groupId>org.apache.maven.plugins</groupId>
+			     <artifactId>maven-dependency-plugin</artifactId>
+			     <executions>
+			         <execution>
+			             <goals>
+			                 <goal>properties</goal>
+			             </goals>
+			         </execution>
+			     </executions>
+ 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+				</configuration>
+			</plugin>
+			-->
 		</plugins>
 		<finalName>tyche-housecontrol</finalName>
 	</build>

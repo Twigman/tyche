@@ -13,6 +13,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileProperties;
 import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileProperties;
 import de.qwyt.housecontrol.tyche.service.DeconzApiClient;
+import de.qwyt.housecontrol.tyche.service.FritzboxService;
 import de.qwyt.housecontrol.tyche.service.LightServiceImpl;
 import de.qwyt.housecontrol.tyche.service.RoomServiceImpl;
 import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
@@ -49,6 +50,9 @@ public class TycheApplication implements CommandLineRunner {
 	@Autowired
 	private RoomServiceImpl roomService;
 	
+	@Autowired
+	private FritzboxService fritzboxService;
+	
 	
 	
 	public static void main(String[] args) {
@@ -66,6 +70,10 @@ public class TycheApplication implements CommandLineRunner {
 		lightService.registerLights(deconzClient.getLights());
 		LOG.info("Initialising rooms");
 		roomService.saveRoomsinDb();
+		
+		LOG.debug("Entries: {}", fritzboxService.getHostNumberOfEntries());
+		
+		LOG.debug("MAC: {}", fritzboxService.getGenericHostEntry(3).getNewMACAddress());
 		
 		
 		

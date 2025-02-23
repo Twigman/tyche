@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="DeviceConfig1"
+    targetNamespace="urn:dslforum-org:service:DeviceConfig:1"
+    xmlns:tns="urn:dslforum-org:service:DeviceConfig:1"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+    <!-- Datentypen -->
+    <types>
+        <xsd:schema targetNamespace="urn:dslforum-org:service:DeviceConfig:1">
+            <xsd:element name="GetPersistentData">
+                <xsd:complexType/>
+            </xsd:element>
+            <xsd:element name="GetPersistentDataResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="NewPersistentData" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="FactoryReset">
+                <xsd:complexType/>
+            </xsd:element>
+            <xsd:element name="FactoryResetResponse">
+                <xsd:complexType/>
+            </xsd:element>
+
+            <xsd:element name="Reboot">
+                <xsd:complexType/>
+            </xsd:element>
+            <xsd:element name="RebootResponse">
+                <xsd:complexType/>
+            </xsd:element>
+
+            <xsd:element name="X_GenerateUUID">
+                <xsd:complexType/>
+            </xsd:element>
+            <xsd:element name="X_GenerateUUIDResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="NewUUID" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </types>
+
+    <!-- Nachrichten -->
+    <message name="GetPersistentDataRequest">
+        <part name="parameters" element="tns:GetPersistentData"/>
+    </message>
+    <message name="GetPersistentDataResponse">
+        <part name="parameters" element="tns:GetPersistentDataResponse"/>
+    </message>
+
+    <message name="FactoryResetRequest">
+        <part name="parameters" element="tns:FactoryReset"/>
+    </message>
+    <message name="FactoryResetResponse">
+        <part name="parameters" element="tns:FactoryResetResponse"/>
+    </message>
+
+    <message name="RebootRequest">
+        <part name="parameters" element="tns:Reboot"/>
+    </message>
+    <message name="RebootResponse">
+        <part name="parameters" element="tns:RebootResponse"/>
+    </message>
+
+    <message name="X_GenerateUUIDRequest">
+        <part name="parameters" element="tns:X_GenerateUUID"/>
+    </message>
+    <message name="X_GenerateUUIDResponse">
+        <part name="parameters" element="tns:X_GenerateUUIDResponse"/>
+    </message>
+
+    <!-- PortType -->
+    <portType name="DeviceConfig1PortType">
+        <operation name="GetPersistentData">
+            <input message="tns:GetPersistentDataRequest"/>
+            <output message="tns:GetPersistentDataResponse"/>
+        </operation>
+        <operation name="FactoryReset">
+            <input message="tns:FactoryResetRequest"/>
+            <output message="tns:FactoryResetResponse"/>
+        </operation>
+        <operation name="Reboot">
+            <input message="tns:RebootRequest"/>
+            <output message="tns:RebootResponse"/>
+        </operation>
+        <operation name="X_GenerateUUID">
+            <input message="tns:X_GenerateUUIDRequest"/>
+            <output message="tns:X_GenerateUUIDResponse"/>
+        </operation>
+    </portType>
+
+    <!-- Binding -->
+    <binding name="DeviceConfig1Binding" type="tns:DeviceConfig1PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <operation name="GetPersistentData">
+            <soap:operation soapAction="urn:dslforum-org:service:DeviceConfig:1#GetPersistentData"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+
+        <operation name="FactoryReset">
+            <soap:operation soapAction="urn:dslforum-org:service:DeviceConfig:1#FactoryReset"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+
+        <operation name="Reboot">
+            <soap:operation soapAction="urn:dslforum-org:service:DeviceConfig:1#Reboot"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+
+        <operation name="X_GenerateUUID">
+            <soap:operation soapAction="urn:dslforum-org:service:DeviceConfig:1#X_GenerateUUID"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+    </binding>
+
+    <!-- Service -->
+    <service name="DeviceConfig1Service">
+        <port name="DeviceConfig1Port" binding="tns:DeviceConfig1Binding">
+            <soap:address location="https://fritz.box:49443/upnp/control/deviceconfig"/>
+        </port>
+    </service>
+</definitions>

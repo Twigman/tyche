@@ -63,22 +63,5 @@ public class WebSocketEventListener {
 			
 			e.printStackTrace();
 		}
-		
-		
-		/*
-		if (eventType.getMessage().getEvent().equals("changed")) {
-			// change
-			if (eventType.getMessage().getResourceType().equals("sensors")) {
-				// sensor event
-				
-				//sensorController.updateSensor(event.getMessage().getUniqueId(), event.getMessage().getState());
-				
-			} else {
-				LOG.warn("No handling for resource " + eventType.getMessage().getResourceType() + " implemented");
-			}
-		} else {
-			LOG.warn("No handling for event type '" + eventType.getMessage().getEvent() + "' implemented");
-		}
-		*/
 	}
 }

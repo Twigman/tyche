@@ -34,6 +34,10 @@ build/
 ### VS Code ###
 .vscode/
 
+**/soap_example.xml
+**/truststore.jks
+**/certs/
+**/fritzbox_doku/
 **/application.properties
 **/application.yml
 **/application-docker.yml
@@ -47,7 +51,7 @@ logback-spring.xml
 deliver_docker_setup_to_raspberry.sh
 docker-compose.dev.yml
 docker-compose.prod.yml
-**/RoomConfig.java
+
 
 # Package Files #
 *.jar
