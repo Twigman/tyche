@@ -13,8 +13,8 @@ Ideas:<br />
 * [ ] REST APIs
 * [ ] SOAP Client
   - WSDL files generated from fritzbox doc with ChatGPT
-  - generated JAXB Classes with maven wsimport plugin
-  - SSL Certificates
+  - generated JAXB classes with maven wsimport plugin
+  - SSL certificates in truststore
 * [x] Persistant storage with MongoDB
   - sensors and their states are stored
   - sensors are loaded from the database when the application is started
