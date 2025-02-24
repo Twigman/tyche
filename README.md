@@ -11,7 +11,7 @@ Ideas:<br />
   - json messages are parsed into classes via ObjectMapper (Jackson)
   - using filters for serialization
 * [ ] REST APIs
-* [ ] SOAP Client
+* [x] SOAP Client
   - WSDL files generated from fritzbox doc with ChatGPT
   - generated JAXB classes with maven wsimport plugin
   - SSL certificates in truststore
