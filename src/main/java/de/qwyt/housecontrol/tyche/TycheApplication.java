@@ -71,7 +71,7 @@ public class TycheApplication implements CommandLineRunner {
 		LOG.info("Initialising rooms");
 		roomService.saveRoomsinDb();
 		
-		LOG.debug("Entries: {}", fritzboxService.getHostNumberOfEntries());
+		LOG.debug("Entries: {}", fritzboxService.getHostNumberOfEntries().getNewHostNumberOfEntries());
 		
 		LOG.debug("MAC: {}", fritzboxService.getGenericHostEntry(3).getNewMACAddress());
 		

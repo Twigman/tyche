@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                  xmlns:tns="urn:dslforum-org:service:Hosts:1"
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                  name="HostsService"
+                  xmlns:tns="urn:dslforum-org:service:Hosts:1"
+                  name="Hosts1Service"
                   targetNamespace="urn:dslforum-org:service:Hosts:1">
 
+  <!-- Typen -->
   <wsdl:types>
     <xsd:schema targetNamespace="urn:dslforum-org:service:Hosts:1">
       <xsd:element name="GetHostNumberOfEntriesResponse">
@@ -15,52 +16,25 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-
-      <xsd:element name="GetSpecificHostEntryRequest">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="NewMACAddress" type="xsd:string"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="GetSpecificHostEntryResponse">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="NewIPAddress" type="xsd:string"/>
-            <xsd:element name="NewHostName" type="xsd:string"/>
-            <xsd:element name="NewActive" type="xsd:boolean"/>
-            <xsd:element name="NewInterfaceType" type="xsd:string"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
     </xsd:schema>
   </wsdl:types>
 
+  <!-- Nachrichten -->
   <wsdl:message name="GetHostNumberOfEntriesRequest"/>
   <wsdl:message name="GetHostNumberOfEntriesResponse">
     <wsdl:part name="parameters" element="tns:GetHostNumberOfEntriesResponse"/>
   </wsdl:message>
 
-  <wsdl:message name="GetSpecificHostEntryRequest">
-    <wsdl:part name="parameters" element="tns:GetSpecificHostEntryRequest"/>
-  </wsdl:message>
-  <wsdl:message name="GetSpecificHostEntryResponse">
-    <wsdl:part name="parameters" element="tns:GetSpecificHostEntryResponse"/>
-  </wsdl:message>
-
-  <wsdl:portType name="HostsPortType">
+  <!-- PortType -->
+  <wsdl:portType name="Hosts1PortType">
     <wsdl:operation name="GetHostNumberOfEntries">
       <wsdl:input message="tns:GetHostNumberOfEntriesRequest"/>
       <wsdl:output message="tns:GetHostNumberOfEntriesResponse"/>
     </wsdl:operation>
-    <wsdl:operation name="GetSpecificHostEntry">
-      <wsdl:input message="tns:GetSpecificHostEntryRequest"/>
-      <wsdl:output message="tns:GetSpecificHostEntryResponse"/>
-    </wsdl:operation>
   </wsdl:portType>
 
-  <wsdl:binding name="HostsBinding" type="tns:HostsPortType">
+  <!-- Binding -->
+  <wsdl:binding name="Hosts1Binding" type="tns:Hosts1PortType">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <wsdl:operation name="GetHostNumberOfEntries">
       <soap:operation soapAction="urn:dslforum-org:service:Hosts:1#GetHostNumberOfEntries"/>
@@ -71,20 +45,13 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetSpecificHostEntry">
-      <soap:operation soapAction="urn:dslforum-org:service:Hosts:1#GetSpecificHostEntry"/>
-      <wsdl:input>
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
 
-  <wsdl:service name="HostsService">
-    <wsdl:port name="HostsPort" binding="tns:HostsBinding">
+  <!-- Service mit Port -->
+  <wsdl:service name="Hosts1Service">
+    <wsdl:port name="HostsPort" binding="tns:Hosts1Binding">
       <soap:address location="https://fritz.box:49443/upnp/control/hosts"/>
     </wsdl:port>
   </wsdl:service>
+
 </wsdl:definitions>

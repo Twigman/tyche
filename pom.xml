@@ -47,12 +47,34 @@
 		</dependency>
 		
 		<!-- SOAP START -->
+		
+		<!-- Authentication -->
+		<!--
+		<dependency>
+		    <groupId>org.glassfish.jaxb</groupId>
+		    <artifactId>jaxb-runtime</artifactId>
+		</dependency>-->
+		
 		<!-- Apache CXF for SOAP-Support -->
+		<!--
 	    <dependency>
 		    <groupId>org.apache.cxf</groupId>
 		    <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
 		    <version>4.1.0</version>
 		</dependency>
+		-->
+		<!--
+		<dependency>
+	        <groupId>jakarta.xml.bind</groupId>
+	        <artifactId>jakarta.xml.bind-api</artifactId>
+	        <version>3.0.1</version>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.glassfish.jaxb</groupId>
+	        <artifactId>jaxb-runtime</artifactId>
+	        <version>3.0.1</version>
+	    </dependency>
+	    -->
 		
 		<!-- SOAP END -->
 		
@@ -105,6 +127,42 @@
 			Generating WSDL Stubs for Fritzbox TR-064 
 			WSDL Files are generated with ChatGPT <3
 			-->
+			<!--
+			<plugin>
+			    <groupId>org.apache.cxf</groupId>
+			    <artifactId>cxf-codegen-plugin</artifactId>
+			    <version>4.1.0</version> 
+			    <executions>
+			        <execution>
+			            <id>generate-sources</id>
+			            <phase>generate-sources</phase>
+			            <configuration>
+			                <wsdlOptions>
+			                    <wsdlOption>
+			                        <wsdl>${project.basedir}/src/main/resources/wsdl/fritzbox/Hosts1.wsdl</wsdl>
+			                        <extraargs>
+			                            <extraarg>-p</extraarg>
+			                            <extraarg>fritzbox.ws.tr064</extraarg>
+			                        </extraargs>
+			                    </wsdlOption>
+			                    <wsdlOption>
+			                        <wsdl>${project.basedir}/src/main/resources/wsdl/fritzbox/DeviceConfig1.wsdl</wsdl>
+			                        <extraargs>
+			                            <extraarg>-p</extraarg>
+			                            <extraarg>fritzbox.ws.tr064</extraarg>
+			                        </extraargs>
+			                    </wsdlOption>
+			                </wsdlOptions>
+			            </configuration>
+			            <goals>
+			                <goal>wsdl2java</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin>-->
+			
+			
+			<!--
 			<plugin>
 	            <groupId>com.sun.xml.ws</groupId>
 	            <artifactId>jaxws-maven-plugin</artifactId>
@@ -120,12 +178,25 @@
 			        <wsdlDirectory>${project.basedir}/src/main/resources/wsdl/fritzbox</wsdlDirectory>
 			        <packageName>fritzbox.ws.tr064</packageName>
 			        <sourceDestDir>
-			            ${project.build.directory}/generated-sources/wsdl
+			            ${project.build.directory}/generated-sources/jaxws
 			        </sourceDestDir>
 			    </configuration>
         	</plugin>
+        	-->
+        	<!-- 
+        	<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-compiler-plugin</artifactId>
+	            <configuration>
+	                <source>21</source>
+	                <target>21</target>
+	                <generatedSourcesDirectory>${project.build.directory}/generated-sources/jaxws</generatedSourcesDirectory>
+	            </configuration>
+	        </plugin>-->
+        	
         	
         	<!-- Plugin to include generated-sources -->
+        	<!--
 	        <plugin>
 	            <groupId>org.codehaus.mojo</groupId>
 	            <artifactId>build-helper-maven-plugin</artifactId>
@@ -138,23 +209,12 @@
 	                    </goals>
 	                    <configuration>
 	                        <sources>
-	                            <source>${project.build.directory}/generated-sources/wsdl</source>
+	                            <source>${project.build.directory}/generated-sources/jaxws</source>
 	                        </sources>
 	                    </configuration>
 	                </execution>
 	            </executions>
-        	</plugin>
-        	
-        	<!-- Maven-Compiler-Plugin, include generated sources
-	        <plugin>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-compiler-plugin</artifactId>
-	            <configuration>
-	                <source>21</source>
-	                <target>21</target>
-	                <generatedSourcesDirectory>${project.build.directory}/generated-sources</generatedSourcesDirectory>
-	            </configuration>
-	        </plugin>-->
+        	</plugin>-->
 			
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
