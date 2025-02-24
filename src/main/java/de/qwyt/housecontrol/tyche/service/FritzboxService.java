@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.soap.client.core.SoapActionCallback;
 
-import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.GetGenericHostEntryRequest;
-import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.GetGenericHostEntryResponse;
-import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.GetHostNumberOfEntriesRequest;
-import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.GetHostNumberOfEntriesResponse;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetGenericHostEntryRequest;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetGenericHostEntryResponse;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetHostNumberOfEntriesRequest;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetHostNumberOfEntriesResponse;
 
 
 

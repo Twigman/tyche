@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064;
+package de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;

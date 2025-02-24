@@ -1,5 +1,6 @@
 package de.qwyt.housecontrol.tyche.config;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -12,19 +13,23 @@ import jakarta.annotation.PostConstruct;
 public class SslConfig {
 
 	@Value("${security.truststore.file}")
-	private Resource truststore;
+	private String truststorePath;
 	
 	@Value("${security.truststore.pw}")
 	private String truststorePw;
 	
 	@PostConstruct
 	public void init() {
-		try {
-			System.setProperty("javax.net.ssl.trustStore", truststore.getFile().getAbsolutePath());
+		File truststoreFile = new File(truststorePath);
+		
+		if (truststoreFile.exists()) {
+			System.out.println("Path to truststore.jks: " + truststoreFile.getAbsolutePath());
+			
+			System.setProperty("javax.net.ssl.trustStore", truststoreFile.getAbsolutePath());
 			System.setProperty("javax.net.ssl.trustStorePassword", truststorePw);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else {
+			System.out.println("Truststore not found at " + truststorePath);
 		}
+
 	}
 }

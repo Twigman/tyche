@@ -9,11 +9,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileProperties;
 import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileProperties;
 import de.qwyt.housecontrol.tyche.service.DeconzApiClient;
-import de.qwyt.housecontrol.tyche.service.FritzboxService;
 import de.qwyt.housecontrol.tyche.service.LightServiceImpl;
 import de.qwyt.housecontrol.tyche.service.RoomServiceImpl;
 import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
@@ -23,6 +23,7 @@ import jakarta.annotation.PreDestroy;
 
 @EnableConfigurationProperties({AutomationProfileProperties.class, HueColorProfileProperties.class})
 @SpringBootApplication
+@EnableScheduling
 public class TycheApplication implements CommandLineRunner {
 
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
@@ -50,10 +51,6 @@ public class TycheApplication implements CommandLineRunner {
 	@Autowired
 	private RoomServiceImpl roomService;
 	
-	@Autowired
-	private FritzboxService fritzboxService;
-	
-	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(TycheApplication.class, args);
@@ -70,11 +67,6 @@ public class TycheApplication implements CommandLineRunner {
 		lightService.registerLights(deconzClient.getLights());
 		LOG.info("Initialising rooms");
 		roomService.saveRoomsinDb();
-		
-		LOG.debug("Entries: {}", fritzboxService.getHostNumberOfEntries().getNewHostNumberOfEntries());
-		
-		LOG.debug("MAC: {}", fritzboxService.getGenericHostEntry(3).getNewMACAddress());
-		
 		
 		
 		webSocketService.connect(deconzWebSocketUrl);

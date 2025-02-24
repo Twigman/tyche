@@ -11,8 +11,6 @@ import de.qwyt.housecontrol.tyche.service.webservice.FritzboxAuthInterceptor;
 import de.qwyt.housecontrol.tyche.service.webservice.SoapLoggerInterceptor;
 
 
-
-
 @Configuration
 public class SoapConfig {
 	
@@ -30,10 +28,11 @@ public class SoapConfig {
 		WebServiceTemplate template = new WebServiceTemplate();
 		template.setMarshaller(marshaller);
 		template.setUnmarshaller(marshaller);
+		/*
 		template.setInterceptors(new ClientInterceptor[] {
 				new FritzboxAuthInterceptor(username, pw),
 				new SoapLoggerInterceptor()
-		});
+		});*/
 		
 		return template;
 	}
@@ -45,26 +44,4 @@ public class SoapConfig {
         marshaller.setContextPath("de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064");
         return marshaller;
 	}
-	
-	/*
-	@Bean
-	public HttpComponentsMessageSender httpComponentsMessageSender() {
-		CloseableHttpClient httpClient = HttpClients.custom().setDefaultCredentialsProvider(this.getFritzboxCredentialsProvider()).build();
-		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory()
-		
-		HttpComponentsMessageSender messageSender = new HttpComponentsMessageSender();
-		messageSender.setHttpClient(httpClient);
-		return messageSender;
-	}
-	
-	private CredentialsProvider getFritzboxCredentialsProvider() {
-		BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, pw.toCharArray());
-		
-		final AuthScope authScope = new AuthScope(new HttpHost("https", "fritz.box", 49443));
-		credentialsProvider.setCredentials(authScope, credentials);
-		
-		return credentialsProvider;
-	}
-	*/
 }

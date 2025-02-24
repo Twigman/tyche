@@ -1,5 +1,9 @@
 package de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064;
 
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetGenericHostEntryRequest;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetGenericHostEntryResponse;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetHostNumberOfEntriesRequest;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetHostNumberOfEntriesResponse;
 import jakarta.xml.bind.annotation.XmlRegistry;
 
 @XmlRegistry
