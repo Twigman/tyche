@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.controller;
+package de.qwyt.housecontrol.tyche.controller.sensor;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,17 +25,17 @@ public class TemperatureRestController {
 	private SensorServiceImpl service;
 	
 	@GetMapping(path = "/all/latest")
-	public List<SensorState> getTemperature() {
+	public List<SensorState> getLatestTemperatureAll() {
 		return service.getLatestTemperatureSensorStates();
 	}
 	
 	@GetMapping(path = "/{sensorId}/latest")
-	public SensorState getLatestTemperature(@PathVariable String sensorId) {
+	public SensorState getLatestTemperatureById(@PathVariable String sensorId) {
 		return service.getLatestTemperatureSensorState(sensorId);
 	}
 	
 	@GetMapping(path = "/{sensorId}")
-	public List<SensorState> getTemperature(
+	public List<SensorState> getTemperatureByIdBetween(
 			@PathVariable String sensorId,
 			@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 			) {
