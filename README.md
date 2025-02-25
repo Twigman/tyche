@@ -31,6 +31,7 @@ Ideas:<br />
 * [x] JUnit Tests
   - HueLights
   - ChangeChecker
+* [ ] UML diagrams  
 
 <br />
 The project is still in progress and will be updated<br />
