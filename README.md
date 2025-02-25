@@ -11,7 +11,8 @@ Ideas:<br />
   - json messages are parsed into classes via ObjectMapper (Jackson)
   - using filters for serialization
 * [x] REST APIs
-  - started with temperature
+  - Temperature endpoint
+  - Sensors endpoint
 * [x] SOAP Client
   - ~~WSDL files generated from fritzbox doc with ChatGPT~~
     - files aren't complete even after several attempts
