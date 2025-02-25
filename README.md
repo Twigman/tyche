@@ -10,7 +10,8 @@ Ideas:<br />
 * [x] JSON Handling
   - json messages are parsed into classes via ObjectMapper (Jackson)
   - using filters for serialization
-* [ ] REST APIs
+* [x] REST APIs
+  - started with temperature
 * [x] SOAP Client
   - WSDL files generated from fritzbox doc with ChatGPT
   - generated JAXB classes with maven wsimport plugin
@@ -20,6 +21,7 @@ Ideas:<br />
   - sensors are loaded from the database when the application is started
   - lights and their states are stored
   - lights are loaded from the database when the application is started
+  - custom methods and interface
 * [x] Events
 * [ ] Mocking WebService endpoint
 * [ ] Web-Frontend
