@@ -12,6 +12,10 @@ Ideas:<br />
   - using filters for serialization
 * [x] REST APIs
   - Temperature endpoint
+  - Humidity endpoint
+  - Presence endpoint
+  - LightLevel endpoint
+  - Pressure endpoint
   - Sensors endpoint
 * [x] SOAP Client
   - ~~WSDL files generated from fritzbox doc with ChatGPT~~
