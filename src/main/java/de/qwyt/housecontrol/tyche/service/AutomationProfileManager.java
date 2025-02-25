@@ -55,15 +55,17 @@ public class AutomationProfileManager {
 		return properties.getProfiles().get(profileType);
 	}
 	
-	public AutomationProfile setActiveProfile(AutomationProfileType profileType) {
+	public boolean setActiveProfile(AutomationProfileType profileType) {
 		if (this.activeProfile.getProfileType() != profileType) {
 			// change profile
 			this.activeProfile = this.properties.getProfiles().get(profileType);
 			this.activeAutomationProfileRepository.save(new ActiveAutomationProfile(this.activeProfile.getProfileType()));
 			LOG.info("AUTOMATION PROFILE {} {}", Symbole.ARROW_RIGHT, this.activeProfile.getProfileType());
+			
+			return true;
 		}
 		
-		return this.activeProfile;
+		return false;
 	}
 	
 	public AutomationProfile getActiveProfile() {

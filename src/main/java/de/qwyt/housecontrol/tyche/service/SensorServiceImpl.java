@@ -389,6 +389,18 @@ public class SensorServiceImpl {
 	}
 
 	// SensorStates - Between
+	public List<SensorState> getLightLevelSensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate) {
+		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollection.LIGHT_LEVEL_SENSOR_STATES);
+	}
+	
+	public List<SensorState> getPresenceSensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate) {
+		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollection.PRESENCE_SENSOR_STATES);
+	}
+	
+	public List<SensorState> getPressureSensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate) {
+		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollection.PRESSURE_SENSOR_STATES);
+	}
+	
 	public List<SensorState> getHumiditySensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate) {
 		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollection.HUMIDITY_SENSOR_STATES);
 	}
