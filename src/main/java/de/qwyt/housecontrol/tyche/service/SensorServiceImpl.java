@@ -24,6 +24,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import de.qwyt.housecontrol.tyche.model.sensor.zha.HumiditySensor;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.LightLevelSensor;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.PresenceSensor;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.PressureSensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.TemperatureSensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
@@ -371,4 +375,38 @@ public class SensorServiceImpl {
         
 		return sensorStateRepository.findSensorStateBetween(sensorId, startOfDay, endOfDay, SensorStatesCollection.TEMPERATURE_SENSOR_STATES);
 	}
+
+	public List<Sensor> getSensorsByClass(Class c) {
+		List<Sensor> sensorList = new ArrayList<Sensor>();
+		
+		this.sensorMap.forEach((key, sensor) -> {
+			if (sensor.getClass().equals(c)) {
+				sensorList.add(sensor);
+			}
+		});
+		
+		return sensorList;
+	}
+
+	// Sensors by Type
+	public List<Sensor> getTemperatureSensors() {
+		return getSensorsByClass(TemperatureSensor.class);
+	}
+
+	public List<Sensor> getPresenceSensors() {
+		return getSensorsByClass(PresenceSensor.class);
+	}
+
+	public List<Sensor> getHumiditySensors() {
+		return getSensorsByClass(HumiditySensor.class);
+	}
+
+	public List<Sensor> getLightLevelSensors() {
+		return getSensorsByClass(LightLevelSensor.class);
+	}
+
+	public List<Sensor> getPressureSensors() {
+		return getSensorsByClass(PressureSensor.class);
+	}
+
 }
