@@ -28,6 +28,7 @@ Ideas:<br />
 * [ ] Mocking WebService endpoint
 * [ ] Web-Frontend
 * [x] Docker setup
+  - environment for local IDE and production on raspberry
   - MongoDB
   - Tyche
 * [x] JUnit Tests
