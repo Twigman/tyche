@@ -13,8 +13,10 @@ Ideas:<br />
 * [x] REST APIs
   - started with temperature
 * [x] SOAP Client
-  - WSDL files generated from fritzbox doc with ChatGPT
-  - generated JAXB classes with maven wsimport plugin
+  - ~~WSDL files generated from fritzbox doc with ChatGPT~~
+    - files aren't complete even after several attempts
+  - ~~generated classes with maven plugin~~
+    - As only a few interfaces are used, the classes were created manually for JAXB
   - SSL certificates in truststore
 * [x] Persistant storage with MongoDB
   - sensors and their states are stored
