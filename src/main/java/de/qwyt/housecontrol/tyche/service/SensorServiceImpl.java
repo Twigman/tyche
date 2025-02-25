@@ -1,9 +1,14 @@
 package de.qwyt.housecontrol.tyche.service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -20,10 +25,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.TemperatureSensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorStatesCollection;
 import de.qwyt.housecontrol.tyche.repository.sensor.SensorConfigRepository;
 import de.qwyt.housecontrol.tyche.repository.sensor.SensorRepository;
 import de.qwyt.housecontrol.tyche.repository.sensor.SensorStateRepository;
+import de.qwyt.housecontrol.tyche.util.TimeHelper;
 
 @Service
 public class SensorServiceImpl {
@@ -312,5 +320,55 @@ public class SensorServiceImpl {
 	
 	public Sensor getSensor(String uniqueId) {
 		return this.sensorMap.get(uniqueId);
+	}
+	
+	// SensorState - Latest
+	public SensorState getLatestTemperatureSensorState(String sensorId) {
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.TEMPERATURE_SENSOR_STATES);
+	}
+	
+	public SensorState getLatestPressureSensorState(String sensorId) {
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.PRESSURE_SENSOR_STATES);
+	}
+	
+	public SensorState getLatestPresenceSensorState(String sensorId) {
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.PRESENCE_SENSOR_STATES);
+	}
+	
+	public SensorState getLatestLightLevelSensorState(String sensorId) {
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.LIGHT_LEVEL_SENSOR_STATES);
+	}
+	
+	public SensorState getLatestHumiditySensorState(String sensorId) {
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.HUMIDITY_SENSOR_STATES);
+	}
+	
+	public SensorState getLatestDimmerSwitchState(String sensorId) {
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.DIMMER_SWITCH_SENSOR_STATES);
+	}
+
+	// For all temperature sensors
+	public List<SensorState> getLatestTemperatureSensorStates() {
+		List<SensorState> temperatureStates = new ArrayList<SensorState>();
+		
+		this.sensorMap.forEach((key, sensor) -> {
+			if (sensor.getClass().equals(TemperatureSensor.class)) {
+				SensorState state = sensorStateRepository.findLatestSensorState(key, SensorStatesCollection.TEMPERATURE_SENSOR_STATES);
+				
+				if (state != null) {
+					temperatureStates.add(state);
+				}
+			}
+		});
+		
+		return temperatureStates;
+	}
+
+	// SensorStates - Between
+	public List<SensorState> getTemperatureSensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate) {
+		Instant startOfDay = TimeHelper.getStartOfDayUTCPlus1(startDate);
+        Instant endOfDay = TimeHelper.getEndOfDayUTCPlus1(endDate);
+        
+		return sensorStateRepository.findSensorStateBetween(sensorId, startOfDay, endOfDay, SensorStatesCollection.TEMPERATURE_SENSOR_STATES);
 	}
 }
