@@ -1,4 +1,4 @@
-# 1. JDK for Raspberry Pi (ARM-Architectur)
+# JDK for Raspberry Pi (ARM-Architectur)
 FROM arm64v8/eclipse-temurin:21-jdk-alpine
 
 # spring profile
@@ -8,6 +8,9 @@ WORKDIR /app
 
 # dependencies
 COPY target/tyche-housecontrol.jar /app/tyche-housecontrol.jar
+COPY automation-profiles.yml /app/automation-profiles.yml
+COPY color-profiles.yml /app/color-profiles.yml
+COPY truststore.jks /app/truststore.jks
 
 # example port for Spring-Boot-App
 EXPOSE 8080
