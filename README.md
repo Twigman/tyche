@@ -46,10 +46,16 @@ Ideas:<br />
 The project is still in progress and will be updated<br />
 <br />
 Start only MongoDB container for development with IDE:<br />
-`docker compose -f docker-compose.dev.yml up -d`<br />
+```sh
+docker compose -f docker-compose.dev.yml up -d
+```
 <br />
-Build for Raspberry:<br /> 
-`docker compose -f docker-compose.prod.yml up -d --build`<br />
+Build for Raspberry:<br />
+```sh
+docker compose -f docker-compose.prod.yml up -d --build
+```
 <br />
 Start on Raspberry:<br />
-`docker compose -f docker-compose.prod.yml up -d`
+```sh
+docker compose -f docker-compose.prod.yml up -d
+```
