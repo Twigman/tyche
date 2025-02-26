@@ -23,6 +23,9 @@ Ideas:<br />
   - ~~generated classes with maven plugin~~
     - As only a few interfaces are used, the classes were created manually for JAXB
   - SSL certificates in truststore
+* [x] WebSocket
+  - receives messages from Raspberry via basic WebSocket
+  - delivers messages (to frontend) via STOMP
 * [x] Persistant storage with MongoDB
   - sensors and their states are stored
   - sensors are loaded from the database when the application is started
