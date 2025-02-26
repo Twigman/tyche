@@ -31,7 +31,8 @@ Ideas:<br />
   - custom methods and interface
 * [x] Events
 * [ ] Mocking WebService endpoint
-* [ ] Web-Frontend
+* [x] Web-Frontend
+  - https://github.com/Twigman/tyche-web-interface
 * [x] Docker setup
   - environment for local IDE and production on raspberry
   - MongoDB
