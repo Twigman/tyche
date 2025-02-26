@@ -35,6 +35,7 @@ build/
 .vscode/
 
 **/soap_example.xml
+**/CorsConfig.java
 **/truststore.jks
 **/certs/
 **/fritzbox_doku/
