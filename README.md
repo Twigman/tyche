@@ -48,21 +48,20 @@ Ideas:<br />
 <br />
 The project is still in progress and will be updated<br />
 <br />
-Start only MongoDB container for development with IDE:<br /> 
+Start only MongoDB container for development with IDE:
+
 ```sh
 docker compose -f docker-compose.dev.yml up -d
 ```
-<br />
-Build for Raspberry:<br />
+
+Build for Raspberry:
+
 ```sh
 docker compose -f docker-compose.prod.yml up -d --build
 ```
-<br />
-Start on Raspberry:<br />
-```sh
-docker compose -f docker-compose.prod.yml up -d
-```
+
+Start on Raspberry:
 
 ```sh
-yarn
+docker compose -f docker-compose.prod.yml up -d
 ```
