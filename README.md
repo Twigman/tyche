@@ -45,7 +45,7 @@ Ideas:<br />
 <br />
 The project is still in progress and will be updated<br />
 <br />
-Start only MongoDB container for development with IDE:<br />
+Start only MongoDB container for development with IDE:<br /> 
 ```sh
 docker compose -f docker-compose.dev.yml up -d
 ```
