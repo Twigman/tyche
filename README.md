@@ -62,3 +62,7 @@ Start on Raspberry:<br />
 ```sh
 docker compose -f docker-compose.prod.yml up -d
 ```
+
+```sh
+yarn
+```
