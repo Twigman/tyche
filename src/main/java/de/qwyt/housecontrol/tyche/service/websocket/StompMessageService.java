@@ -6,6 +6,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import de.qwyt.housecontrol.tyche.event.sensor.DimmerSwitchEvent;
+import de.qwyt.housecontrol.tyche.event.sensor.SensorHumidityEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorPresenceEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorTemperatureEvent;
 
@@ -32,7 +33,7 @@ public class StompMessageService {
 	@Value("${tyche.stomp.topic.sensor.dimmerswitch}")
 	private String sensorDimmerSwitchTopic;
 	
-	@Value("${tyche.stomp.topic.huelights}")
+	@Value("${tyche.stomp.topic.light.huelight}")
 	private String hueLightTopic;
 	
 	@Autowired
@@ -50,6 +51,10 @@ public class StompMessageService {
 
 	public void sendSensorTemperatureUpdate(SensorTemperatureEvent event) {
 		messagingTemplate.convertAndSend(sensorTemperatureTopic, event);
+	}
+	
+	public void sendSensorHumidityUpdate(SensorHumidityEvent event) {
+		messagingTemplate.convertAndSend(sensorHumidityTopic, event);
 	}
 	
 }

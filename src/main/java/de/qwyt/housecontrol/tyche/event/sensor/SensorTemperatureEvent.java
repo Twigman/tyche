@@ -11,10 +11,12 @@ public class SensorTemperatureEvent extends SensorEvent {
 
 	private static final long serialVersionUID = 7393717207748209350L;
 	
-	private TemperatureSensor sensor;
-	
 	public SensorTemperatureEvent(Object source, HousecontrolModule module, TemperatureSensor sensor) {
-		super(source, module);
-		this.sensor = sensor;
+		super(source, module, sensor);
+	}
+	
+	@Override
+	public TemperatureSensor getSensor() {
+		return (TemperatureSensor) super.getSensor();
 	}
 }

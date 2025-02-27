@@ -34,8 +34,11 @@ build/
 ### VS Code ###
 .vscode/
 
-**/soap_example.xml
+# configs
 **/CorsConfig.java
+**/StompConfig.java
+
+**/soap_example.xml
 **/truststore.jks
 **/certs/
 **/fritzbox_doku/

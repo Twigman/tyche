@@ -5,6 +5,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import de.qwyt.housecontrol.tyche.event.sensor.SensorHumidityEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorPresenceEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorTemperatureEvent;
 import de.qwyt.housecontrol.tyche.service.websocket.StompMessageService;
@@ -31,4 +32,9 @@ public class StompEventListener {
 		stompMessageService.sendSensorTemperatureUpdate(event);
 	}
 
+	@Async
+	@EventListener
+	public void onSensorHumidityEvent(SensorHumidityEvent event) {
+		stompMessageService.sendSensorHumidityUpdate(event);
+	}
 }

@@ -102,7 +102,7 @@ public class AutomationServiceImpl {
 	
 	@EventListener
 	public void onDimmerSwitchEvent(DimmerSwitchEvent dimmerEvent) {
-		DimmerSwitch dimmerSwitch = dimmerEvent.getDimmSwitch();
+		DimmerSwitch dimmerSwitch = dimmerEvent.getSensor();
 		
 		switch(dimmerSwitch.getState().getButton()) {
 		case BUTTON_ON_PRESSED:

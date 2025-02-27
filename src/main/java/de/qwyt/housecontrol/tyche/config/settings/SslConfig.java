@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.config;
+package de.qwyt.housecontrol.tyche.config.settings;
 
 import java.io.File;
 import java.io.IOException;

@@ -11,10 +11,12 @@ public class SensorPresenceEvent extends SensorEvent {
 
 	private static final long serialVersionUID = 9012706990902344024L;
 	
-	private PresenceSensor sensor;
-	
 	public SensorPresenceEvent(Object source, HousecontrolModule module, PresenceSensor sensor) {
-		super(source, module);
-		this.sensor = sensor;
+		super(source, module, sensor);
+	}
+	
+	@Override
+	public PresenceSensor getSensor() {
+		return (PresenceSensor) super.getSensor();
 	}
 }

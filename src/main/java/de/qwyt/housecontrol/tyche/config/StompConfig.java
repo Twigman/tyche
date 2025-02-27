@@ -20,7 +20,10 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
 	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
+		registry.addEndpoint("/ws").setAllowedOriginPatterns(
+				"http://localhost:5173", // vue-frontend desktop
+				"http://192.168.178.47:5173" // vue-fontend raspberry);
+				);
 	}
 
 }
