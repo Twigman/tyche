@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.service.webservice;
+package de.qwyt.housecontrol.tyche.service.webservice.interceptor;
 
 import org.springframework.ws.WebServiceMessage;
 import org.springframework.ws.client.WebServiceClientException;

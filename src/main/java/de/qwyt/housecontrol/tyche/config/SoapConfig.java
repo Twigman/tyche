@@ -7,8 +7,8 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.client.support.interceptor.ClientInterceptor;
 
-import de.qwyt.housecontrol.tyche.service.webservice.FritzboxAuthInterceptor;
-import de.qwyt.housecontrol.tyche.service.webservice.SoapLoggerInterceptor;
+import de.qwyt.housecontrol.tyche.service.webservice.interceptor.FritzboxAuthInterceptor;
+import de.qwyt.housecontrol.tyche.service.webservice.interceptor.SoapLoggerInterceptor;
 
 
 @Configuration

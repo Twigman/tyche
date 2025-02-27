@@ -1,6 +1,6 @@
 package de.qwyt.housecontrol.tyche.model.sensor.zha.state;
 
-public enum SensorStatesCollection {
+public enum SensorStatesCollectionName {
 	TEMPERATURE_SENSOR_STATES("TemperatureSensorStates"),
     HUMIDITY_SENSOR_STATES("HumiditySensorStates"),
     CLIP_DAYLIGHT_OFFSET_SENSOR_STATES("CLIPDaylightOffsetSensorStates"),
@@ -12,7 +12,7 @@ public enum SensorStatesCollection {
 
     private final String collectionName;
 
-    SensorStatesCollection(String collectionName) {
+    SensorStatesCollectionName(String collectionName) {
         this.collectionName = collectionName;
     }
 

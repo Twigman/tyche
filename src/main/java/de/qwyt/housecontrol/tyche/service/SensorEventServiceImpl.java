@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.event.sensor.DimmerSwitchEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorPresenceEvent;
+import de.qwyt.housecontrol.tyche.event.sensor.SensorTemperatureEvent;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.DimmerSwitch;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.PresenceSensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.TemperatureSensor;
 
 @Service
 public class SensorEventServiceImpl {
@@ -27,7 +29,8 @@ public class SensorEventServiceImpl {
 		this.eventPublisher = eventPublisher;
 		this.eventMappings = Map.of(
 				PresenceSensor.class, sensor -> new SensorPresenceEvent(this, HousecontrolModule.ZIGBEE, (PresenceSensor) sensor),
-				DimmerSwitch.class, sensor -> new DimmerSwitchEvent(this, HousecontrolModule.ZIGBEE, (DimmerSwitch) sensor)
+				DimmerSwitch.class, sensor -> new DimmerSwitchEvent(this, HousecontrolModule.ZIGBEE, (DimmerSwitch) sensor),
+				TemperatureSensor.class, sensor -> new SensorTemperatureEvent(this, HousecontrolModule.ZIGBEE, (TemperatureSensor) sensor)
 				);
 	}
 	

@@ -3,12 +3,10 @@ package de.qwyt.housecontrol.tyche.service;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -16,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,7 +28,7 @@ import de.qwyt.housecontrol.tyche.model.sensor.zha.PressureSensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.Sensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.TemperatureSensor;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
-import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorStatesCollection;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorStatesCollectionName;
 import de.qwyt.housecontrol.tyche.repository.sensor.SensorConfigRepository;
 import de.qwyt.housecontrol.tyche.repository.sensor.SensorRepository;
 import de.qwyt.housecontrol.tyche.repository.sensor.SensorStateRepository;
@@ -328,51 +325,51 @@ public class SensorServiceImpl {
 	
 	// SensorState - Latest
 	public SensorState getLatestTemperatureSensorState(String sensorId) {
-		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.TEMPERATURE_SENSOR_STATES);
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollectionName.TEMPERATURE_SENSOR_STATES);
 	}
 	
 	public SensorState getLatestPressureSensorState(String sensorId) {
-		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.PRESSURE_SENSOR_STATES);
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollectionName.PRESSURE_SENSOR_STATES);
 	}
 	
 	public SensorState getLatestPresenceSensorState(String sensorId) {
-		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.PRESENCE_SENSOR_STATES);
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollectionName.PRESENCE_SENSOR_STATES);
 	}
 	
 	public SensorState getLatestLightLevelSensorState(String sensorId) {
-		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.LIGHT_LEVEL_SENSOR_STATES);
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollectionName.LIGHT_LEVEL_SENSOR_STATES);
 	}
 	
 	public SensorState getLatestHumiditySensorState(String sensorId) {
-		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.HUMIDITY_SENSOR_STATES);
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollectionName.HUMIDITY_SENSOR_STATES);
 	}
 	
 	public SensorState getLatestDimmerSwitchState(String sensorId) {
-		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollection.DIMMER_SWITCH_SENSOR_STATES);
+		return sensorStateRepository.findLatestSensorState(sensorId, SensorStatesCollectionName.DIMMER_SWITCH_SENSOR_STATES);
 	}
 
 	// All latest sensors states
 	public List<SensorState> getLatestPressureSensorStates() {
-		return getLatestSensorStatesByClass(PressureSensor.class, SensorStatesCollection.PRESSURE_SENSOR_STATES);
+		return getLatestSensorStatesByClass(PressureSensor.class, SensorStatesCollectionName.PRESSURE_SENSOR_STATES);
 	}
 	
 	public List<SensorState> getLatestLightLevelSensorStates() {
-		return getLatestSensorStatesByClass(LightLevelSensor.class, SensorStatesCollection.LIGHT_LEVEL_SENSOR_STATES);
+		return getLatestSensorStatesByClass(LightLevelSensor.class, SensorStatesCollectionName.LIGHT_LEVEL_SENSOR_STATES);
 	}
 	
 	public List<SensorState> getLatestPresenceSensorStates() {
-		return getLatestSensorStatesByClass(PresenceSensor.class, SensorStatesCollection.PRESENCE_SENSOR_STATES);
+		return getLatestSensorStatesByClass(PresenceSensor.class, SensorStatesCollectionName.PRESENCE_SENSOR_STATES);
 	}
 	
 	public List<SensorState> getLatestHumiditySensorStates() {
-		return getLatestSensorStatesByClass(HumiditySensor.class, SensorStatesCollection.HUMIDITY_SENSOR_STATES);
+		return getLatestSensorStatesByClass(HumiditySensor.class, SensorStatesCollectionName.HUMIDITY_SENSOR_STATES);
 	}
 	
 	public List<SensorState> getLatestTemperatureSensorStates() {
-		return getLatestSensorStatesByClass(TemperatureSensor.class, SensorStatesCollection.TEMPERATURE_SENSOR_STATES);
+		return getLatestSensorStatesByClass(TemperatureSensor.class, SensorStatesCollectionName.TEMPERATURE_SENSOR_STATES);
 	}
 	
-	public List<SensorState> getLatestSensorStatesByClass(Class c, SensorStatesCollection collection) {
+	public List<SensorState> getLatestSensorStatesByClass(Class c, SensorStatesCollectionName collection) {
 		List<SensorState> states = new ArrayList<SensorState>();
 		
 		this.sensorMap.forEach((key, sensor) -> {
@@ -390,26 +387,26 @@ public class SensorServiceImpl {
 
 	// SensorStates - Between
 	public List<SensorState> getLightLevelSensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate) {
-		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollection.LIGHT_LEVEL_SENSOR_STATES);
+		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollectionName.LIGHT_LEVEL_SENSOR_STATES);
 	}
 	
 	public List<SensorState> getPresenceSensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate) {
-		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollection.PRESENCE_SENSOR_STATES);
+		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollectionName.PRESENCE_SENSOR_STATES);
 	}
 	
 	public List<SensorState> getPressureSensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate) {
-		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollection.PRESSURE_SENSOR_STATES);
+		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollectionName.PRESSURE_SENSOR_STATES);
 	}
 	
 	public List<SensorState> getHumiditySensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate) {
-		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollection.HUMIDITY_SENSOR_STATES);
+		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollectionName.HUMIDITY_SENSOR_STATES);
 	}
 	
 	public List<SensorState> getTemperatureSensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate) {
-		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollection.TEMPERATURE_SENSOR_STATES);
+		return getSensorStatesBetween(sensorId, startDate, endDate, SensorStatesCollectionName.TEMPERATURE_SENSOR_STATES);
 	}
 	
-	public List<SensorState> getSensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate, SensorStatesCollection collection) {
+	public List<SensorState> getSensorStatesBetween(String sensorId, LocalDate startDate, LocalDate endDate, SensorStatesCollectionName collection) {
 		Instant startOfDay = TimeHelper.getStartOfDayUTCPlus1(startDate);
         Instant endOfDay = TimeHelper.getEndOfDayUTCPlus1(endDate);
         

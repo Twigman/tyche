@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
-import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorStatesCollection;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorStatesCollectionName;
 
 
 /**
@@ -48,7 +48,7 @@ public class CustomSensorStateRepositoryImpl implements CustomSensorStateReposit
 	}
 	
 	// Between
-	public List<SensorState> findSensorStateBetween(String sensorId, Instant start, Instant end, SensorStatesCollection collection) {
+	public List<SensorState> findSensorStateBetween(String sensorId, Instant start, Instant end, SensorStatesCollectionName collection) {
 		Query query = new Query()
 				.addCriteria(Criteria.where("sensorId").is(sensorId))
 				.addCriteria(Criteria.where("lastupdated").gte(Date.from(start)).lte(Date.from(end)))
@@ -58,7 +58,7 @@ public class CustomSensorStateRepositoryImpl implements CustomSensorStateReposit
 	}
 	
 	// Latest
-	public SensorState findLatestSensorState(String sensorId, SensorStatesCollection collection) {
+	public SensorState findLatestSensorState(String sensorId, SensorStatesCollectionName collection) {
 		Query query = new Query()
 				.addCriteria(Criteria.where("sensorId").is(sensorId))
 				.with(Sort.by(Sort.Direction.DESC, "lastupdated"))

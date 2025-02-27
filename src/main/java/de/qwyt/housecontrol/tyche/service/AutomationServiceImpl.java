@@ -61,7 +61,7 @@ public class AutomationServiceImpl {
 	}
 	
 	@EventListener
-	public void handlePresenceEvent(SensorPresenceEvent presenceEvent) {
+	public void onSensorPresenceEvent(SensorPresenceEvent presenceEvent) {
 		PresenceSensor sensor = presenceEvent.getSensor();
 		// Is motion detection active?
 		if (automationProfileManager.getActiveProfile().getActivateMotionDetection()) {
@@ -101,7 +101,7 @@ public class AutomationServiceImpl {
 	}
 	
 	@EventListener
-	public void handleDimmerEvent(DimmerSwitchEvent dimmerEvent) {
+	public void onDimmerSwitchEvent(DimmerSwitchEvent dimmerEvent) {
 		DimmerSwitch dimmerSwitch = dimmerEvent.getDimmSwitch();
 		
 		switch(dimmerSwitch.getState().getButton()) {

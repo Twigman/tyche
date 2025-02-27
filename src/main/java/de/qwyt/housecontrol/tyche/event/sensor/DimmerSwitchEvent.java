@@ -1,21 +1,20 @@
 package de.qwyt.housecontrol.tyche.event.sensor;
 
-import org.springframework.context.ApplicationEvent;
-
 import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.DimmerSwitch;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class DimmerSwitchEvent extends ApplicationEvent {
+@Setter
+public class DimmerSwitchEvent extends SensorEvent {
 
+	private static final long serialVersionUID = -7606192762088388894L;
+	
 	private DimmerSwitch dimmSwitch;
 	
-	private HousecontrolModule module;
-	
 	public DimmerSwitchEvent(Object source, HousecontrolModule module, DimmerSwitch dimmerSwitch) {
-		super(source);
+		super(source, module);
 		this.dimmSwitch = dimmerSwitch;
-		this.module = module;
 	}
 }
