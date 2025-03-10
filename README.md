@@ -43,7 +43,9 @@ Ideas:<br />
 * [x] JUnit Tests
   - HueLights
   - ChangeChecker
-* [ ] UML diagrams  
+* [ ] UML diagrams
+  - model classes
+  - sequence for color profile usage
 
 <br />
 The project is still in progress and will be updated<br />
