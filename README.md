@@ -33,6 +33,7 @@ Ideas:<br />
   - lights are loaded from the database when the application is started
   - custom methods and interface
 * [x] Events
+* [x] Spotify client
 * [ ] Mocking WebService endpoint
 * [x] Web-Frontend
   - https://github.com/Twigman/tyche-web-interface
