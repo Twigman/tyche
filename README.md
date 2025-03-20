@@ -44,9 +44,9 @@ Ideas:<br />
 * [x] JUnit Tests
   - HueLights
   - ChangeChecker
-* [ ] Spring Security
+* [x] Spring Security
   - TLS
-  - DPoP Auth
+  - DPoP
 * [ ] UML diagrams
   - model classes
   - sequence for color profile usage
