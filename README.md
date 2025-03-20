@@ -45,6 +45,7 @@ Ideas:<br />
   - HueLights
   - ChangeChecker
 * [ ] Spring Security
+  - TLS
   - DPoP Auth
 * [ ] UML diagrams
   - model classes
