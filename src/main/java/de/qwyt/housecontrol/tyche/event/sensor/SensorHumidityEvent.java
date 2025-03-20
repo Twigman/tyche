@@ -2,7 +2,11 @@ package de.qwyt.housecontrol.tyche.event.sensor;
 
 import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.HumiditySensor;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class SensorHumidityEvent extends SensorEvent {
 
 	private static final long serialVersionUID = -6842694794851678957L;

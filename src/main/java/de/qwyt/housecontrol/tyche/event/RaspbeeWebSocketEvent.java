@@ -3,6 +3,11 @@ package de.qwyt.housecontrol.tyche.event;
 
 import org.springframework.context.ApplicationEvent;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class RaspbeeWebSocketEvent extends ApplicationEvent {
 	
 	private Object source;
@@ -15,9 +20,4 @@ public class RaspbeeWebSocketEvent extends ApplicationEvent {
 		this.source = source;
 		this.message = message;
 	}
-	
-	public String getMessage() {
-		return this.message;
-	}
-
 }
