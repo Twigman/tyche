@@ -57,6 +57,9 @@ public class HueLightState {
 	@JsonProperty("xy")
 	private List<Double> xy;
 	
+	@JsonProperty("ignoreSensors")
+	private Boolean ignoreSensors;
+	
 	@Indexed
 	private String lightId;
 	
@@ -66,20 +69,7 @@ public class HueLightState {
 	// extra field for tyche
 	@JsonProperty("hueColorProfileType")
 	private HueColorProfileType colorProfile;
-	/**
-	 * Only use "on2" for yaml configuration.
-	 * The name "on" combined with the wrapper class Boolean causes problems.
-	 * 
-	 * @param value
-	 */
-	/*public void setOn2(Boolean value) {
-		this.on = value;
-		this.on2 = value;
-	}
-	
-	public Boolean getOn2() {
-		return this.on2;
-	}*/
+
 	
 	public void setOn(Boolean value) {
 		this.enabled = value;
@@ -87,5 +77,13 @@ public class HueLightState {
 	
 	public Boolean isOn() {
 		return this.enabled;
+	}
+	
+	public Boolean isEnabled() {
+		return this.enabled;
+	}
+	
+	public Boolean isIgnoreSensors() {
+		return this.ignoreSensors;
 	}
 }
