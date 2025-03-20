@@ -34,11 +34,18 @@ public class TemperatureRestController {
 		return service.getLatestTemperatureSensorState(sensorId);
 	}
 	
+	// call /api/temperatures/{id}?startDate=2025-03-05&endDate=2025-03-05
 	@GetMapping(path = "/{sensorId}")
 	public List<SensorState> getTemperatureByIdBetween(
 			@PathVariable String sensorId,
-			@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+			@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
 			) {
-		return service.getTemperatureSensorStatesBetween(sensorId, date, date);
+		return service.getTemperatureSensorStatesBetween(sensorId, startDate, endDate);
+	}
+	
+	@GetMapping(path = "/{sensorId}/last24h")
+	public List<SensorState> getTemperatureByIdLast24h(@PathVariable String sensorId) {
+		return service.getTemperatureSensorStatesLast24h(sensorId);
 	}
 }

@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.model.light.hue;
+package de.qwyt.housecontrol.tyche.model.light.hue.capabilities;
 
 import org.springframework.data.annotation.Id;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class HueLightColorCt {
+public class HueLightCapColorCt {
 	
 	@Id
 	private String id;

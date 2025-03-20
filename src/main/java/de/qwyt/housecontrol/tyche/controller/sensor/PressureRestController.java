@@ -34,8 +34,14 @@ public class PressureRestController {
 	@GetMapping(path = "/{sensorId}")
 	public List<SensorState> getPressureByIdBetween(
 			@PathVariable String sensorId,
-			@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+			@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
 			) {
-		return service.getPressureSensorStatesBetween(sensorId, date, date);
+		return service.getPressureSensorStatesBetween(sensorId, startDate, endDate);
+	}
+	
+	@GetMapping(path = "/{sensorId}/last24h")
+	public List<SensorState> getPressureByIdLast24h(@PathVariable String sensorId) {
+		return service.getPressureSensorStatesLast24h(sensorId);
 	}
 }

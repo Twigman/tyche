@@ -34,8 +34,9 @@ public class PresenceRestController {
 	@GetMapping(path = "/{sensorId}")
 	public List<SensorState> getPresenceByIdBetween(
 			@PathVariable String sensorId,
-			@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+			@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
 			) {
-		return service.getPresenceSensorStatesBetween(sensorId, date, date);
+		return service.getPresenceSensorStatesBetween(sensorId, startDate, endDate);
 	}
 }

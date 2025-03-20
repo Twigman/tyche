@@ -34,8 +34,14 @@ public class LightLevelRestController {
 	@GetMapping(path = "/{sensorId}")
 	public List<SensorState> getLightLevelByIdBetween(
 			@PathVariable String sensorId,
-			@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+			@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
 			) {
-		return service.getLightLevelSensorStatesBetween(sensorId, date, date);
+		return service.getLightLevelSensorStatesBetween(sensorId, startDate, endDate);
+	}
+	
+	@GetMapping(path = "/{sensorId}/last24h")
+	public List<SensorState> getLightLevelByIdLast24h(@PathVariable String sensorId) {
+		return service.getLightLevelSensorStatesLast24h(sensorId);
 	}
 }

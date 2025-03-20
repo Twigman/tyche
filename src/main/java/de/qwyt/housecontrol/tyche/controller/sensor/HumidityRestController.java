@@ -34,8 +34,14 @@ public class HumidityRestController {
 	@GetMapping(path = "/{sensorId}")
 	public List<SensorState> getHumidityByIdBetween(
 			@PathVariable String sensorId,
-			@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+			@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
 			) {
-		return service.getHumiditySensorStatesBetween(sensorId, date, date);
+		return service.getHumiditySensorStatesBetween(sensorId, startDate, endDate);
+	}
+	
+	@GetMapping(path = "/{sensorId}/last24h")
+	public List<SensorState> getHumidityByIdLast24h(@PathVariable String sensorId) {
+		return service.getHumiditySensorStatesLast24h(sensorId);
 	}
 }

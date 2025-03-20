@@ -1,5 +1,6 @@
 package de.qwyt.housecontrol.tyche.service;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class SensorServiceImpl {
 	
 	private final SensorConfigRepository sensorConfigRepository;
 	
-	private final SensorEventServiceImpl sensorEventService;
+	private final EventServiceImpl eventService;
 	
 	@Autowired
 	public SensorServiceImpl(
@@ -60,14 +61,14 @@ public class SensorServiceImpl {
 			SensorRepository sensorRepository,
 			SensorStateRepository sensorStateRepository,
 			SensorConfigRepository sensorConfigRepository,
-			SensorEventServiceImpl sensorEventService
+			EventServiceImpl eventService
 			) {
 		this.modelMapper = modelMapper;
 		this.objectMapper = objectMapper;
 		this.sensorRepository = sensorRepository;
 		this.sensorStateRepository = sensorStateRepository;
 		this.sensorConfigRepository = sensorConfigRepository;
-		this.sensorEventService = sensorEventService;
+		this.eventService = eventService;
 		this.sensorMap = new HashMap<>();
 	}
 	
@@ -244,7 +245,7 @@ public class SensorServiceImpl {
 		    LOG.debug("State changed for {}", sensor.getNameAndIdInfo());
 		    
 		    // Event Service
-		    sensorEventService.processSensorChange(sensor);
+		    eventService.fireSensorEvent(sensor);
 		} catch (JsonProcessingException | IllegalArgumentException e) {
 		    LOG.error("Can't create SensorState from JSON: {}", stateNode.toString());
 		    e.printStackTrace();
@@ -413,6 +414,30 @@ public class SensorServiceImpl {
 		return sensorStateRepository.findSensorStateBetween(sensorId, startOfDay, endOfDay, collection);
 	}
 
+	// last 24h
+	public List<SensorState> getTemperatureSensorStatesLast24h(String sensorId) {
+		return getSensorStatesLast24h(sensorId, SensorStatesCollectionName.TEMPERATURE_SENSOR_STATES);
+	}
+	
+	public List<SensorState> getHumiditySensorStatesLast24h(String sensorId) {
+		return getSensorStatesLast24h(sensorId, SensorStatesCollectionName.HUMIDITY_SENSOR_STATES);
+	}
+	
+	public List<SensorState> getPressureSensorStatesLast24h(String sensorId) {
+		return getSensorStatesLast24h(sensorId, SensorStatesCollectionName.PRESSURE_SENSOR_STATES);
+	}
+	
+	public List<SensorState> getLightLevelSensorStatesLast24h(String sensorId) {
+		return getSensorStatesLast24h(sensorId, SensorStatesCollectionName.LIGHT_LEVEL_SENSOR_STATES);
+	}
+	
+	public List<SensorState> getSensorStatesLast24h(String sensorId, SensorStatesCollectionName collection) {
+		Instant now = Instant.now();
+        Instant start = now.minus(Duration.ofHours(24));
+        
+		return sensorStateRepository.findSensorStateBetween(sensorId, start, now, collection);
+	}
+	
 	public List<Sensor> getSensorsByClass(Class c) {
 		List<Sensor> sensorList = new ArrayList<Sensor>();
 		

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.qwyt.housecontrol.tyche.model.light.hue.HueLightColorCt;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class HueLightCapColor {
 	
 	@JsonProperty("ct")
-	private HueLightColorCt ct;
+	private HueLightCapColorCt ct;
 	
 	@JsonProperty("effects")
 	private List<String> effects;
