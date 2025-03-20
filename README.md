@@ -45,6 +45,7 @@ Ideas:<br />
   - HueLights
   - ChangeChecker
 * [ ] Spring Security
+  - DPoP Auth
 * [ ] UML diagrams
   - model classes
   - sequence for color profile usage
