@@ -1,5 +1,7 @@
 package de.qwyt.housecontrol.tyche.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetGenericHost
 import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetGenericHostEntryResponse;
 import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetHostNumberOfEntriesRequest;
 import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetHostNumberOfEntriesResponse;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetSpecificHostEntryRequest;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetSpecificHostEntryResponse;
 
 
 
@@ -24,8 +28,12 @@ public class FritzboxService {
 	@Value("${fritzbox.tr064.endpoints.hosts}")
 	private String hostsEnpoint;
 	
+	private List<GetGenericHostEntryResponse> hostList;
+	
 	@Autowired
-	public FritzboxService(WebServiceTemplate webServiceTemplate) {
+	public FritzboxService(
+			WebServiceTemplate webServiceTemplate
+			) {
 		this.webServiceTemplate = webServiceTemplate;
 	}
 	
@@ -51,4 +59,31 @@ public class FritzboxService {
 		return response;
 	}
 	
+	public GetSpecificHostEntryResponse getSpecificHostEntry(String macAddress) {
+		GetSpecificHostEntryRequest request = new GetSpecificHostEntryRequest(macAddress);
+		GetSpecificHostEntryResponse response = (GetSpecificHostEntryResponse) webServiceTemplate.marshalSendAndReceive(
+				hostsEnpoint,
+				request,
+				new SoapActionCallback("urn:dslforum-org:service:Hosts:1#GetSpecificHostEntry")
+				);
+		
+		return response;
+	}
+	
+	public GetSpecificHostEntryResponse getPhoneInfo(String phoneMac) {
+		GetSpecificHostEntryResponse responsePhone = this.getSpecificHostEntry(phoneMac);
+		
+		if (responsePhone != null) {
+			// right entry
+			return responsePhone;
+		} else {
+			// TODO: check other entries
+			LOG.warn("Phone MAC address not found in host list");
+			return null;
+		}
+	}
+	
+	public void initHostList() {
+		
+	}
 }

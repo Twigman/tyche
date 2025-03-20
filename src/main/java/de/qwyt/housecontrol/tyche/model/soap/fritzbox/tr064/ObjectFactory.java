@@ -4,6 +4,8 @@ import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetGenericHost
 import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetGenericHostEntryResponse;
 import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetHostNumberOfEntriesRequest;
 import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetHostNumberOfEntriesResponse;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetSpecificHostEntryRequest;
+import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetSpecificHostEntryResponse;
 import jakarta.xml.bind.annotation.XmlRegistry;
 
 @XmlRegistry
@@ -25,5 +27,15 @@ public class ObjectFactory {
 
     public GetGenericHostEntryResponse createGetGenericHostEntryResponse() {
         return new GetGenericHostEntryResponse();
+    }
+    
+    // GetSpecificHostEntry
+    
+    public GetSpecificHostEntryRequest createGetSpecificHostEntryRequest(String macAddress) {
+        return new GetSpecificHostEntryRequest(macAddress);
+    }
+    
+    public GetSpecificHostEntryResponse createGetSpecificHostEntryResponse() {
+        return new GetSpecificHostEntryResponse();
     }
 }
