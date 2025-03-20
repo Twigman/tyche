@@ -17,11 +17,28 @@ public class AutomationProfile {
 	@Id
 	private AutomationProfileType profileType;
 	
-	private Boolean activateMotionDetection;
+	private Boolean activeMotionDetection;
 	
-	private Boolean activateLightAutomation;
+	private Boolean activeLightAutomation;
+	
+	// true: switches back to profile HOME, if the room is inactive
+	// e.g. for profile cooking ignoreSensors is true so the light stays on
+	// with autoHomeProfile the profile switches back to HOME after a certain period of inactivity
+	private Boolean autoHomeProfile;
 	
 	private AutomationProfileSensors sensors;
 	
 	private Map<RoomType, LightPresets> presets;
+	
+	public Boolean isActiveLightAutomation() {
+		return activeLightAutomation;
+	}
+	
+	public Boolean isActiveMotionDetection() {
+		return activeMotionDetection;
+	}
+	
+	public Boolean isAutoHomeProfile() {
+		return autoHomeProfile;
+	}
 }

@@ -11,8 +11,8 @@ automation:
     # ---
     # lights.colorProfile: DEFAULT_CT_BRI
     HOME:
-      activateMotionDetection: true
-      activateLightAutomation: true
+      activeMotionDetection: true
+      activeLightAutomation: true
       sensors:
         targetTemperatureLivingroom: 20.5
       presets:
@@ -23,38 +23,53 @@ automation:
           lights:
             enabled: true
     AWAY:
-      activateMotionDetection: true
-      activateLightAutomation: false
+      activeMotionDetection: true
+      activeLightAutomation: false
       presets:
         ALL:
           lights:
             enabled: false
     VACATION:
-      activateMotionDetection: true
-      activateLightAutomation: false
+      activeMotionDetection: true
+      activeLightAutomation: false
       presets:
         ALL:
           lights:
             enabled: false
     SLEEPING:
-      activateMotionDetection: true
-      activateLightAutomation: false
+      activeMotionDetection: true
+      activeLightAutomation: false
       presets:
         ALL:
           lights:
             enabled: false
+    COOKING:
+      activeMotionDetection: true
+      activeLightAutomation: true
+      autoHomeProfile: true
+      presets:
+        ALL:
+          lights:
+            enabled: false
+        LIVINGROOM:
+          lights:
+            enabled: true
+        KITCHEN:
+          lights:
+            enabled: true
+            ignoreSensors: true
     BEDTIME:
-      activateMotionDetection: true
-      activateLightAutomation: true
+      activeMotionDetection: true
+      activeLightAutomation: true
       presets:
         ALL:
           lights:
             colorProfile: DEFAULT_CT
             enabled: false
             bri: 60
-        BEDROOM:
-          lights:
-            colorProfile: DEFAULT_CT
-            enabled: true
-            bri: 200
+#        BEDROOM:
+#          lights:
+#            colorProfile: DEFAULT_CT
+#            enabled: true
+#            bri: 200
 

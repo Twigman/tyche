@@ -37,12 +37,18 @@ public class AutomationProfileProperties {
 				// Temperature
 				profile.getSensors().setTargetTemperatureLivingroom(18d);
 			}
+			if (profile.isAutoHomeProfile() == null) {
+				profile.setAutoHomeProfile(false);
+			}
 			// defaults for rooms
 			for (RoomType type : RoomType.values()) {
 				if (profile.getPresets().containsKey(type)) {
 					if (profile.getPresets().get(type).getLights().getColorProfile() == null) {
 						// Default color profile
 						profile.getPresets().get(type).getLights().setColorProfile(HueColorProfileType.DEFAULT_CT_BRI);
+					}
+					if (profile.getPresets().get(type).getLights().getIgnoreSensors() == null) {
+						profile.getPresets().get(type).getLights().setIgnoreSensors(false);
 					}
 				}
 			}

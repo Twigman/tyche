@@ -11,9 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import de.qwyt.housecontrol.tyche.client.DeconzApiClient;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileProperties;
 import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileProperties;
-import de.qwyt.housecontrol.tyche.service.DeconzApiClient;
 import de.qwyt.housecontrol.tyche.service.LightServiceImpl;
 import de.qwyt.housecontrol.tyche.service.RoomServiceImpl;
 import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
@@ -24,6 +24,7 @@ import jakarta.annotation.PreDestroy;
 @EnableConfigurationProperties({AutomationProfileProperties.class, HueColorProfileProperties.class})
 @SpringBootApplication
 @EnableScheduling
+
 public class TycheApplication implements CommandLineRunner {
 
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
@@ -67,7 +68,6 @@ public class TycheApplication implements CommandLineRunner {
 		lightService.registerLights(deconzClient.getLights());
 		LOG.info("Initialising rooms");
 		roomService.saveRoomsinDb();
-		
 		
 		webSocketService.connect(deconzWebSocketUrl);
 		
