@@ -46,7 +46,7 @@ Ideas:<br />
   - ChangeChecker
 * [x] Spring Security
   - TLS
-  - DPoP
+  - DPoP + Bearer
 * [ ] UML diagrams
   - model classes
   - sequence for color profile usage
