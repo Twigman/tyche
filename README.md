@@ -4,7 +4,7 @@ Showcase for a Spring Boot project<br />
 This is a part of my home automation project. It runs on a Raspberry Pi with a ZigBee module. Several light sources and various sensors are connected to it.<br />
 The application uses REST requests to retrieve the initial configuration. Changes are communicated via WebSocket.<br />
 <br />
-Ideas:<br />
+Implementation:<br />
 * [x] Pluggable WebSocket implementation
   - concrete implementation for Spring and Jetty (for the showcase)
 * [x] JSON Handling
@@ -44,7 +44,9 @@ Ideas:<br />
 * [x] JUnit Tests
   - HueLights
   - ChangeChecker
-* [ ] Spring Security
+* [x] Spring Security
+  - TLS
+  - DPoP + Bearer
 * [ ] UML diagrams
   - model classes
   - sequence for color profile usage
