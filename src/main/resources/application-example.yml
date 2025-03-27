@@ -22,6 +22,11 @@ security:
 
 server:
    port: 8080
+   ssl:
+     enabled: true
+     key-store: ./certs/tls.p12
+     key-store-password: pw
+     key-store-type: PKCS12
 
 raspberry:
   ip: 1.1.1.1
