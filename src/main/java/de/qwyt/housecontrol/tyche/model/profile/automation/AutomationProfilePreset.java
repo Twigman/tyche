@@ -6,8 +6,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class LightPresets {
+public class AutomationProfilePreset {
 
 	private HueLightState lights;
+	
+	private AutoProfileSwitch autoProfileSwitch;
 	
 }

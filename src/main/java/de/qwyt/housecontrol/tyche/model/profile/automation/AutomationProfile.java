@@ -28,7 +28,7 @@ public class AutomationProfile {
 	
 	private AutomationProfileSensors sensors;
 	
-	private Map<RoomType, LightPresets> presets;
+	private Map<RoomType, AutomationProfilePreset> presets;
 	
 	public Boolean isActiveLightAutomation() {
 		return activeLightAutomation;
