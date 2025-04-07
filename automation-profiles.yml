@@ -22,6 +22,12 @@ automation:
         LIVINGROOM:
           lights:
             enabled: true
+        KITCHEN:
+          autoProfileSwitch:
+            enabled: true
+            visitThreshold: 3
+            inTimespanSec: 180
+            toProfile: COOKING
     AWAY:
       activeMotionDetection: true
       activeLightAutomation: false
