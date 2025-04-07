@@ -1,12 +1,20 @@
 package de.qwyt.housecontrol.tyche.service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,71 +22,92 @@ public class TimerService {
 	
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
-	private final Map<String, Timer> timerMap;
+	private final Map<String, ScheduledFuture<?>> scheduledTasks;
 	
-	private final Map <String, TimerTask> taskMap;
+	private final ThreadPoolTaskScheduler taskScheduler;
+	
+	private final EventServiceImpl eventService;
+	
+	private final Map<String, Instant> timerTargetTimes;
 	
 	
-	public TimerService() {
-		this.timerMap = new HashMap<>();
-		this.taskMap = new HashMap<>();
+	public TimerService(EventServiceImpl eventService) {
+		this.scheduledTasks = new ConcurrentHashMap<>();
+        this.taskScheduler = new ThreadPoolTaskScheduler();
+        this.timerTargetTimes = new ConcurrentHashMap<>();
+		// 20 parallel timers possible
+		this.taskScheduler.setPoolSize(20);
+		this.taskScheduler.initialize();
+		this.eventService = eventService;
 	}
 	
-	public void startTimer(String id, long delay, Runnable callback) {
-		// cancel running timer and task
-		if (taskMap.containsKey(id)) {
-			taskMap.get(id).cancel();
-		}
-		if (timerMap.containsKey(id)) {
-			timerMap.get(id).cancel();
-		}
+	
+	public void startTimer(String id, long delayMillis, Runnable callback) {
+		cancelTimer(id);
+		// calc target time
+		Instant targetTime = Instant.now().plusMillis(delayMillis);
+		timerTargetTimes.put(id, targetTime);
 		
-		// create new Timer-Task
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run() {
-				callback.run();
-				timerMap.remove(id);
-				taskMap.remove(id);
-			}
-		};
+		ScheduledFuture<?> future = taskScheduler.schedule(() -> {
+			callback.run();
+			scheduledTasks.remove(id);
+			timerTargetTimes.remove(id);
+			LOG.debug("Timer " + id + " fired!");
+		}, Instant.now().plusMillis(delayMillis));
 		
-		Timer timer = new Timer();
-		timer.schedule(task, delay);
-		
+		scheduledTasks.put(id, future);
 		LOG.debug("Timer started for {}", id);
-		
-		timerMap.put(id, timer);
-		taskMap.put(id, task);
 	}
 	
-	public void cancelTimer(String id) {
-		if (taskMap.containsKey(id)) {
-			taskMap.get(id).cancel();
-			taskMap.remove(id);
-			LOG.debug("Task canceled for {}", id);
-		}
-		if (timerMap.containsKey(id)) {
-			timerMap.get(id).cancel();
-			timerMap.remove(id);
-			LOG.debug("Timer canceled for {}", id);
-		}
+	
+	public void startRepeatingTimer(String id, long initialDelay, Duration interval, Runnable callback) {
+		cancelTimer(id);
+
+		// TODO: target time not stored
+        ScheduledFuture<?> future = taskScheduler.scheduleAtFixedRate(
+                callback,
+                Instant.now().plusMillis(initialDelay),
+                interval
+        );
+
+        scheduledTasks.put(id, future);
+        LOG.debug("Repeating timer started for {} every {}", id, interval);
 	}
 	
-	public void cancelAllTimers() {
-		if (taskMap.size() != 0) {
-			taskMap.forEach((id, task) -> {
-				task.cancel();
-				LOG.debug("Task canceled for {}", id);
-			});
-			taskMap.clear();
-		}
-		if (timerMap.size() != 0) {
-			timerMap.forEach((id, timer) -> {
-				timer.cancel();
-				LOG.debug("Timer canceled for {}", id);
-			});
-			timerMap.clear();
-		}
-	}
+    public void cancelTimer(String id) {
+        ScheduledFuture<?> future = scheduledTasks.remove(id);
+        if (future != null) {
+            future.cancel(false);
+            LOG.debug("Timer canceled for {}", id);
+        }
+        timerTargetTimes.remove(id);
+    }
+
+    public boolean isTimerCreated(String id) {
+    	return scheduledTasks.containsKey(id);
+    }
+    
+    public void cancelAllTimers() {
+        scheduledTasks.forEach((id, future) -> {
+            future.cancel(false);
+            LOG.debug("Timer canceled for {}", id);
+        });
+        scheduledTasks.clear();
+        timerTargetTimes.clear();
+    }
+    
+    public Set<String> getRunningTimerIds() {
+    	return scheduledTasks.keySet();
+    }
+    
+    public Optional<Duration> getRemainingTime(String id) {
+    	Instant target = timerTargetTimes.get(id);
+    	
+    	if (target == null) {
+    		return Optional.empty();
+    	}
+    	
+    	Duration remaining = Duration.between(Instant.now(), target);
+    	return remaining.isNegative() ? Optional.of(Duration.ZERO) : Optional.of(remaining);
+    }
 }
