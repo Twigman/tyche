@@ -21,7 +21,7 @@ import de.qwyt.housecontrol.tyche.client.DeconzApiClient;
 import de.qwyt.housecontrol.tyche.model.group.Room;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLight;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLightState;
-import de.qwyt.housecontrol.tyche.model.profile.automation.LightPresets;
+import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfilePreset;
 import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileType;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightRepository;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightStateRepository;
@@ -295,11 +295,6 @@ public class LightServiceImpl {
 		
 		return (counter == room.getLightIdList().size()) ? true : false;
 	}
-	
-	/*
-	private String formatLightName(String name) {
-		return String.format("%-21s", name);
-	}*/
 	
 	public Map<String, HueLight> getLightMap() {
 		return this.lightMap;

@@ -17,17 +17,16 @@ import org.springframework.stereotype.Service;
 
 import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.event.LogLevel;
+import de.qwyt.housecontrol.tyche.event.RoomVisitThresholdReachedEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.DimmerSwitchEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorPresenceEvent;
 import de.qwyt.housecontrol.tyche.model.group.Room;
 import de.qwyt.housecontrol.tyche.model.group.RoomType;
-import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfile;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileType;
-import de.qwyt.housecontrol.tyche.model.profile.automation.LightPresets;
+import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfilePreset;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.DimmerSwitch;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.PresenceSensor;
 import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetSpecificHostEntryResponse;
-import de.qwyt.housecontrol.tyche.util.Symbole;
 
 @Service
 public class AutomationServiceImpl {
@@ -50,6 +49,10 @@ public class AutomationServiceImpl {
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	
 	private ScheduledFuture<?> dynamicTask;
+	
+	private final String motionTimerPrefix = "timer-motion-";
+	
+	private final String profileTimerPrefix = "timer-profile-";
 	
 	private boolean checkPhoneAtHighFrequency;
 	
@@ -93,12 +96,12 @@ public class AutomationServiceImpl {
 	@EventListener
 	public void onSensorPresenceEvent(SensorPresenceEvent presenceEvent) {
 		PresenceSensor sensor = presenceEvent.getSensor();
-		AutomationProfile activeProfile = automationProfileManager.getActiveProfile();
+		//AutomationProfile activeProfile = automationProfileManager.getActiveProfile();
 		// necessary for lambda
 		AtomicReference<RoomType> affectedRoom = new AtomicReference<RoomType>(null);
 		
 		// Is motion detection active?
-		if (activeProfile.isActiveMotionDetection()) {
+		if (automationProfileManager.getActiveProfile().isActiveMotionDetection()) {
 			// motion detection -> active
 			if (roomService.getRoom(RoomType.HALLWAY).getSensorIdList().contains(sensor.getUniqueId()) && sensor.getState().isPresence()) {
 				/*
@@ -107,7 +110,7 @@ public class AutomationServiceImpl {
 				affectedRoom.set(RoomType.HALLWAY);
 				
 				// if user was away, check if he is back
-				if (activeProfile.getProfileType() == AutomationProfileType.AWAY) {
+				if (automationProfileManager.getActiveProfile().getProfileType() == AutomationProfileType.AWAY) {
 					this.checkPhoneConnectionBurst();
 				}
 			} else if (roomService.getRoom(RoomType.KITCHEN).getSensorIdList().contains(sensor.getUniqueId()) && sensor.getState().isPresence()) {
@@ -115,27 +118,30 @@ public class AutomationServiceImpl {
 			}
 			
 			if (affectedRoom.get() != null) {
+				roomService.addVisitIn(affectedRoom.get());
 				LOG.debug("Motion Detector {}: Presence", affectedRoom.get());
 				
 				// light automation active and lights are controlled by sensors?
-				if (activeProfile.isActiveLightAutomation() && !activeProfile.getPresets().get(affectedRoom.get()).getLights().getIgnoreSensors()) {
+				if (automationProfileManager.getActiveProfile().isActiveLightAutomation() &&
+						!automationProfileManager.getActiveProfile().getPresets().get(affectedRoom.get()).getLights().isIgnoreSensors()) {
 					// light automation -> active
 					lightService.turnOnLightsIn(
 							roomService.getRoom(affectedRoom.get()),
-							activeProfile.getPresets().get(affectedRoom.get()).getLights().getColorProfile()
+							automationProfileManager.getActiveProfile().getPresets().get(affectedRoom.get()).getLights().getColorProfile()
 							);
-					timerService.startTimer(sensor.getUniqueId(), lightTimer, () -> lightService.turnOffLightsIn(roomService.getRoom(affectedRoom.get())));
+					timerService.startTimer(motionTimerPrefix + sensor.getUniqueId(), lightTimer, () -> lightService.turnOffLightsIn(roomService.getRoom(affectedRoom.get())));
 				}
 				
 				// TODO: works only for cooking profile
-				if (activeProfile.isAutoHomeProfile() && affectedRoom.get() == RoomType.KITCHEN) {
+				if (automationProfileManager.getActiveProfile().isAutoHomeProfile() && affectedRoom.get() == RoomType.KITCHEN) {
 					LOG.debug("Auto HOME timer set back to {} minutes", autoHomeTimer / 60000);
-					timerService.startTimer(activeProfile.getProfileType().toString() + "-AutoHome", autoHomeTimer, () -> automationProfileManager.setActiveProfile(HousecontrolModule.SYSTEM, AutomationProfileType.HOME));
-					timerService.startTimer(activeProfile.getProfileType().toString() + "-AutoHomeExec", autoHomeTimer, () -> executePreset(automationProfileManager.getActiveProfile().getPresets()));
+					timerService.startTimer(profileTimerPrefix + automationProfileManager.getActiveProfile().getProfileType().toString() + "-AutoHomeProfileSwitch", autoHomeTimer, () -> automationProfileManager.setActiveProfile(HousecontrolModule.SYSTEM, AutomationProfileType.HOME));
+					timerService.startTimer(profileTimerPrefix + automationProfileManager.getActiveProfile().getProfileType().toString() + "-AutoHomeExecPreset", autoHomeTimer, () -> executePreset(automationProfileManager.getActiveProfile().getPresets()));
 				}
 				
-				if (activeProfile.isActiveLightAutomation() && activeProfile.getPresets().get(affectedRoom.get()).getLights().getIgnoreSensors()) {
-					LOG.debug("While Profile {} is active, lights in {} ignoring sensors", activeProfile.getProfileType(), affectedRoom.get());
+				if (automationProfileManager.getActiveProfile().isActiveLightAutomation() &&
+						automationProfileManager.getActiveProfile().getPresets().get(affectedRoom.get()).getLights().getIgnoreSensors()) {
+					LOG.debug("While Profile {} is active, lights in {} ignoring sensors", automationProfileManager.getActiveProfile().getProfileType(), affectedRoom.get());
 				}
 			}
 		} else {
@@ -175,6 +181,11 @@ public class AutomationServiceImpl {
 		}
 	}
 	
+	@EventListener
+	public void onRoomVisitThresholdReached(RoomVisitThresholdReachedEvent event) {
+		setAndExecuteActiveProfile(event.getModule(), automationProfileManager.getActiveProfile().getPresets().get(event.getRoomType()).getAutoProfileSwitch().getToProfile());
+	}
+	
 	public boolean setAndExecuteActiveProfile(HousecontrolModule module, AutomationProfileType type) {
 		boolean success = automationProfileManager.setActiveProfile(module, type);
 		
@@ -182,8 +193,8 @@ public class AutomationServiceImpl {
 			executePreset(automationProfileManager.getActiveProfile().getPresets());
 			
 			if (automationProfileManager.getActiveProfile().isAutoHomeProfile()) {
-				timerService.startTimer(automationProfileManager.getActiveProfileType().toString() + "-AutoHome", autoHomeTimer, () -> automationProfileManager.setActiveProfile(HousecontrolModule.SYSTEM, AutomationProfileType.HOME));
-				timerService.startTimer(automationProfileManager.getActiveProfileType().toString() + "-AutoHomeExec", autoHomeTimer, () -> executePreset(automationProfileManager.getActiveProfile().getPresets()));
+				timerService.startTimer(profileTimerPrefix + automationProfileManager.getActiveProfileType().toString() + "-AutoHomeProfileSwitch", autoHomeTimer, () -> automationProfileManager.setActiveProfile(HousecontrolModule.SYSTEM, AutomationProfileType.HOME));
+				timerService.startTimer(profileTimerPrefix + automationProfileManager.getActiveProfileType().toString() + "-AutoHomeExecPreset", autoHomeTimer, () -> executePreset(automationProfileManager.getActiveProfile().getPresets()));
 				
 				try {
 					// Event appears before fireAutomationActiveProfile in web log
@@ -199,7 +210,7 @@ public class AutomationServiceImpl {
 		return success;
 	}
 	
-	public void executePreset(Map<RoomType, LightPresets> map) {
+	public void executePreset(Map<RoomType, AutomationProfilePreset> map) {
 		// stop all timers
 		timerService.cancelAllTimers();
 		

@@ -4,10 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.event.LogLevel;
+import de.qwyt.housecontrol.tyche.event.RoomVisitThresholdReachedEvent;
 import de.qwyt.housecontrol.tyche.model.profile.automation.ActiveAutomationProfile;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfile;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileProperties;
@@ -32,18 +34,22 @@ public class AutomationProfileManager {
 	
 	private final EventServiceImpl eventService;
 
+	private final RoomServiceImpl roomService; 
 	
 	@Autowired
 	public AutomationProfileManager(
 			AutomationProfileProperties properties,
 			AutomationProfileRepository automationProfileRepository,
 			ActiveAutomationProfileRepository activeAutomationProfileRepository,
-			EventServiceImpl eventService
+			EventServiceImpl eventService, 
+			RoomServiceImpl roomService
 			) {
 		this.properties = properties;
 		this.automationProfileRepository = automationProfileRepository;
 		this.activeAutomationProfileRepository = activeAutomationProfileRepository;
 		this.eventService = eventService;
+		this.roomService = roomService;
+		this.activeProfile = null;
 	}
 	
 	@PostConstruct
@@ -55,8 +61,7 @@ public class AutomationProfileManager {
 		
 		automationProfileRepository.saveAll(properties.getProfiles().values());
 		LOG.info("{} automation profiles updated in the database", automationProfileRepository.count());
-		this.activeProfile = properties.getProfiles().get(properties.getActiveProfile());
-		LOG.info("AUTOMATION PROFILE {} {}", Symbole.ARROW_RIGHT, this.activeProfile.getProfileType());
+		this.setActiveProfile(HousecontrolModule.SYSTEM, properties.getActiveProfile());
 	}
 
 	public AutomationProfile getProfile(AutomationProfileType profileType) {
@@ -64,12 +69,13 @@ public class AutomationProfileManager {
 	}
 	
 	public boolean setActiveProfile(HousecontrolModule module, AutomationProfileType profileType) {
-		if (this.activeProfile.getProfileType() != profileType) {
+		if (this.activeProfile == null ||  this.activeProfile.getProfileType() != profileType) {
 			// change profile
 			this.activeProfile = this.properties.getProfiles().get(profileType);
 			this.activeAutomationProfileRepository.save(new ActiveAutomationProfile(this.activeProfile.getProfileType()));
 			LOG.info("AUTOMATION PROFILE {} {}", Symbole.ARROW_RIGHT, this.activeProfile.getProfileType());
 			eventService.fireAutomationActiveProfile(module, activeProfile.getProfileType());
+			roomService.updateRoomVisitProperties(this.activeProfile.getPresets());
 			
 			if (this.activeProfile.isAutoHomeProfile()) {
 				LOG.info("Auto HOME is enabled");
