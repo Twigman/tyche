@@ -1,5 +1,6 @@
 package de.qwyt.housecontrol.tyche.event;
 
+import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileType;
 import lombok.Getter;
 import lombok.Setter;

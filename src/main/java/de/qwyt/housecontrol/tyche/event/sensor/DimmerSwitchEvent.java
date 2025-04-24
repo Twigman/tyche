@@ -1,6 +1,6 @@
 package de.qwyt.housecontrol.tyche.event.sensor;
 
-import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
+import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.DimmerSwitch;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.state.LightLevelSensorState;
 import lombok.Getter;

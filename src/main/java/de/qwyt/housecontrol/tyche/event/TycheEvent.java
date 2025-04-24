@@ -2,6 +2,7 @@ package de.qwyt.housecontrol.tyche.event;
 
 import org.springframework.context.ApplicationEvent;
 
+import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
 import lombok.Getter;
 import lombok.Setter;
 
