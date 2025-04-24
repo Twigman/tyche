@@ -1,5 +1,7 @@
 package de.qwyt.housecontrol.tyche.event;
 
+import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
+import de.qwyt.housecontrol.tyche.event.types.LogLevel;
 import lombok.Getter;
 import lombok.Setter;
 
