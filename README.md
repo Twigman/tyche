@@ -1,7 +1,7 @@
 # tyche-showcase
 Showcase for a Spring Boot project<br />
 <br />
-This is a part of my home automation project. It runs on a Raspberry Pi with a ZigBee module. Several light sources and various sensors are connected to it.<br />
+This is a part of my home automation project. The service runs on a Raspberry Pi with a ZigBee module. Several light sources and various sensors are connected to it.<br />
 The application uses REST requests to retrieve the initial configuration. Changes are communicated via WebSocket.<br />
 <br />
 Implementation:<br />
@@ -52,7 +52,7 @@ Implementation:<br />
   - sequence for color profile usage
 
 <br />
-The project is still in progress and will be updated<br />
+ATTENTION: The uploaded project is not complete/executable. The real configuration and some config beans are missing! This is an archtecture showcase with implementation details in the first place.<br />
 <br />
 Start only MongoDB container for development with IDE:
 
