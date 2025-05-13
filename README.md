@@ -34,7 +34,6 @@ Implementation:<br />
   - custom methods and interface
 * [x] Events
 * [x] Spotify client
-* [ ] Mocking WebService endpoint
 * [x] Web-Frontend
   - https://github.com/Twigman/tyche-web-interface
 * [x] Docker setup
@@ -52,7 +51,7 @@ Implementation:<br />
   - sequence for color profile usage
 
 <br />
-ATTENTION: The uploaded project is not complete/executable. The real configuration and some config beans are missing! This is an architecture showcase with implementation details in the first place.<br />
+NOTE: The uploaded project is not complete/executable. The real configuration and some config beans are missing! This is an architecture showcase with implementation details in the first place.<br />
 <br />
 Start only MongoDB container for development with IDE:
 
