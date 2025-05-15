@@ -96,6 +96,24 @@ Light configurations (color temperature, brightness, effects) are abstracted via
 automation:
   activeProfile: HOME
   profiles:
+    HOME:
+      activeMotionDetection: true
+      activeLightAutomation: true
+      sensors:
+        targetTemperatureLivingroom: 20.5
+      presets:
+        ALL:
+          lights:
+            enabled: false
+        LIVINGROOM:
+          lights:
+            enabled: true
+        KITCHEN:
+          autoProfileSwitch:
+            enabled: true
+            visitThreshold: 3
+            inTimespanSec: 180
+            toProfile: COOKING
     COOKING:
       activeMotionDetection: true
       activeLightAutomation: true
