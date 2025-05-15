@@ -98,7 +98,15 @@ automation:
   profiles:
     COOKING:
       activeMotionDetection: true
+      activeLightAutomation: true
+      autoHomeProfile: true
       presets:
+        ALL:
+          lights:
+            enabled: false
+        LIVINGROOM:
+          lights:
+            enabled: true
         KITCHEN:
           lights:
             enabled: true
