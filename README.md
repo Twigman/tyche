@@ -9,6 +9,112 @@ The service runs on a Raspberry Pi and is designed to be modular, secure, and ex
 > While example configuration files are included, some components are not fully configured for privacy reasons.  
 > The purpose of this repository is to demonstrate architecture and implementation – not to provide a production-ready system.
 
+---
+
+## Project Overview
+
+- **Communication**
+  REST API for initial configuration; WebSocket/STOMP for live updates
+- **Smart Home Control**
+  Reads data from sensors, controls lighting devices via ZigBee 
+- **External Integration**
+  Connected to FritzBox to detect device presence (e.g., smartphone in Wi-Fi) 
+- **Security** 
+  TLS, Spring Security, DPoP & Bearer token support
+- **Persistence**
+  MongoDB for device state storage
+
+---
+
+## Implemented Features
+
+### Infrastructure & Communication
+
+- **Pluggable WebSocket implementation**
+  - Support for Spring and Jetty (as part of this showcase)
+- **REST APIs**
+  - Endpoints for: Temperature, Humidity, Presence, Light Level, Pressure, Phone, Profile, Timer
+- **WebSocket Integration**
+  - Incoming messages from Raspberry Pi via basic WebSocket
+  - Outgoing updates to frontend via STOMP
+- **SOAP Client**
+  - Access to FritzBox using JAXB
+  - SSL certificates included in a custom truststore
+
+### Data Handling & Persistence
+
+- **JSON Handling**
+  - Message parsing using Jackson ObjectMapper
+  - Controlled serialization using filters
+- **MongoDB Integration**
+  - Persistent storage for sensors, lights and profiles
+  - Custom repository interfaces and methods
+
+---
+
+## Architecture & Design Highlights
+
+- **Layered Architecture**  
+  Clear separation between controllers, services, and data access layers, following SOLID principles and single-responsibility design.
+
+- **Modular & Extensible Design**  
+  Components are isolated and replaceable. Each module (e.g., sensor types, light control) adheres to strict interface boundaries, allowing for future expansion with minimal code changes.
+
+- **Event-Driven Processing**  
+  Core interactions (especially via WebSocket/STOMP) are fully event-based. Incoming and outgoing events are loosely coupled via a shared dispatcher mechanism, improving testability and scalability.
+
+- **Polymorphic Sensor Modeling**  
+  Sensors are built from multiple component objects (e.g., config/state) that can be either generalized or fully customized depending on the device.  
+  A polymorphic inheritance approach enables unified handling across different sensor types while preserving flexibility.
+
+- **Advanced Configuration System**  
+  Automation behavior is defined via YAML files, allowing users to create dynamic behavior profiles.  
+  These profiles can include nested references (e.g., shared light configurations), making the system highly reusable and easy to extend.  
+  Devices are mapped to rooms via ID, enabling automatic group-based logic without changing the core logic.
+
+
+- **Event-driven architecture**
+- **Spotify client integration**
+- **Docker-based setup**
+  - Separate configurations for local development and production deployment on Raspberry Pi
+- **Spring Security**
+  - TLS encryption
+  - DPoP token authentication
+ 
+---
+
+## Web Frontend
+
+A companion frontend project is available here:  
+👉 [tyche-web-interface](https://github.com/Twigman/tyche-web-interface)
+
+---
+
+## Docker Setup
+
+### Development (MongoDB only):
+
+```bash
+docker compose -f docker-compose.dev.yml up -d
+```
+
+### Build for Raspberry:
+
+```bash
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+### Start on Raspberry:
+
+```bash
+docker compose -f docker-compose.prod.yml up -d
+```
+
+
+---
+
+
+
 Implementation:<br />
 * [x] Pluggable WebSocket implementation
   - concrete implementation for Spring and Jetty (for the showcase)
@@ -54,24 +160,3 @@ Implementation:<br />
 * [ ] UML diagrams
   - model classes
   - sequence for color profile usage
-
-<br />
-NOTE: The uploaded project is not complete/executable. The real configuration and some config beans are missing! This is an architecture showcase with implementation details in the first place.<br />
-<br />
-Start only MongoDB container for development with IDE:
-
-```sh
-docker compose -f docker-compose.dev.yml up -d
-```
-
-Build for Raspberry:
-
-```sh
-docker compose -f docker-compose.prod.yml up -d --build
-```
-
-Start on Raspberry:
-
-```sh
-docker compose -f docker-compose.prod.yml up -d
-```
