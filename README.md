@@ -96,6 +96,7 @@ Light configurations (color temperature, brightness, effects) are abstracted via
 automation:
   activeProfile: HOME
   profiles:
+    # default lights.colorProfile: DEFAULT_CT_BRI
     HOME:
       activeMotionDetection: true
       activeLightAutomation: true
