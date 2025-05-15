@@ -74,6 +74,53 @@ The service runs on a Raspberry Pi and is designed to be modular, secure, and ex
 
 ---
 
+## Configuration & Automation Profiles
+
+Tyche's behavior is highly configurable via external YAML files. This includes dynamic automation profiles, reusable color presets, and rule-based behavior switching.
+
+### Profile System
+
+The `automation-profiles.yml` defines behavior modes (e.g. `HOME`, `AWAY`, `COOKING`) which control:
+
+- Whether motion detection and light automation are active
+- Room-specific presets (e.g., enabling lights in `LIVINGROOM`)
+- Transitions between profiles (e.g., auto-switching to `COOKING` when activity pattern is detected in the kitchen)
+
+### Color Profiles
+
+Light configurations (color temperature, brightness, effects) are abstracted via named color profiles defined in `color-profiles.yml`. These profiles can be reused across rooms and scenarios.
+
+### Example Snippets
+
+```yaml
+automation:
+  activeProfile: HOME
+  profiles:
+    COOKING:
+      activeMotionDetection: true
+      presets:
+        KITCHEN:
+          lights:
+            enabled: true
+            ignoreSensors: true
+```
+
+```yaml
+color:
+  profiles:
+    DEFAULT_CT_BRI:
+      bri: 252
+      ct: 341
+```
+
+This modular configuration allows for:
+- Declarative automation logic
+- Easy expansion with new rooms or devices
+- Reusability of color profiles and presets
+- Flexible event-triggered behavior
+
+---
+
 ## Web Frontend
 
 A companion frontend project is available here:  
