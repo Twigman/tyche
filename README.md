@@ -1,9 +1,14 @@
-# tyche-showcase
-Showcase for a Spring Boot project<br />
-<br />
-This is a part of my home automation project. The service runs on a Raspberry Pi with a ZigBee module. Several light sources and various sensors are connected to it.<br />
-The application uses REST requests to retrieve the initial configuration. Changes are communicated via WebSocket.<br />
-<br />
+# Tyche – Spring Boot Architecture Showcase
+
+**Tyche** is the central automation service for my personal smart home setup.  
+It collects data from various sensors, controls lights through ZigBee, and integrates with external services like my FritzBox router.  
+The service runs on a Raspberry Pi and is designed to be modular, secure, and extensible. This repository serves as a **technical showcase**, focusing on clean architecture and implementation quality.
+
+> ⚠️ Note: This project is intentionally incomplete and not directly executable.  
+> Sensitive information (e.g., network endpoints, device MAC addresses, location data) has been removed or anonymized.  
+> While example configuration files are included, some components are not fully configured for privacy reasons.  
+> The purpose of this repository is to demonstrate architecture and implementation – not to provide a production-ready system.
+
 Implementation:<br />
 * [x] Pluggable WebSocket implementation
   - concrete implementation for Spring and Jetty (for the showcase)
