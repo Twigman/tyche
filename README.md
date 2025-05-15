@@ -128,6 +128,8 @@ automation:
 color:
   profiles:
     DEFAULT_CT_BRI:
+      alert: none
+      effect: none
       bri: 252
       ct: 341
 ```
