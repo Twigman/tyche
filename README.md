@@ -72,15 +72,6 @@ The service runs on a Raspberry Pi and is designed to be modular, secure, and ex
   These profiles can include nested references (e.g., shared light configurations), making the system highly reusable and easy to extend.  
   Devices are mapped to rooms via ID, enabling automatic group-based logic without changing the core logic.
 
-
-- **Event-driven architecture**
-- **Spotify client integration**
-- **Docker-based setup**
-  - Separate configurations for local development and production deployment on Raspberry Pi
-- **Spring Security**
-  - TLS encryption
-  - DPoP token authentication
- 
 ---
 
 ## Web Frontend
@@ -110,9 +101,12 @@ docker compose -f docker-compose.prod.yml up -d --build
 docker compose -f docker-compose.prod.yml up -d
 ```
 
-
 ---
 
+## Final Note
+
+This repository is a technical showcase, focused on architecture and code quality.
+It is not intended for direct deployment or reuse without adjustment.
 
 
 Implementation:<br />
