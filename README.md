@@ -98,10 +98,7 @@ automation:
   profiles:
     # default lights.colorProfile: DEFAULT_CT_BRI
     HOME:
-      activeMotionDetection: true
-      activeLightAutomation: true
-      sensors:
-        targetTemperatureLivingroom: 20.5
+      # ...
       presets:
         ALL:
           lights:
