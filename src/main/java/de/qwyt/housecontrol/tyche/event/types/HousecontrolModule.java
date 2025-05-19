@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.event;
+package de.qwyt.housecontrol.tyche.event.types;
 
 public enum HousecontrolModule {
 	ZIGBEE,

@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.service.websocket.adapter;
+package de.qwyt.housecontrol.tyche.websocket.adapter;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;

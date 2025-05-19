@@ -8,12 +8,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import de.qwyt.housecontrol.tyche.client.SpotifyApiClient;
-import de.qwyt.housecontrol.tyche.event.LogLevel;
 import de.qwyt.housecontrol.tyche.util.Symbole;
-import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
+import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
+import de.qwyt.housecontrol.tyche.event.types.LogLevel;
 
 @Service
-public class SpotifyService {
+public class SpotifyServiceImpl {
 	
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
@@ -22,7 +22,7 @@ public class SpotifyService {
 	private final EventServiceImpl eventService;
 	
 	@Autowired
-	public SpotifyService(SpotifyApiClient spotifyApiClient, EventServiceImpl eventService) {
+	public SpotifyServiceImpl(SpotifyApiClient spotifyApiClient, EventServiceImpl eventService) {
 		this.spotifyApiClient = spotifyApiClient;
 		this.eventService = eventService;
 	}

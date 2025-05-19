@@ -11,21 +11,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
-import de.qwyt.housecontrol.tyche.event.LogLevel;
-import de.qwyt.housecontrol.tyche.event.RoomVisitThresholdReachedEvent;
-import de.qwyt.housecontrol.tyche.event.sensor.DimmerSwitchEvent;
-import de.qwyt.housecontrol.tyche.event.sensor.SensorPresenceEvent;
+import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
+import de.qwyt.housecontrol.tyche.event.types.LogLevel;
 import de.qwyt.housecontrol.tyche.model.group.Room;
 import de.qwyt.housecontrol.tyche.model.group.RoomType;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileType;
+import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfile;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfilePreset;
-import de.qwyt.housecontrol.tyche.model.sensor.zha.DimmerSwitch;
 import de.qwyt.housecontrol.tyche.model.sensor.zha.PresenceSensor;
+import de.qwyt.housecontrol.tyche.model.sensor.zha.state.DimmerSwitchState;
 import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetSpecificHostEntryResponse;
 
 @Service
@@ -38,11 +35,11 @@ public class AutomationServiceImpl {
 	
 	private final AutomationProfileManager automationProfileManager;
 	
-	private final TimerService timerService;
+	private final TimerServiceImpl timerService;
 	
 	private final PhoneServiceImpl phoneService;
 	
-	private final FritzboxService fritzboxService;
+	private final FritzboxServiceImpl fritzboxService;
 	
 	private final EventServiceImpl eventService;
 	
@@ -67,9 +64,9 @@ public class AutomationServiceImpl {
 			LightServiceImpl lightService,
 			RoomServiceImpl roomService,
 			AutomationProfileManager automationProfileManager, 
-			TimerService timerService,
+			TimerServiceImpl timerService,
 			PhoneServiceImpl phoneService,
-			FritzboxService fritzboxService,
+			FritzboxServiceImpl fritzboxService,
 			EventServiceImpl eventService
 			) {
 		this.lightService = lightService;
@@ -93,9 +90,7 @@ public class AutomationServiceImpl {
 	 * 
 	 * @param presenceEvent
 	 */
-	@EventListener
-	public void onSensorPresenceEvent(SensorPresenceEvent presenceEvent) {
-		PresenceSensor sensor = presenceEvent.getSensor();
+	public void processSensorPresenceInput(PresenceSensor sensor) {
 		//AutomationProfile activeProfile = automationProfileManager.getActiveProfile();
 		// necessary for lambda
 		AtomicReference<RoomType> affectedRoom = new AtomicReference<RoomType>(null);
@@ -149,44 +144,45 @@ public class AutomationServiceImpl {
 		}
 	}
 	
-	@EventListener
-	public void onDimmerSwitchEvent(DimmerSwitchEvent dimmerEvent) {
-		DimmerSwitch dimmerSwitch = dimmerEvent.getSensor();
-		
-		switch(dimmerSwitch.getState().getButton()) {
-		case BUTTON_ON_PRESSED:
-			this.automationProfileManager.setActiveProfile(HousecontrolModule.MANUAL, AutomationProfileType.HOME);
-			this.executePreset(this.automationProfileManager.getActiveProfile().getPresets());
-			break;
-		case BUTTON_OFF_PRESSED:
-			this.automationProfileManager.setActiveProfile(HousecontrolModule.MANUAL, AutomationProfileType.BEDTIME);
-			this.executePreset(this.automationProfileManager.getActiveProfile().getPresets());
-			break;
-		case BUTTON_OFF_HOLD:
-			if (dimmerSwitch.getState().getEventduration() >= 16) {
-				this.automationProfileManager.setActiveProfile(HousecontrolModule.MANUAL, AutomationProfileType.SLEEPING);
+	public void applyDimmerSwitchAction(DimmerSwitchState dimmerState) {
+		switch(dimmerState.getButton()) {
+			case BUTTON_ON_PRESSED:
+				this.automationProfileManager.setActiveProfile(HousecontrolModule.MANUAL, AutomationProfileType.HOME);
 				this.executePreset(this.automationProfileManager.getActiveProfile().getPresets());
-				LOG.info("Good night");
-			}
-			break;
-		case BUTTON_OFF_RELEASED:
-			//LOG.debug("OFF released");
-			break;
-		case BUTTON_OFF_HOLD_RELEASED:
-			//LOG.debug("OFF released after: {}", dimmerSwitch.getState().getEventduration());
-			break;
-		default:
-			LOG.warn("Unknown button: {}", dimmerSwitch.getState().getButton());
-			break;
+				break;
+			case BUTTON_OFF_PRESSED:
+				this.automationProfileManager.setActiveProfile(HousecontrolModule.MANUAL, AutomationProfileType.BEDTIME);
+				this.executePreset(this.automationProfileManager.getActiveProfile().getPresets());
+				break;
+			case BUTTON_OFF_HOLD:
+				if (dimmerState.getEventduration() >= 16) {
+					this.automationProfileManager.setActiveProfile(HousecontrolModule.MANUAL, AutomationProfileType.SLEEPING);
+					this.executePreset(this.automationProfileManager.getActiveProfile().getPresets());
+					LOG.info("Good night");
+				}
+				break;
+			case BUTTON_OFF_RELEASED:
+				//LOG.debug("OFF released");
+				break;
+			case BUTTON_OFF_HOLD_RELEASED:
+				//LOG.debug("OFF released after: {}", dimmerSwitch.getState().getEventduration());
+				break;
+			default:
+				LOG.warn("Unknown button: {}", dimmerState.getButton());
+				break;
 		}
 	}
 	
-	@EventListener
-	public void onRoomVisitThresholdReached(RoomVisitThresholdReachedEvent event) {
-		setAndExecuteActiveProfile(event.getModule(), automationProfileManager.getActiveProfile().getPresets().get(event.getRoomType()).getAutoProfileSwitch().getToProfile());
+	public void handleAutoProfileSwitchForRoom(RoomType roomType, HousecontrolModule module) {
+	    AutomationProfile profile = automationProfileManager.getActiveProfile();
+	    AutomationProfilePreset preset = profile.getPresets().get(roomType);
+	    AutomationProfileType toProfile = preset.getAutoProfileSwitch().getToProfile();
+	    setAndExecuteActiveProfile(module, toProfile);
 	}
 	
+	
 	public boolean setAndExecuteActiveProfile(HousecontrolModule module, AutomationProfileType type) {
+		
 		boolean success = automationProfileManager.setActiveProfile(module, type);
 		
 		if (success) {

@@ -18,7 +18,7 @@ import de.qwyt.housecontrol.tyche.service.LightServiceImpl;
 import de.qwyt.housecontrol.tyche.service.RoomServiceImpl;
 import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
 import de.qwyt.housecontrol.tyche.service.WeatherServiceImpl;
-import de.qwyt.housecontrol.tyche.service.websocket.WebSocketService;
+import de.qwyt.housecontrol.tyche.websocket.WebSocketConnector;
 import jakarta.annotation.PreDestroy;
 
 @EnableConfigurationProperties({AutomationProfileProperties.class, HueColorProfileProperties.class})
@@ -33,9 +33,9 @@ public class TycheApplication implements CommandLineRunner {
 	private String deconzWebSocketUrl;
 	
 	@Autowired
-	//@Qualifier("jettyWebSocketService")
-	@Qualifier("springBasicWebSocketService")
-	private WebSocketService webSocketService;
+	//@Qualifier("jettyWebSocketConnector")
+	@Qualifier("springBasicWebSocketConnector")
+	private WebSocketConnector webSocket;
 	
 	@Autowired
 	private WeatherServiceImpl weatherService;
@@ -69,7 +69,7 @@ public class TycheApplication implements CommandLineRunner {
 		LOG.info("Initialising rooms");
 		roomService.saveRoomsinDb();
 		
-		webSocketService.connect(deconzWebSocketUrl);
+		webSocket.connect(deconzWebSocketUrl);
 		
 		//weatherService.requestData();
 	}
@@ -77,6 +77,6 @@ public class TycheApplication implements CommandLineRunner {
 	@PreDestroy
 	public void exit() {
 		LOG.info("Shutting down services...");
-		webSocketService.close();
+		webSocket.close();
 	}
 }

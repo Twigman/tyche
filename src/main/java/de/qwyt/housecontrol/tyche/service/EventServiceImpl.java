@@ -9,16 +9,15 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import de.qwyt.housecontrol.tyche.event.AutomationActiveProfileEvent;
-import de.qwyt.housecontrol.tyche.event.LogLevel;
-import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.event.LogEvent;
 import de.qwyt.housecontrol.tyche.event.PhoneInfoEvent;
 import de.qwyt.housecontrol.tyche.event.RoomVisitThresholdReachedEvent;
-import de.qwyt.housecontrol.tyche.event.TycheEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.DimmerSwitchEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorHumidityEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorPresenceEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorTemperatureEvent;
+import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
+import de.qwyt.housecontrol.tyche.event.types.LogLevel;
 import de.qwyt.housecontrol.tyche.model.device.PhoneInfo;
 import de.qwyt.housecontrol.tyche.model.group.RoomType;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileType;

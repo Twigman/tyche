@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TycheEvent extends ApplicationEvent {
+public abstract class TycheEvent extends ApplicationEvent {
 
 	private static final long serialVersionUID = -3805641093024446051L;
 	

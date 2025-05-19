@@ -1,17 +1,20 @@
-package de.qwyt.housecontrol.tyche.service.websocket;
+package de.qwyt.housecontrol.tyche.websocket.adapter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import de.qwyt.housecontrol.tyche.event.AutomationActiveProfileEvent;
+import de.qwyt.housecontrol.tyche.event.LogEvent;
+import de.qwyt.housecontrol.tyche.event.PhoneInfoEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.DimmerSwitchEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorHumidityEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorPresenceEvent;
 import de.qwyt.housecontrol.tyche.event.sensor.SensorTemperatureEvent;
 
-@Service
-public class StompMessageService {
+@Component
+public class StompMessageAdapter {
 	
 	private final SimpMessagingTemplate messagingTemplate;
 	
@@ -30,14 +33,23 @@ public class StompMessageService {
 	@Value("${tyche.stomp.topic.sensor.humidity}")
 	private String sensorHumidityTopic;
 	
+	@Value("${tyche.stomp.topic.phone.info}")
+	private String phoneInfoTopic;
+	
 	@Value("${tyche.stomp.topic.sensor.dimmerswitch}")
 	private String sensorDimmerSwitchTopic;
 	
 	@Value("${tyche.stomp.topic.light.huelight}")
 	private String hueLightTopic;
 	
+	@Value("${tyche.stomp.topic.automation.active-profile}")
+	private String automationActiveProfileTopic;
+	
+	@Value("${tyche.stomp.topic.app.log}")
+	private String appLogTopic;
+	
 	@Autowired
-	public StompMessageService(SimpMessagingTemplate messagingTemplate) {
+	public StompMessageAdapter(SimpMessagingTemplate messagingTemplate) {
 		this.messagingTemplate = messagingTemplate;
 	}
 	
@@ -55,6 +67,18 @@ public class StompMessageService {
 	
 	public void sendSensorHumidityUpdate(SensorHumidityEvent event) {
 		messagingTemplate.convertAndSend(sensorHumidityTopic, event);
+	}
+
+	public void sendPhoneInfoUpdate(PhoneInfoEvent event) {
+		messagingTemplate.convertAndSend(phoneInfoTopic, event);
+	}
+
+	public void sendAutomationActiveProfileUpdate(AutomationActiveProfileEvent event) {
+		messagingTemplate.convertAndSend(automationActiveProfileTopic, event);
+	}
+
+	public void sendLogEvent(LogEvent event) {
+		messagingTemplate.convertAndSend(appLogTopic, event);
 	}
 	
 }

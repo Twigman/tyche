@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import de.qwyt.housecontrol.tyche.service.SpotifyService;
+import de.qwyt.housecontrol.tyche.service.SpotifyServiceImpl;
 
 @RestController
 @RequestMapping("/api/spotify")
 public class SpotifyRestController {
 	
 	@Autowired
-	private SpotifyService spotifyService;
+	private SpotifyServiceImpl spotifyService;
 	
 	@PutMapping(path = "/volume")
 	public ResponseEntity<Void> putVolume(@RequestParam("vol") int percent) {

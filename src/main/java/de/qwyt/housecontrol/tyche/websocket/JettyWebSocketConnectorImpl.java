@@ -1,21 +1,16 @@
-package de.qwyt.housecontrol.tyche.service.websocket;
+package de.qwyt.housecontrol.tyche.websocket;
 
 import java.net.URI;
-import java.util.concurrent.CompletableFuture;
 
-import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
-import de.qwyt.housecontrol.tyche.service.websocket.adapter.JettyWebSocketAdapter;
+import de.qwyt.housecontrol.tyche.websocket.adapter.JettyWebSocketAdapter;
 
-@Service
-public class JettyWebSocketServiceImpl implements WebSocketService {
+public class JettyWebSocketConnectorImpl implements WebSocketConnector {
 
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	

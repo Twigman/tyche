@@ -18,7 +18,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TimerService {
+public class TimerServiceImpl {
 	
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
@@ -31,7 +31,7 @@ public class TimerService {
 	private final Map<String, Instant> timerTargetTimes;
 	
 	
-	public TimerService(EventServiceImpl eventService) {
+	public TimerServiceImpl(EventServiceImpl eventService) {
 		this.scheduledTasks = new ConcurrentHashMap<>();
         this.taskScheduler = new ThreadPoolTaskScheduler();
         this.timerTargetTimes = new ConcurrentHashMap<>();

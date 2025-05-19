@@ -1,19 +1,16 @@
-package de.qwyt.housecontrol.tyche.service.websocket;
+package de.qwyt.housecontrol.tyche.websocket;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketClient;
 
-import de.qwyt.housecontrol.tyche.service.websocket.adapter.SpringBasicWebSocketAdapter;
+import de.qwyt.housecontrol.tyche.websocket.adapter.SpringBasicWebSocketAdapter;
 
-@Service
-public class SpringBasicWebSocketServiceImpl implements WebSocketService {
+public class SpringBasicWebSocketConnectorImpl implements WebSocketConnector {
 
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
@@ -23,8 +20,7 @@ public class SpringBasicWebSocketServiceImpl implements WebSocketService {
 	
 	private WebSocketSession session;
 	
-	@Autowired
-	public SpringBasicWebSocketServiceImpl(WebSocketClient webSocketClient, SpringBasicWebSocketAdapter webSocketAdapter) {
+	public SpringBasicWebSocketConnectorImpl(WebSocketClient webSocketClient, SpringBasicWebSocketAdapter webSocketAdapter) {
 		this.webSocketClient = webSocketClient;
         this.webSocketAdapter = webSocketAdapter;
 	}

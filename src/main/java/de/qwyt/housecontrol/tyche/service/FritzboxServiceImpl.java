@@ -20,7 +20,7 @@ import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetSpecificHos
 
 
 @Service
-public class FritzboxService {
+public class FritzboxServiceImpl {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
 	private final WebServiceTemplate webServiceTemplate;
@@ -31,7 +31,7 @@ public class FritzboxService {
 	private List<GetGenericHostEntryResponse> hostList;
 	
 	@Autowired
-	public FritzboxService(
+	public FritzboxServiceImpl(
 			WebServiceTemplate webServiceTemplate
 			) {
 		this.webServiceTemplate = webServiceTemplate;

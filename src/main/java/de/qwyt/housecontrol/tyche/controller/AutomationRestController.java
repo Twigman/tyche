@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.qwyt.housecontrol.tyche.controller.request.ActiveProfileRequest;
-import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
+import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileType;
 import de.qwyt.housecontrol.tyche.service.AutomationProfileManager;
 import de.qwyt.housecontrol.tyche.service.AutomationServiceImpl;

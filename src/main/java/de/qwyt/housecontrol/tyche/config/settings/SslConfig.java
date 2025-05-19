@@ -1,11 +1,9 @@
 package de.qwyt.housecontrol.tyche.config.settings;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 
 import jakarta.annotation.PostConstruct;
 

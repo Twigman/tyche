@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
-import de.qwyt.housecontrol.tyche.event.HousecontrolModule;
-import de.qwyt.housecontrol.tyche.event.LogLevel;
+import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
+import de.qwyt.housecontrol.tyche.event.types.LogLevel;
 import de.qwyt.housecontrol.tyche.model.group.Room;
 import de.qwyt.housecontrol.tyche.model.group.RoomType;
 import de.qwyt.housecontrol.tyche.model.group.RoomVisitProperties;
