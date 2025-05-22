@@ -79,7 +79,8 @@ The following table outlines the main code packages, their responsibilities, and
   Components are isolated and replaceable. Each module (e.g., sensor types, light control) adheres to strict interface boundaries, allowing for future expansion with minimal code changes.
 
 - **Event-Driven Processing**  
-  Core interactions (especially via WebSocket/STOMP) are fully event-based. Incoming and outgoing events are loosely coupled via a shared dispatcher mechanism, improving testability and scalability.
+  Core interactions (especially via WebSocket/STOMP) are fully event-based. Incoming and outgoing events are loosely coupled via a shared dispatcher mechanism.
+  👉 [Class diagram](./diagrams/class_event_overview.png)
 
 - **Polymorphic Sensor Modeling**  
   Sensors are built from multiple component objects (e.g., config/state) that can be either generalized or fully customized depending on the device.  
