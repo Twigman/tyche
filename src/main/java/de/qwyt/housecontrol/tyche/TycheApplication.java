@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import de.qwyt.housecontrol.tyche.client.DeconzApiClient;
+import de.qwyt.housecontrol.tyche.integration.client.DeconzApiClient;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileProperties;
 import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileProperties;
 import de.qwyt.housecontrol.tyche.service.LightServiceImpl;

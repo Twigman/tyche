@@ -1,4 +1,4 @@
-package de.qwyt.housecontrol.tyche.client;
+package de.qwyt.housecontrol.tyche.integration.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

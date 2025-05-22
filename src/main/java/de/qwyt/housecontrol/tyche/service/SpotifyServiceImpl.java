@@ -7,10 +7,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import de.qwyt.housecontrol.tyche.client.SpotifyApiClient;
 import de.qwyt.housecontrol.tyche.util.Symbole;
 import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
 import de.qwyt.housecontrol.tyche.event.types.LogLevel;
+import de.qwyt.housecontrol.tyche.integration.client.SpotifyApiClient;
 
 @Service
 public class SpotifyServiceImpl {

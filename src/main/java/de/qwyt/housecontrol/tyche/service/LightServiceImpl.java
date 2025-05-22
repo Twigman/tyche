@@ -17,7 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.qwyt.housecontrol.tyche.client.DeconzApiClient;
+import de.qwyt.housecontrol.tyche.integration.client.DeconzApiClient;
 import de.qwyt.housecontrol.tyche.model.group.Room;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLight;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLightState;

@@ -122,7 +122,7 @@ public class SensorServiceImpl {
 
 		        // Extract the sensor type from the root node
 		        String sensorType = sensorNode.get("type").asText();
-		        sensorNode = this.insertTypeInState(sensorNode, sensorType);
+		        sensorNode = this.insertTypeInNode(sensorNode, sensorType, "state");
 
 		        // Convert JsonNode into a Sensor object
 		        Sensor sensor = objectMapper.treeToValue(sensorNode, Sensor.class);
@@ -195,6 +195,9 @@ public class SensorServiceImpl {
 		JsonNode attrNode = root.get("attr");
 		
         try {
+        	// type is necessary for mapping
+        	root = this.insertTypeInNode(attrNode, sensor.getType(), "");
+        	
 			Sensor changedSensor = objectMapper.treeToValue(attrNode, Sensor.class);
 			
 			// only update if relevant fields have changed
@@ -229,7 +232,7 @@ public class SensorServiceImpl {
 	 */
 	private void updateSensorStateByJson(Sensor sensor, JsonNode root) {
 		
-		root = this.insertTypeInState(root, sensor.getType());
+		root = this.insertTypeInNode(root, sensor.getType(), "state");
 		// Map state-entry to concrete SensorState and change values of the registered sensor
 		JsonNode stateNode = root.get("state");
 
@@ -266,16 +269,25 @@ public class SensorServiceImpl {
 	 * @return the modified {@link JsonNode} with the {@code type} field added to the {@code state} node
 	 * @throws NullPointerException if {@code root} is {@code null}
 	 */
-	private JsonNode insertTypeInState(JsonNode root, String sensorType) {
-		JsonNode stateNode = root.get("state");
-		
-		// Add type in stateNode if it is an ObjectNode
-		if (stateNode != null && stateNode.isObject()) {
-			((ObjectNode) stateNode).put("type", sensorType);
-		    ((ObjectNode) root).set("state", stateNode);
+	private JsonNode insertTypeInNode(JsonNode root, String sensorType, String targetNode) {
+		if (targetNode == "") {
+			if (root != null && root.isObject()) {
+				((ObjectNode) root).put("type", sensorType);
+			} else {
+				LOG.warn("root is null");
+			}
 		} else {
-			LOG.warn("Sensor has no 'state' attribute.");
+			JsonNode node = root.get(targetNode);
+			
+			// Add type in node if it is an ObjectNode
+			if (node != null && node.isObject()) {
+				((ObjectNode) node).put("type", sensorType);
+			    ((ObjectNode) root).set(targetNode, node);
+			} else {
+				LOG.warn("Sensor has no '" + targetNode + "' attribute.");
+			}
 		}
+		
 		return root;
 	}
 	
