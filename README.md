@@ -80,12 +80,12 @@ The following table outlines the main code packages, their responsibilities, and
   Each module (e.g., sensor types, light control) adheres to strict interface boundaries, allowing for future expansion with minimal code changes.
 
 - **Event-Driven Processing**  
-  Core interactions (especially via WebSocket/STOMP) are fully event-based. Incoming and outgoing events are loosely coupled via a shared dispatcher mechanism.
+  Core interactions (especially via WebSocket/STOMP) are fully event-based. Incoming and outgoing events are loosely coupled via a shared dispatcher mechanism.<br />
   👉 [View event class diagram](./diagrams/class_event_overview.png)
 
 - **Polymorphic Sensor Modeling**  
   Sensors are built from multiple component objects (e.g., config/state) that can be either generalized or fully customized depending on the device.  
-  A polymorphic inheritance approach enables unified handling across different sensor types while preserving flexibility.
+  A polymorphic inheritance approach enables unified handling across different sensor types while preserving flexibility.<br />
   👉 [View model overview](./diagrams/class_overview_model.png)
 
 - **Advanced Configuration System**  
