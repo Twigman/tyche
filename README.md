@@ -94,7 +94,8 @@ The following table outlines the main code packages, their responsibilities, and
   Devices are mapped to rooms via ID, enabling automatic group-based logic without changing the core logic.
 
 ### Other diagrams
-- [View sequence color profile diagram](./diagrams/sequence_color_profile.png)
+- 👉 [View distribution diagram](./diagrams/distribution.png)
+- 👉 [View sequence color profile diagram](./diagrams/sequence_color_profile.png)
 
 
 ---
