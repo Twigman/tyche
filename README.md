@@ -26,6 +26,24 @@ The service runs on a Raspberry Pi and is designed to be modular, secure, and ex
 
 ---
 
+## Package Overview
+
+The following table outlines the main code packages, their responsibilities, and approximate size:
+
+| Package                   | #Classes | Description                                                              |
+|---------------------------|----------|---------------------------------------------------------------------------|
+| `tyche.config`            | 14       | Spring Boot configuration classes, including async setup and feature toggles |
+| `tyche.controller`        | 18       | REST controllers for accessing automation, sensors, and settings         |
+| `tyche.event`             | 13       | Core event types and event class hierarchy used for internal messaging   |
+| `tyche.model`             | 58       | Domain models such as sensors, rooms, profiles, and system states        |
+| `tyche.integration.client`| 2        | External system integrations (ZigBee via deCONZ API)                     |
+| `tyche.repository`        | 12       | Persistence layer using Spring Data MongoDB repositories                 |
+| `tyche.service`           | 16       | Application logic: services that manage sensors, profiles, automation etc. |
+| `tyche.util`              | 4        | Utility classes, helpers, and internal support functions                 |
+| `tyche.websocket`         | 8        | WebSocket-based event listeners and message forwarding to clients        |
+
+---
+
 ## Implemented Features
 
 ### Infrastructure & Communication
