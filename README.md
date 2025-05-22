@@ -86,6 +86,7 @@ The following table outlines the main code packages, their responsibilities, and
 - **Polymorphic Sensor Modeling**  
   Sensors are built from multiple component objects (e.g., config/state) that can be either generalized or fully customized depending on the device.  
   A polymorphic inheritance approach enables unified handling across different sensor types while preserving flexibility.
+  👉 [View model overview](./diagrams/class_overview_model.png)
 
 - **Advanced Configuration System**  
   Automation behavior is defined via YAML files, allowing users to create dynamic behavior profiles.  
