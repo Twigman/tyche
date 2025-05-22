@@ -93,6 +93,10 @@ The following table outlines the main code packages, their responsibilities, and
   These profiles can include nested references (e.g., shared light configurations), making the system highly reusable and easy to extend.  
   Devices are mapped to rooms via ID, enabling automatic group-based logic without changing the core logic.
 
+### Other diagrams
+- [View sequence color profile diagram](./diagrams/sequence_color_profile.png)
+
+
 ---
 
 ## Configuration & Automation Profiles
