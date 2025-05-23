@@ -34,9 +34,9 @@ The following table outlines the main code packages, their responsibilities, and
 |---------------------------|----------|---------------------------------------------------------------------------|
 | `tyche.config`            | 14       | Spring Boot configuration classes, including async setup and feature toggles |
 | `tyche.controller`        | 18       | REST controllers for accessing automation, sensors, and settings         |
-| `tyche.event`             | 13       | Core event types and event class hierarchy used for internal messaging   |
+| `tyche.event`             | 13       | Core event types and event class hierarchy                               |
 | `tyche.model`             | 58       | Domain models such as sensors, rooms, profiles, and system states        |
-| `tyche.integration.client`| 2        | External system integrations (ZigBee via deCONZ API)                     |
+| `tyche.integration.client`| 2        | External system integrations                                             |
 | `tyche.repository`        | 12       | Persistence layer using Spring Data MongoDB repositories                 |
 | `tyche.service`           | 16       | Application logic: services that manage sensors, profiles, automation etc. |
 | `tyche.util`              | 4        | Utility classes, helpers, and internal support functions                 |
