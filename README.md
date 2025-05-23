@@ -81,7 +81,7 @@ The following table outlines the main code packages, their responsibilities, and
   The system follows a modular design, where core components like sensors or automation are separated by clear responsibilities and can be extended with limited impact.
 
 - **Event-Driven Processing**  
-  Core interactions—especially those related to WebSocket/STOMP—are handled in an event-driven fashion using Spring's event mechanism. Components remain loosely coupled through asynchronous event publishing and listening.<br />
+  WebSocket/STOMP communication is implemented in an event-driven manner using Spring’s native event system to keep components loosely coupled.<br />
   👉 [View event class diagram](./diagrams/class_event_overview.png)
 
 - **Polymorphic Sensor Modeling**  
@@ -184,13 +184,13 @@ A companion frontend project is available here:
 docker compose -f docker-compose.dev.yml up -d
 ```
 
-### Build for Raspberry:
+### Build and run on Raspberry Pi:
 
 ```bash
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 
-### Start on Raspberry:
+### Start on Raspberry Pi:
 
 ```bash
 docker compose -f docker-compose.prod.yml up -d
@@ -200,5 +200,5 @@ docker compose -f docker-compose.prod.yml up -d
 
 ## Final Note
 
-This repository is a technical showcase, focused on architecture and code quality.
+This repository serves as a technical showcase, focusing on modular architecture, clear separation of concerns, and practical implementation quality.
 It is not intended for direct deployment or reuse without adjustment.
