@@ -15,33 +15,33 @@ import de.qwyt.housecontrol.tyche.model.sensor.zha.state.SensorState;
 import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
 
 @RestController
-@RequestMapping("/api/pressure")
-public class PressureRestController {
+@RequestMapping("/api/humidity")
+public class HumidityController {
 
 	@Autowired
 	private SensorServiceImpl service;
 	
 	@GetMapping(path = "/all/latest")
-	public List<SensorState> getLatestPressureAll() {
-		return service.getLatestPressureSensorStates();
+	public List<SensorState> getLatestHumidityAll() {
+		return service.getLatestHumiditySensorStates();
 	}
 	
 	@GetMapping(path = "/{sensorId}/latest")
-	public SensorState getLatestPressureById(@PathVariable String sensorId) {
-		return service.getLatestPressureSensorState(sensorId);
+	public SensorState getLatestHumidityById(@PathVariable String sensorId) {
+		return service.getLatestHumiditySensorState(sensorId);
 	}
 	
 	@GetMapping(path = "/{sensorId}")
-	public List<SensorState> getPressureByIdBetween(
+	public List<SensorState> getHumidityByIdBetween(
 			@PathVariable String sensorId,
 			@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
 			@RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
 			) {
-		return service.getPressureSensorStatesBetween(sensorId, startDate, endDate);
+		return service.getHumiditySensorStatesBetween(sensorId, startDate, endDate);
 	}
 	
 	@GetMapping(path = "/{sensorId}/last24h")
-	public List<SensorState> getPressureByIdLast24h(@PathVariable String sensorId) {
-		return service.getPressureSensorStatesLast24h(sensorId);
+	public List<SensorState> getHumidityByIdLast24h(@PathVariable String sensorId) {
+		return service.getHumiditySensorStatesLast24h(sensorId);
 	}
 }

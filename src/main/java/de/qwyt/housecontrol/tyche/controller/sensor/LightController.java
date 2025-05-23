@@ -19,7 +19,7 @@ import de.qwyt.housecontrol.tyche.service.LightServiceImpl;
 
 @RestController
 @RequestMapping("/api/lights")
-public class LightRestController {
+public class LightController {
 
 	@Autowired
 	private LightServiceImpl lightService;

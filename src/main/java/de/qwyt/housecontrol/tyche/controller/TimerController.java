@@ -25,7 +25,7 @@ import de.qwyt.housecontrol.tyche.service.TimerServiceImpl;
 
 @RestController
 @RequestMapping("/api/timers")
-public class TimerRestController {
+public class TimerController {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	private final TimerServiceImpl timerService;
@@ -36,7 +36,7 @@ public class TimerRestController {
 	private String url;
 	
 	@Autowired
-	public TimerRestController(
+	public TimerController(
 			TimerServiceImpl timerService,
 			DPoPValidator dpopValidator
 			) {

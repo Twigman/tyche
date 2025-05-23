@@ -10,7 +10,7 @@ import de.qwyt.housecontrol.tyche.service.SpotifyServiceImpl;
 
 @RestController
 @RequestMapping("/api/spotify")
-public class SpotifyRestController {
+public class SpotifyController {
 	
 	@Autowired
 	private SpotifyServiceImpl spotifyService;

@@ -16,14 +16,14 @@ import de.qwyt.housecontrol.tyche.service.AutomationServiceImpl;
 
 @RestController
 @RequestMapping("/api/automation")
-public class AutomationRestController {
+public class AutomationController {
 	
 	private final AutomationProfileManager automationProfileManager;
 	
 	private final AutomationServiceImpl automationService;
 	
 	@Autowired
-	public AutomationRestController(
+	public AutomationController(
 			AutomationProfileManager automationProfileManager, 
 			AutomationServiceImpl automationService
 			) {

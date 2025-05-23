@@ -19,7 +19,7 @@ import de.qwyt.housecontrol.tyche.service.SensorServiceImpl;
 
 @RestController
 @RequestMapping("/api/temperatures")
-public class TemperatureRestController {
+public class TemperatureController {
 
 	@Autowired
 	private SensorServiceImpl service;
