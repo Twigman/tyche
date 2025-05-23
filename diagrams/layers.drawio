@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0" version="27.0.8">
   <diagram name="Seite-1" id="5CU7-ElbSWRXbxw236bT">
-    <mxGraphModel dx="783" dy="1585" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2742" dy="1455" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -16,11 +16,14 @@
         <mxCell id="-B-z06DFlxI5KMjTxw7x-116" value="«controller»&lt;br&gt;&lt;b&gt;LightController&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="-B-z06DFlxI5KMjTxw7x-1">
           <mxGeometry x="1210" y="240" width="180" height="50" as="geometry" />
         </mxCell>
+        <mxCell id="-B-z06DFlxI5KMjTxw7x-3" value="Controller Layer" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1" vertex="1" parent="-B-z06DFlxI5KMjTxw7x-1">
+          <mxGeometry x="1140" y="10" width="110" height="30" as="geometry" />
+        </mxCell>
         <mxCell id="-B-z06DFlxI5KMjTxw7x-15" value="" style="swimlane;startSize=0;fillColor=#fad9d5;strokeColor=#ae4132;" vertex="1" parent="1">
           <mxGeometry x="80" y="390" width="2390" height="450" as="geometry" />
         </mxCell>
         <mxCell id="-B-z06DFlxI5KMjTxw7x-16" value="Servicer Layer" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1" vertex="1" parent="-B-z06DFlxI5KMjTxw7x-15">
-          <mxGeometry x="1135" y="10" width="100" height="30" as="geometry" />
+          <mxGeometry x="1145" y="10" width="100" height="30" as="geometry" />
         </mxCell>
         <mxCell id="-B-z06DFlxI5KMjTxw7x-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="-B-z06DFlxI5KMjTxw7x-15" source="-B-z06DFlxI5KMjTxw7x-26" target="-B-z06DFlxI5KMjTxw7x-28">
           <mxGeometry relative="1" as="geometry" />
@@ -120,7 +123,7 @@
           <mxGeometry x="80" y="870" width="2390" height="330" as="geometry" />
         </mxCell>
         <mxCell id="-B-z06DFlxI5KMjTxw7x-39" value="Integration Layer" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1" vertex="1" parent="-B-z06DFlxI5KMjTxw7x-38">
-          <mxGeometry x="1130" y="10" width="110" height="30" as="geometry" />
+          <mxGeometry x="1140" y="10" width="110" height="30" as="geometry" />
         </mxCell>
         <mxCell id="-B-z06DFlxI5KMjTxw7x-40" value="«interface»&lt;br&gt;&lt;b&gt;CustomSensorStateRepository&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#d0cee2;strokeColor=#56517e;" vertex="1" parent="-B-z06DFlxI5KMjTxw7x-38">
           <mxGeometry x="1885" y="240" width="190" height="50" as="geometry" />
@@ -298,9 +301,6 @@
               <mxPoint x="2190" y="440" />
             </Array>
           </mxGeometry>
-        </mxCell>
-        <mxCell id="-B-z06DFlxI5KMjTxw7x-3" value="Controller Layer" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1" vertex="1" parent="1">
-          <mxGeometry x="1180" y="-10" width="110" height="30" as="geometry" />
         </mxCell>
         <mxCell id="-B-z06DFlxI5KMjTxw7x-6" value="«controller»&lt;br&gt;&lt;b&gt;PhoneController&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
           <mxGeometry x="590" y="280" width="180" height="50" as="geometry" />
