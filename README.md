@@ -73,7 +73,8 @@ The following table outlines the main code packages, their responsibilities, and
 ## Architecture & Design Highlights
 
 - **Layered Architecture**  
-  Clear separation between controllers, services, and data access layers, following SOLID principles and single-responsibility design.
+  Clear separation between controllers, services, repositories and external adapters.<br />
+  👉 [View layered architecture diagram](./diagrams/layers.png)
 
 - **Modular & Extensible Design**  
   All major components (e.g., sensor types, automation profiles, lighting control) are isolated and replaceable.
