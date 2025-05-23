@@ -16,7 +16,7 @@ The service runs on a Raspberry Pi and is designed to be modular, secure, and ex
 - **Communication**
   REST API for initial configuration; WebSocket/STOMP for live updates
 - **Smart Home Control**
-  Reads data from sensors, controls lighting devices via ZigBee 
+  Reads data from sensors, controls lighting devices via ZigBee, supports automation profiles 
 - **External Integration**
   Connected to FritzBox to detect device presence (e.g., smartphone in Wi-Fi) 
 - **Security** 
@@ -78,10 +78,10 @@ The following table outlines the main code packages, their responsibilities, and
 
 - **Modular & Extensible Design**  
   All major components (e.g., sensor types, automation profiles, lighting control) are isolated and replaceable.
-  Each module (e.g., sensor types, light control) adheres to strict interface boundaries, allowing for future expansion with minimal code changes.
+  The system follows a modular design, where core components like sensors or automation are separated by clear responsibilities and can be extended with limited impact.
 
 - **Event-Driven Processing**  
-  Core interactions (especially via WebSocket/STOMP) are fully event-based. Incoming and outgoing events are loosely coupled via a shared dispatcher mechanism.<br />
+  Core interactions—especially those related to WebSocket/STOMP—are handled in an event-driven fashion using Spring's event mechanism. Components remain loosely coupled through asynchronous event publishing and listening.<br />
   👉 [View event class diagram](./diagrams/class_event_overview.png)
 
 - **Polymorphic Sensor Modeling**  
