@@ -63,10 +63,8 @@ The following table outlines the main code packages, their responsibilities, and
 
 - **JSON Handling**
   - Message parsing using Jackson ObjectMapper
-  - Controlled serialization using filters
 - **MongoDB Integration**
   - Persistent storage for sensors, lights and profiles
-  - Custom repository interfaces and methods
 
 ---
 
