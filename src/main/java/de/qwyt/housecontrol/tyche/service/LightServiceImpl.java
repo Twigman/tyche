@@ -1,7 +1,6 @@
 package de.qwyt.housecontrol.tyche.service;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,7 +20,6 @@ import de.qwyt.housecontrol.tyche.integration.client.DeconzApiClient;
 import de.qwyt.housecontrol.tyche.model.group.Room;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLight;
 import de.qwyt.housecontrol.tyche.model.light.hue.HueLightState;
-import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfilePreset;
 import de.qwyt.housecontrol.tyche.model.profile.color.HueColorProfileType;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightRepository;
 import de.qwyt.housecontrol.tyche.repository.light.HueLightStateRepository;
@@ -95,12 +93,13 @@ public class LightServiceImpl {
 		    JsonNode rootNode = objectMapper.readTree(jsonResponse);
 		    
 		    // iterate over all root nodes
-		    for (Iterator<Map.Entry<String, JsonNode>> it = rootNode.fields(); it.hasNext(); ) {
-		        Map.Entry<String, JsonNode> entry = it.next();
-		        JsonNode lightNode = entry.getValue();
+		    for (Map.Entry<String, JsonNode> entry : rootNode.properties()) {
+		    	JsonNode lightNode = entry.getValue();
 
 		        // Convert JsonNode into a hue light object
-		        HueLight light = objectMapper.treeToValue(lightNode, HueLight.class);
+		        HueLight light;
+				light = objectMapper.treeToValue(lightNode, HueLight.class);
+
 
 		        // Insert light with uniqueId as key into the map
 	        	if (this.updateLightMap(light)) {
@@ -118,8 +117,8 @@ public class LightServiceImpl {
 			
 			return true;
 			
-		} catch (JsonProcessingException e) {
-			LOG.error("Error during Sensor registration");
+		} catch (JsonProcessingException | IllegalArgumentException e) {
+			LOG.error("Error during Light registration: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -178,7 +177,7 @@ public class LightServiceImpl {
 		    this.hueLightStateRepository.saveNew(light.getState());
 		    LOG.debug("State changed for {}", light.getNameAndIdInfo());
 		} catch (JsonProcessingException | IllegalArgumentException e) {
-		    LOG.error("Can't create SensorState from JSON: {}", stateNode.toString());
+		    LOG.error("Can't create LightState from JSON: {}", stateNode.toString());
 		    e.printStackTrace();
 		}
 	}
@@ -229,7 +228,7 @@ public class LightServiceImpl {
 		HueLight light = this.lightMap.get(uniqueId);
 		colorProfileManager.applyProfile(light.getState(), colorProfile);
 		
-		light.getState().setOn(true);
+		light.getState().setEnabled(true);
 		
 		if (deconzApiClient.updateLightState(uniqueId, light.getState())) {
 			this.hueLightStateRepository.saveNew(light.getState());
@@ -271,7 +270,7 @@ public class LightServiceImpl {
 	
 	public boolean turnOffLight(String uniqueId) {
 		HueLight light = this.lightMap.get(uniqueId);
-		light.getState().setOn(false);
+		light.getState().setEnabled(false);
 		
 		if (deconzApiClient.updateLightState(uniqueId, light.getState())) {
 		 	this.hueLightStateRepository.saveNew(light.getState());

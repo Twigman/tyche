@@ -70,14 +70,14 @@ public class HueLightState {
 	@JsonProperty("hueColorProfileType")
 	private HueColorProfileType colorProfile;
 
-	
+	/*
 	public void setOn(Boolean value) {
 		this.enabled = value;
 	}
 	
 	public Boolean isOn() {
 		return this.enabled;
-	}
+	}*/
 	
 	public Boolean isEnabled() {
 		return this.enabled;

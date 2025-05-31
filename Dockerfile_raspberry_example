@@ -1,5 +1,6 @@
 # JDK for Raspberry Pi (ARM-Architectur)
-FROM arm64v8/eclipse-temurin:21-jdk-alpine
+# FROM arm64v8/eclipse-temurin:21-jdk-alpine
+FROM bellsoft/liberica-openjre-alpine:21
 
 # spring profile
 ENV SPRING_PROFILES_ACTIVE=docker

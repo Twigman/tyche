@@ -1,6 +1,5 @@
 package de.qwyt.housecontrol.tyche.service;
 
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,7 @@ public class FritzboxServiceImpl {
 	@Value("${fritzbox.tr064.endpoints.hosts}")
 	private String hostsEnpoint;
 	
-	private List<GetGenericHostEntryResponse> hostList;
+	//private List<GetGenericHostEntryResponse> hostList;
 	
 	@Autowired
 	public FritzboxServiceImpl(

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.5</version>
+		<version>3.5.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.qwyt.housecontrol</groupId>
@@ -55,7 +55,7 @@
 		<dependency>
 		    <groupId>com.nimbusds</groupId>
 		    <artifactId>nimbus-jose-jwt</artifactId>
-		    <version>10.0.2</version>
+		    <version>10.3</version>
 		</dependency>
 		
 		<dependency>
@@ -71,7 +71,7 @@
 		<dependency>
 		    <groupId>org.modelmapper</groupId>
 		    <artifactId>modelmapper</artifactId>
-		    <version>3.2.2</version>
+		    <version>3.2.3</version>
 		</dependency>
 
 		<dependency>
@@ -101,13 +101,29 @@
 
 	</dependencies>
 
-	<build>
+	<build> 
 		<plugins>
+		<!--
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-		</plugins>
+			-->
+			<plugin>
+	            <groupId>org.springframework.boot</groupId>
+	            <artifactId>spring-boot-maven-plugin</artifactId>
+	            <configuration>
+	                <layout>JAR</layout>
+	            </configuration>
+	            <executions>
+	                <execution>
+	                    <goals>
+	                        <goal>repackage</goal>
+	                    </goals>
+	                </execution>
+	            </executions>
+	        </plugin>
+        </plugins>
 		<finalName>tyche-housecontrol</finalName>
 	</build>
 

@@ -1,7 +1,5 @@
 package de.qwyt.housecontrol.tyche.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +9,6 @@ import de.qwyt.housecontrol.tyche.model.soap.fritzbox.tr064.hosts.GetSpecificHos
 
 @Service
 public class PhoneServiceImpl {
-	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
 	private final PhoneInfo phoneInfo;
 	

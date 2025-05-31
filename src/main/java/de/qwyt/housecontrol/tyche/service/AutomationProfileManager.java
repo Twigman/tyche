@@ -3,13 +3,9 @@ package de.qwyt.housecontrol.tyche.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import de.qwyt.housecontrol.tyche.event.RoomVisitThresholdReachedEvent;
 import de.qwyt.housecontrol.tyche.event.types.HousecontrolModule;
-import de.qwyt.housecontrol.tyche.event.types.LogLevel;
 import de.qwyt.housecontrol.tyche.model.profile.automation.ActiveAutomationProfile;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfile;
 import de.qwyt.housecontrol.tyche.model.profile.automation.AutomationProfileProperties;

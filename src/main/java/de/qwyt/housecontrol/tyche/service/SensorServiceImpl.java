@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -116,8 +115,7 @@ public class SensorServiceImpl {
 		    JsonNode rootNode = objectMapper.readTree(jsonResponse);
 		    
 		    // iterate over all root nodes
-		    for (Iterator<Map.Entry<String, JsonNode>> it = rootNode.fields(); it.hasNext(); ) {
-		        Map.Entry<String, JsonNode> entry = it.next();
+		    for (Map.Entry<String, JsonNode> entry : rootNode.properties()) {
 		        JsonNode sensorNode = entry.getValue();
 
 		        // Extract the sensor type from the root node

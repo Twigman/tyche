@@ -2,18 +2,14 @@ package de.qwyt.housecontrol.tyche.service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -26,19 +22,16 @@ public class TimerServiceImpl {
 	
 	private final ThreadPoolTaskScheduler taskScheduler;
 	
-	private final EventServiceImpl eventService;
-	
 	private final Map<String, Instant> timerTargetTimes;
 	
 	
-	public TimerServiceImpl(EventServiceImpl eventService) {
+	public TimerServiceImpl() {
 		this.scheduledTasks = new ConcurrentHashMap<>();
         this.taskScheduler = new ThreadPoolTaskScheduler();
         this.timerTargetTimes = new ConcurrentHashMap<>();
 		// 20 parallel timers possible
 		this.taskScheduler.setPoolSize(20);
 		this.taskScheduler.initialize();
-		this.eventService = eventService;
 	}
 	
 	
